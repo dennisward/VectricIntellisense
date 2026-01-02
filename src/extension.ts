@@ -4,6 +4,12 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
 
+// ***** Important Debugging Note *****
+// If you get a powershell security warning when trying to run or debug the extension,
+// just go to source directory (ind cmd.exe, not powershell) and:
+// npm run watch - there's an issue with the node.ns mpm.ps1 script not being digitally signed.
+// **************************************
+
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -86,5 +92,6 @@ export function activate(context: vscode.ExtensionContext) {
 
     context.subscriptions.push(completionProvider, signatureProvider, hoverProvider);
 }
+
 // This method is called when your extension is deactivated
 export function deactivate() {}
