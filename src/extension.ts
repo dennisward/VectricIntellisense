@@ -1,26 +1,90 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import * as fs from 'fs';
+import * as path from 'path';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
+    const apiFilePath = path.join(context.extensionPath, 'vectric-api.json');
+    const apiData = JSON.parse(fs.readFileSync(apiFilePath, 'utf8'));
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "vectricintellisense" is now active!');
+    // Completion Provider
+    const completionProvider = vscode.languages.registerCompletionItemProvider('lua', {
+        provideCompletionItems() {
+            const items: vscode.CompletionItem[] = [];
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	const disposable = vscode.commands.registerCommand('vectricintellisense.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from VectricIntellisense!');
-	});
+            // Add classes
+            apiData.classes.forEach((cls: any) => {
+                const item = new vscode.CompletionItem(cls.name, vscode.CompletionItemKind.Class);
+                item.detail = cls.detail;
+                item.documentation = new vscode.MarkdownString(cls.documentation);
+                items.push(item);
+            });
 
-	context.subscriptions.push(disposable);
+            // Add functions
+            apiData.functions.forEach((fn: any) => {
+                const item = new vscode.CompletionItem(fn.name, vscode.CompletionItemKind.Function);
+                item.detail = fn.detail;
+                item.documentation = new vscode.MarkdownString(fn.documentation);
+                items.push(item);
+            });
+
+            return items;
+        }
+    });
+
+    // Signature Help Provider
+    const signatureProvider = vscode.languages.registerSignatureHelpProvider('lua', {
+        provideSignatureHelp() {
+            const sigHelp = new vscode.SignatureHelp();
+
+            // Add class constructors
+            apiData.classes.forEach((cls: any) => {
+                if (cls.signature) {
+                    const sig = new vscode.SignatureInformation(cls.signature.label, cls.signature.documentation);
+                    sig.parameters = cls.signature.parameters.map((p: any) => new vscode.ParameterInformation(p.label, p.documentation));
+                    sigHelp.signatures.push(sig);
+                }
+            });
+
+            // Add functions
+            apiData.functions.forEach((fn: any) => {
+                if (fn.signature) {
+                    const sig = new vscode.SignatureInformation(fn.signature.label, fn.signature.documentation);
+                    sig.parameters = fn.signature.parameters.map((p: any) => new vscode.ParameterInformation(p.label, p.documentation));
+                    sigHelp.signatures.push(sig);
+                }
+            });
+
+            sigHelp.activeSignature = 0;
+            sigHelp.activeParameter = 0;
+            return sigHelp;
+        }
+    }, '(', ',');
+
+    // Hover Provider
+    const hoverProvider = vscode.languages.registerHoverProvider('lua', {
+        provideHover(document, position) {
+            const range = document.getWordRangeAtPosition(position);
+            const word = document.getText(range);
+
+            const cls = apiData.classes.find((c: any) => c.name === word);
+            if (cls) {
+                return new vscode.Hover(new vscode.MarkdownString(`### ${cls.name}\n\n${cls.documentation}\n\n**Signature:**\n\`${cls.signature.label}\``));
+            }
+
+            const fn = apiData.functions.find((f: any) => f.name === word);
+            if (fn) {
+                return new vscode.Hover(new vscode.MarkdownString(`### ${fn.name}\n\n${fn.documentation}\n\n**Signature:**\n\`${fn.signature.label}\``));
+            }
+
+            return null;
+        }
+    });
+
+    context.subscriptions.push(completionProvider, signatureProvider, hoverProvider);
 }
-
 // This method is called when your extension is deactivated
 export function deactivate() {}

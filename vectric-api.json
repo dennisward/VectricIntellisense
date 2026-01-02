@@ -1,0 +1,63 @@
+
+{
+  "classes": [
+    {
+      "name": "Point2D",
+      "kind": "Class",
+      "detail": "class Point2D",
+      "documentation": "Represents a 2D point.",
+      "signature": {
+        "label": "Point2D(x: number, y: number)",
+        "documentation": "Creates a Point2D object.",
+        "parameters": [
+          { "label": "x", "documentation": "X coordinate" },
+          { "label": "y", "documentation": "Y coordinate" }
+        ]
+      }
+    },
+    {
+      "name": "Span",
+      "kind": "Class",
+      "detail": "class Span",
+      "documentation": "Represents a segment defined by two points.",
+      "signature": {
+        "label": "Span(start_point: Point2D, end_point: Point2D)",
+        "documentation": "Creates a Span object.",
+        "parameters": [
+          { "label": "start_point", "documentation": "Starting Point2D" },
+          { "label": "end_point", "documentation": "Ending Point2D" }
+        ]
+      }
+    }
+  ],
+  "functions": [
+    {
+      "name": "CreatePoint2D",
+      "kind": "Function",
+      "detail": "(x: number, y: number) → Point2D",
+      "documentation": "Creates a new Point2D object.",
+      "signature": {
+        "label": "CreatePoint2D(x: number, y: number)",
+        "documentation": "Creates a Point2D object.",
+        "parameters": [
+          { "label": "x", "documentation": "X coordinate" },
+          { "label": "y", "documentation": "Y coordinate" }
+        ]
+      }
+    },
+    {
+      "name": "CreateSpan",
+      "kind": "Function",
+      "detail": "(start_point: Point2D, end_point: Point2D) → Span",
+      "documentation": "Creates a new Span object.",
+      "signature": {
+        "label": "CreateSpan(start_point: Point2D, end_point: Point2D)",
+        "documentation": "Creates a Span object.",
+        "parameters": [
+          { "label": "start_point", "documentation": "Starting Point2D" },
+          { "label": "end_point", "documentation": "Ending Point2D" }
+        ]
+      }
+    }
+  ]
+}
