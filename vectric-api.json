@@ -1,63 +1,434 @@
-
 {
+  "version": "12.5",
+  "date": "2025-06-19",
+  "globals": {
+    "functions": [
+      {
+        "name": "IsAspire",
+        "kind": "Function",
+        "detail": "() → boolean",
+        "documentation": "Returns true if the script is running inside Aspire.",
+        "signature": {
+          "label": "IsAspire()",
+          "documentation": "Returns true if the script is running inside Aspire.",
+          "parameters": [],
+          "returns": "boolean"
+        }
+      },
+      {
+        "name": "MessageBox",
+        "kind": "Function",
+        "detail": "(text: string) → void",
+        "documentation": "Displays a message box with passed text to user. The text can include HTML formatting.",
+        "signature": {
+          "label": "MessageBox(text: string)",
+          "documentation": "Displays a message box with passed text to user.",
+          "parameters": [
+            {
+              "label": "text",
+              "documentation": "Text to display in the message box (can include HTML formatting)"
+            }
+          ],
+          "returns": "void"
+        }
+      }
+    ],
+    "constants": []
+  },
   "classes": [
     {
       "name": "Point2D",
       "kind": "Class",
       "detail": "class Point2D",
-      "documentation": "Represents a 2D point.",
-      "signature": {
-        "label": "Point2D(x: number, y: number)",
-        "documentation": "Creates a Point2D object.",
-        "parameters": [
-          { "label": "x", "documentation": "X coordinate" },
-          { "label": "y", "documentation": "Y coordinate" }
-        ]
-      }
+      "documentation": "Represents a 2D point (X and Y values only). Used by many other objects and can be used with geometry objects such as Vector2D to perform calculations.",
+      "constructors": [
+        {
+          "label": "Point2D()",
+          "documentation": "Constructs an un-initialised point with invalid x and y values.",
+          "parameters": []
+        },
+        {
+          "label": "Point2D(x: number, y: number)",
+          "documentation": "Creates a new point with the specified X and Y values.",
+          "parameters": [
+            { "label": "x", "documentation": "The value for the x coordinate of the point" },
+            { "label": "y", "documentation": "The value for the y coordinate of the point" }
+          ]
+        },
+        {
+          "label": "Point2D(pt: Point2D)",
+          "documentation": "Creates a new point with the same X and Y values as the passed point.",
+          "parameters": [
+            { "label": "pt", "documentation": "An existing point to copy X and Y values from" }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "name": "X",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "X coordinate for point (read/write)",
+          "readOnly": false
+        },
+        {
+          "name": "x",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "X coordinate for point (read/write)",
+          "readOnly": false
+        },
+        {
+          "name": "Y",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Y coordinate for point (read/write)",
+          "readOnly": false
+        },
+        {
+          "name": "y",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Y coordinate for point (read/write)",
+          "readOnly": false
+        },
+        {
+          "name": "IsInvalid",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "Returns true if the point is invalid - not initialised or SetInvalid called",
+          "readOnly": true
+        }
+      ],
+      "methods": [
+        {
+          "name": "IsCoincident",
+          "kind": "Method",
+          "detail": "(point: Point2D, tol: number) → boolean",
+          "documentation": "Returns true if passed point is coincident with this point within passed tolerance.",
+          "signature": {
+            "label": "IsCoincident(point: Point2D, tol: number)",
+            "documentation": "Returns true if passed point is coincident with this point within passed tolerance.",
+            "parameters": [
+              { "label": "point", "documentation": "Point to check for coincidence" },
+              { "label": "tol", "documentation": "Maximum distance apart points can be and still be considered coincident" }
+            ],
+            "returns": "boolean"
+          }
+        },
+        {
+          "name": "Set",
+          "kind": "Method",
+          "detail": "(x: number, y: number) → void",
+          "documentation": "Set both the x and y values for the point.",
+          "signature": {
+            "label": "Set(x: number, y: number)",
+            "documentation": "Set both the x and y values for the point.",
+            "parameters": [
+              { "label": "x", "documentation": "New x value for point" },
+              { "label": "y", "documentation": "New y value for point" }
+            ],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "SetInvalid",
+          "kind": "Method",
+          "detail": "() → void",
+          "documentation": "Set the point to invalid state - X and Y will be lost.",
+          "signature": {
+            "label": "SetInvalid()",
+            "documentation": "Set the point to invalid state - X and Y will be lost.",
+            "parameters": [],
+            "returns": "void"
+          }
+        }
+      ],
+      "operators": [
+        {
+          "name": "-",
+          "detail": "Point2D - Point2D → Vector2D",
+          "documentation": "Subtracting a point from another point will return a Vector2D with the difference between the 2 points."
+        },
+        {
+          "name": "+",
+          "detail": "Point2D + Vector2D → Point2D",
+          "documentation": "Adding a vector to a point will return a point displaced from original point by adding the vector."
+        },
+        {
+          "name": "-",
+          "detail": "Point2D - Vector2D → Point2D",
+          "documentation": "Subtracting a vector from a point will return a point displaced from original point by subtracting the vector."
+        }
+      ]
     },
     {
-      "name": "Span",
+      "name": "VectricJob",
       "kind": "Class",
-      "detail": "class Span",
-      "documentation": "Represents a segment defined by two points.",
-      "signature": {
-        "label": "Span(start_point: Point2D, end_point: Point2D)",
-        "documentation": "Creates a Span object.",
-        "parameters": [
-          { "label": "start_point", "documentation": "Starting Point2D" },
-          { "label": "end_point", "documentation": "Ending Point2D" }
-        ]
-      }
-    }
-  ],
-  "functions": [
-    {
-      "name": "CreatePoint2D",
-      "kind": "Function",
-      "detail": "(x: number, y: number) → Point2D",
-      "documentation": "Creates a new Point2D object.",
-      "signature": {
-        "label": "CreatePoint2D(x: number, y: number)",
-        "documentation": "Creates a Point2D object.",
-        "parameters": [
-          { "label": "x", "documentation": "X coordinate" },
-          { "label": "y", "documentation": "Y coordinate" }
-        ]
-      }
+      "detail": "class VectricJob",
+      "documentation": "Represents the currently open job (file) within the application. Main object for script interaction.",
+      "constructors": [
+        {
+          "label": "VectricJob()",
+          "documentation": "Creates a new VectricJob object that refers to the current job.",
+          "parameters": []
+        }
+      ],
+      "properties": [
+        {
+          "name": "Exists",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "Returns true if there is an existing job open",
+          "readOnly": true
+        },
+        {
+          "name": "Name",
+          "kind": "Property",
+          "detail": "string",
+          "documentation": "Returns the name of the current job WITHOUT the file extension (e.g. 'test' not 'test.crv')",
+          "readOnly": true
+        },
+        {
+          "name": "InMM",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "Returns true if the current units are mm",
+          "readOnly": true
+        },
+        {
+          "name": "InInches",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "Returns true if the current units are inches",
+          "readOnly": true
+        },
+        {
+          "name": "Width",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Returns width of the job along x (same as XLength)",
+          "readOnly": true
+        },
+        {
+          "name": "Height",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Returns height of the job along y (same as YLength)",
+          "readOnly": true
+        },
+        {
+          "name": "LayerManager",
+          "kind": "Property",
+          "detail": "CadLayerManager",
+          "documentation": "Returns the CadLayerManager for the job. This manages all the layers which hold all the vector objects.",
+          "readOnly": true
+        },
+        {
+          "name": "Selection",
+          "kind": "Property",
+          "detail": "SelectionList",
+          "documentation": "Returns the SelectionList for the currently selected vectors in the job.",
+          "readOnly": true
+        }
+      ],
+      "methods": [
+        {
+          "name": "Refresh2DView",
+          "kind": "Method",
+          "detail": "() → void",
+          "documentation": "Refreshes the 2D view. Call this after you have created or modified geometry to update the 2D view.",
+          "signature": {
+            "label": "Refresh2DView()",
+            "documentation": "Refreshes the 2D view. Call this after you have created or modified geometry.",
+            "parameters": [],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "GetBounds",
+          "kind": "Method",
+          "detail": "() → Box2D",
+          "documentation": "Returns the 2D bounding box for the drawing area.",
+          "signature": {
+            "label": "GetBounds()",
+            "documentation": "Returns the 2D bounding box for the drawing area.",
+            "parameters": [],
+            "returns": "Box2D"
+          }
+        },
+        {
+          "name": "ImportDxfDwg",
+          "kind": "Method",
+          "detail": "(pathname: string) → boolean",
+          "documentation": "Imports a DXF or DWG file from passed path. Returns true if file imported OK else false. NOTE: after data is imported it is selected.",
+          "signature": {
+            "label": "ImportDxfDwg(pathname: string)",
+            "documentation": "Imports a DXF or DWG file from passed path.",
+            "parameters": [
+              { "label": "pathname", "documentation": "Path to the DXF/DWG file" }
+            ],
+            "returns": "boolean"
+          }
+        }
+      ]
     },
     {
-      "name": "CreateSpan",
-      "kind": "Function",
-      "detail": "(start_point: Point2D, end_point: Point2D) → Span",
-      "documentation": "Creates a new Span object.",
-      "signature": {
-        "label": "CreateSpan(start_point: Point2D, end_point: Point2D)",
-        "documentation": "Creates a Span object.",
-        "parameters": [
-          { "label": "start_point", "documentation": "Starting Point2D" },
-          { "label": "end_point", "documentation": "Ending Point2D" }
-        ]
-      }
+      "name": "Contour",
+      "kind": "Class",
+      "detail": "class Contour",
+      "documentation": "Represents a single vector within the application. Open and closed vectors, arcs, circles - all are based on a Contour with one or more spans.",
+      "constructors": [
+        {
+          "label": "Contour(tolerance: number)",
+          "documentation": "Creates a new contour with the specified tolerance.",
+          "parameters": [
+            { "label": "tolerance", "documentation": "Tolerance to use when performing operations (use 0.0 for default)" }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "name": "Area",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Unsigned area of contour",
+          "readOnly": true
+        },
+        {
+          "name": "IsClosed",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "True if the contour is closed",
+          "readOnly": true
+        },
+        {
+          "name": "IsOpen",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "True if the contour is open",
+          "readOnly": true
+        },
+        {
+          "name": "Length",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Length of contour",
+          "readOnly": true
+        },
+        {
+          "name": "StartPoint2D",
+          "kind": "Property",
+          "detail": "Point2D",
+          "documentation": "The 2D position of the contour start point",
+          "readOnly": true
+        },
+        {
+          "name": "EndPoint2D",
+          "kind": "Property",
+          "detail": "Point2D",
+          "documentation": "The 2D position of the contour end point (same as start point if closed)",
+          "readOnly": true
+        }
+      ],
+      "methods": [
+        {
+          "name": "AppendPoint",
+          "kind": "Method",
+          "detail": "(x: number, y: number) → boolean",
+          "documentation": "Set the 2D starting point for the contour. This method should only be called on an EMPTY contour. The Z value defaults to 0.0",
+          "signature": {
+            "label": "AppendPoint(x: number, y: number)",
+            "documentation": "Set the 2D starting point for the contour.",
+            "parameters": [
+              { "label": "x", "documentation": "X value for start point" },
+              { "label": "y", "documentation": "Y value for start point" }
+            ],
+            "returns": "boolean"
+          }
+        },
+        {
+          "name": "LineTo",
+          "kind": "Method",
+          "detail": "(x: number, y: number) → boolean",
+          "documentation": "Append a line span from the current end point to the passed position. Returns true if span added OK.",
+          "signature": {
+            "label": "LineTo(x: number, y: number)",
+            "documentation": "Append a line span from current end point to passed position.",
+            "parameters": [
+              { "label": "x", "documentation": "X value for end point" },
+              { "label": "y", "documentation": "Y value for end point" }
+            ],
+            "returns": "boolean"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Tool",
+      "kind": "Class",
+      "detail": "class Tool",
+      "documentation": "Represents a tool within the program. Can be created programmatically or selected from the tool database.",
+      "constructors": [
+        {
+          "label": "Tool(name: string, tool_type: ToolType)",
+          "documentation": "Creates a new tool with the specified name and type.",
+          "parameters": [
+            { "label": "name", "documentation": "Name for the tool" },
+            { "label": "tool_type", "documentation": "Type of tool (Tool.BALL_NOSE, Tool.END_MILL, Tool.VBIT, etc.)" }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "name": "ToolDia",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Diameter of tool (read/write)",
+          "readOnly": false
+        },
+        {
+          "name": "Stepdown",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Stepdown for tool (read/write)",
+          "readOnly": false
+        },
+        {
+          "name": "Stepover",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Stepover for tool (read/write)",
+          "readOnly": false
+        },
+        {
+          "name": "FeedRate",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Feed rate for tool (read/write)",
+          "readOnly": false
+        },
+        {
+          "name": "PlungeRate",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Plunge rate for tool (read/write)",
+          "readOnly": false
+        },
+        {
+          "name": "SpindleSpeed",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Spindle speed for tool (read/write)",
+          "readOnly": false
+        }
+      ],
+      "constants": [
+        { "name": "BALL_NOSE", "value": "Tool type constant for ball nose tools" },
+        { "name": "END_MILL", "value": "Tool type constant for end mill tools" },
+        { "name": "VBIT", "value": "Tool type constant for V-bit tools" },
+        { "name": "THROUGH_DRILL", "value": "Tool type constant for drill bits" }
+      ]
     }
   ]
 }
