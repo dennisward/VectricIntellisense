@@ -172,46 +172,171 @@ function loadClasses(extensionPath: string): ApiClass[] {
     }
 }
 
+// ==================== Helper Functions ====================
+
 /**
- * Load a specific category of global functions (for lazy loading if needed)
+ * Get the context of what's being typed (class name vs variable)
  */
-function loadGlobalCategory(extensionPath: string, categoryId: string): ApiFunction[] {
-    const apiPath = path.join(extensionPath, 'vectric-api');
-    const categoryPath = path.join(apiPath, `globals_${categoryId}.json`);
+function getCompletionContext(document: vscode.TextDocument, position: vscode.Position, classes: ApiClass[]) {
+    const lineText = document.lineAt(position).text;
+    const textBeforeCursor = lineText.substring(0, position.character);
     
-    try {
-        if (fs.existsSync(categoryPath)) {
-            const categoryData: GlobalCategory = JSON.parse(
-                fs.readFileSync(categoryPath, 'utf8')
-            );
-            return categoryData.functions;
-        }
-        return [];
-    } catch (error) {
-        console.error(`Error loading global category ${categoryId}:`, error);
-        return [];
+    // Check if we're typing after a dot (.)
+    const dotMatch = textBeforeCursor.match(/(\w+)\.(\w*)$/);
+    if (dotMatch) {
+        const objectName = dotMatch[1];
+        const prefix = dotMatch[2] || '';
+        
+        // Try to infer the type of this variable
+        const inferredType = inferVariableType(document, position, objectName, classes);
+        
+        return {
+            type: 'member-access',
+            objectName: objectName,
+            className: inferredType || objectName, // Use inferred type or assume it's a class name
+            prefix: prefix
+        };
     }
+    
+    // Check if we're typing after a colon (:)
+    const colonMatch = textBeforeCursor.match(/(\w+):(\w*)$/);
+    if (colonMatch) {
+        const objectName = colonMatch[1];
+        const prefix = colonMatch[2] || '';
+        
+        // Try to infer the type of this variable
+        const inferredType = inferVariableType(document, position, objectName, classes);
+        
+        return {
+            type: 'method-access',
+            objectName: objectName,
+            className: inferredType || objectName,
+            prefix: prefix
+        };
+    }
+    
+    // Default: typing a new identifier
+    return {
+        type: 'identifier',
+        objectName: null,
+        className: null,
+        prefix: ''
+    };
 }
 
 /**
- * Load a specific category of classes (for lazy loading if needed)
+ * Infer the type of a variable by looking for its assignment
  */
-function loadClassCategory(extensionPath: string, categoryId: string): ApiClass[] {
-    const apiPath = path.join(extensionPath, 'vectric-api');
-    const categoryPath = path.join(apiPath, `classes_${categoryId}.json`);
+function inferVariableType(document: vscode.TextDocument, position: vscode.Position, varName: string, classes: ApiClass[]): string | null {
+    // Search backwards from current position to find variable declaration/assignment
+    const currentLine = position.line;
     
-    try {
-        if (fs.existsSync(categoryPath)) {
-            const categoryData: ClassCategory = JSON.parse(
-                fs.readFileSync(categoryPath, 'utf8')
-            );
-            return categoryData.classes;
+    // Look up to 100 lines back (or start of file)
+    const searchStart = Math.max(0, currentLine - 100);
+    
+    for (let lineNum = currentLine; lineNum >= searchStart; lineNum--) {
+        const line = document.lineAt(lineNum).text;
+        
+        // Pattern 1: local varName = ClassName(...)
+        const localAssignment = new RegExp(`local\\s+${varName}\\s*=\\s*(\\w+)\\s*\\(`);
+        const localMatch = line.match(localAssignment);
+        if (localMatch) {
+            const className = localMatch[1];
+            // Verify this is actually a known class
+            if (classes.find(cls => cls.name === className)) {
+                return className;
+            }
         }
-        return [];
-    } catch (error) {
-        console.error(`Error loading class category ${categoryId}:`, error);
-        return [];
+        
+        // Pattern 2: varName = ClassName(...)
+        const assignment = new RegExp(`\\b${varName}\\s*=\\s*(\\w+)\\s*\\(`);
+        const assignMatch = line.match(assignment);
+        if (assignMatch) {
+            const className = assignMatch[1];
+            // Verify this is actually a known class
+            if (classes.find(cls => cls.name === className)) {
+                return className;
+            }
+        }
+        
+        // Pattern 3: for varName in ... or function varName(...) - stop searching
+        const declarationPattern = new RegExp(`\\b(for|function)\\s+${varName}\\b`);
+        if (declarationPattern.test(line)) {
+            break; // Different kind of declaration, stop searching
+        }
     }
+    
+    return null;
+}
+
+/**
+ * Find class by name
+ */
+function findClassByName(classes: ApiClass[], name: string): ApiClass | undefined {
+    return classes.find(cls => cls.name === name);
+}
+
+/**
+ * Create a snippet string from a function signature
+ */
+function createSnippetFromSignature(signature: ApiSignature): string {
+    if (signature.parameters.length === 0) {
+        return `${signature.label.split('(')[0]}()$0`;
+    }
+    
+    const params = signature.parameters.map((p, i) => `\${${i + 1}:${p.label}}`).join(', ');
+    const funcName = signature.label.split('(')[0];
+    return `${funcName}(${params})$0`;
+}
+
+/**
+ * Create member completion items (properties, methods) without class prefix
+ */
+function createMemberCompletions(cls: ApiClass, memberType: 'property' | 'method' | 'constant'): vscode.CompletionItem[] {
+    const items: vscode.CompletionItem[] = [];
+    
+    if (memberType === 'property' && cls.properties) {
+        cls.properties.forEach((prop: ApiProperty) => {
+            const item = new vscode.CompletionItem(prop.name, vscode.CompletionItemKind.Property);
+            item.detail = prop.detail;
+            item.documentation = new vscode.MarkdownString(
+                `${prop.documentation}\n\n${prop.readOnly ? '*(Read-only)*' : '*(Read/write)*'}`
+            );
+            item.insertText = prop.name;
+            items.push(item);
+        });
+    }
+    
+    if (memberType === 'method' && cls.methods) {
+        cls.methods.forEach((method: ApiMethod) => {
+            const item = new vscode.CompletionItem(method.name, vscode.CompletionItemKind.Method);
+            item.detail = method.detail;
+            item.documentation = new vscode.MarkdownString(method.documentation);
+            
+            // For methods, create snippet with parameters
+            if (method.signature && method.signature.parameters.length > 0) {
+                const params = method.signature.parameters
+                    .map((p, i) => `\${${i + 1}:${p.label}}`)
+                    .join(', ');
+                item.insertText = new vscode.SnippetString(`${method.name}(${params})$0`);
+            } else {
+                item.insertText = new vscode.SnippetString(`${method.name}()$0`);
+            }
+            items.push(item);
+        });
+    }
+    
+    if (memberType === 'constant' && cls.constants) {
+        cls.constants.forEach((constant: ApiConstant) => {
+            const item = new vscode.CompletionItem(constant.name, vscode.CompletionItemKind.Constant);
+            item.detail = constant.value;
+            item.documentation = new vscode.MarkdownString(constant.value);
+            item.insertText = constant.name;
+            items.push(item);
+        });
+    }
+    
+    return items;
 }
 
 // ==================== Extension Activation ====================
@@ -234,7 +359,31 @@ export function activate(context: vscode.ExtensionContext) {
     const completionProvider = vscode.languages.registerCompletionItemProvider('lua', {
         provideCompletionItems(document, position) {
             const items: vscode.CompletionItem[] = [];
-
+            const context = getCompletionContext(document, position, classes);
+            
+            // CONTEXT 1: Member access (obj.property or ClassName.constant)
+            if (context.type === 'member-access' && context.className) {
+                const cls = findClassByName(classes, context.className);
+                if (cls) {
+                    // Add properties and constants
+                    items.push(...createMemberCompletions(cls, 'property'));
+                    items.push(...createMemberCompletions(cls, 'constant'));
+                }
+                return items;
+            }
+            
+            // CONTEXT 2: Method access (obj:method)
+            if (context.type === 'method-access' && context.className) {
+                const cls = findClassByName(classes, context.className);
+                if (cls) {
+                    // Add methods only
+                    items.push(...createMemberCompletions(cls, 'method'));
+                }
+                return items;
+            }
+            
+            // CONTEXT 3: General identifier (add everything)
+            
             // Add global functions
             globalFunctions.forEach((fn: ApiFunction) => {
                 const item = new vscode.CompletionItem(fn.name, vscode.CompletionItemKind.Function);
@@ -249,88 +398,30 @@ export function activate(context: vscode.ExtensionContext) {
                 items.push(item);
             });
 
-            // Add classes
+            // Add classes (for constructors)
             classes.forEach((cls: ApiClass) => {
-                // Add the class itself
                 const item = new vscode.CompletionItem(cls.name, vscode.CompletionItemKind.Class);
                 item.detail = cls.detail;
                 item.documentation = new vscode.MarkdownString(cls.documentation);
+                
+                // If class has constructors, create snippet for the most common one
+                if (cls.constructors && cls.constructors.length > 0) {
+                    const constructor = cls.constructors[0];
+                    if (constructor.parameters.length > 0) {
+                        const params = constructor.parameters
+                            .map((p, i) => `\${${i + 1}:${p.label}}`)
+                            .join(', ');
+                        item.insertText = new vscode.SnippetString(`${cls.name}(${params})$0`);
+                    } else {
+                        item.insertText = new vscode.SnippetString(`${cls.name}()$0`);
+                    }
+                }
                 items.push(item);
-
-                // Add class properties
-                if (cls.properties) {
-                    cls.properties.forEach((prop: ApiProperty) => {
-                        const propItem = new vscode.CompletionItem(
-                            `${cls.name}.${prop.name}`,
-                            vscode.CompletionItemKind.Property
-                        );
-                        propItem.detail = prop.detail;
-                        propItem.documentation = new vscode.MarkdownString(
-                            `${prop.documentation}\n\n${prop.readOnly ? '*(Read-only)*' : '*(Read/write)*'}`
-                        );
-                        items.push(propItem);
-                    });
-                }
-
-                // Add class methods
-                if (cls.methods) {
-                    cls.methods.forEach((method: ApiMethod) => {
-                        const methodItem = new vscode.CompletionItem(
-                            `${cls.name}:${method.name}`,
-                            vscode.CompletionItemKind.Method
-                        );
-                        methodItem.detail = method.detail;
-                        methodItem.documentation = new vscode.MarkdownString(method.documentation);
-                        
-                        if (method.signature) {
-                            methodItem.insertText = new vscode.SnippetString(
-                                createSnippetFromSignature(method.signature)
-                            );
-                        }
-                        items.push(methodItem);
-                    });
-                }
-
-                // Add class constants
-                if (cls.constants) {
-                    cls.constants.forEach((constant: ApiConstant) => {
-                        const constItem = new vscode.CompletionItem(
-                            `${cls.name}.${constant.name}`,
-                            vscode.CompletionItemKind.Constant
-                        );
-                        constItem.detail = constant.value;
-                        constItem.documentation = new vscode.MarkdownString(constant.value);
-                        items.push(constItem);
-                    });
-                }
-
-                // Add class constructors
-                if (cls.constructors) {
-                    cls.constructors.forEach((constructor: ApiConstructor) => {
-                        const ctorItem = new vscode.CompletionItem(
-                            cls.name,
-                            vscode.CompletionItemKind.Constructor
-                        );
-                        ctorItem.detail = constructor.label;
-                        ctorItem.documentation = new vscode.MarkdownString(constructor.documentation);
-                        
-                        // Create snippet for constructor
-                        if (constructor.parameters.length > 0) {
-                            const params = constructor.parameters
-                                .map((p, i) => `\${${i + 1}:${p.label}}`)
-                                .join(', ');
-                            ctorItem.insertText = new vscode.SnippetString(
-                                `${cls.name}(${params})$0`
-                            );
-                        }
-                        items.push(ctorItem);
-                    });
-                }
             });
 
             return items;
         }
-    });
+    }, '.', ':');  // Trigger on . and :
 
     // ==================== Signature Help Provider ====================
     
@@ -444,20 +535,7 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(completionProvider, signatureProvider, hoverProvider);
 }
 
-// ==================== Helper Functions ====================
-
-/**
- * Create a snippet string from a function signature
- */
-function createSnippetFromSignature(signature: ApiSignature): string {
-    if (signature.parameters.length === 0) {
-        return `${signature.label.split('(')[0]}()$0`;
-    }
-    
-    const params = signature.parameters.map((p, i) => `\${${i + 1}:${p.label}}`).join(', ');
-    const funcName = signature.label.split('(')[0];
-    return `${funcName}(${params})$0`;
-}
+// ==================== Hover Helper Functions ====================
 
 /**
  * Create hover information for a function

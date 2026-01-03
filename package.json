@@ -2,11 +2,13 @@
   "name": "vectricintellisense",
   "displayName": "Vectric Gadget API Intellisense",
   "description": "Provides autocompletion, hover info, and signature help for Vectric Gadget API in Lua.",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "publisher": "Dennis Ward",
+  "author": {"name": "Dennis Ward"},
   "engines": {
     "vscode": "^1.80.0"
   },
+  "license": "MIT",
   "categories": [
     "Other"
   ],

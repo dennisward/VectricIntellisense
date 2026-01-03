@@ -360,6 +360,746 @@
           "value": "Rotation around Y axis"
         }
       ]
+    },
+    {
+      "name": "VectricJob",
+      "kind": "Class",
+      "detail": "class VectricJob",
+      "documentation": "This is the main object a script writer will interact with and represents the currently open job (file) within the application. There are members of the object which will tell you if there is an existing job open and also to allow you to create a new job.",
+      "constructors": [
+        {
+          "label": "VectricJob()",
+          "documentation": "Creates a reference to the currently open job. Use the .Exists property to check if a job is actually loaded.",
+          "parameters": []
+        }
+      ],
+      "properties": [
+        {
+          "name": "Exists",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "Returns true if there is an existing job open",
+          "readOnly": true
+        },
+        {
+          "name": "DocumentVariables",
+          "kind": "Property",
+          "detail": "DocumentVariableList",
+          "documentation": "Returns the DocumentVariableList for the job. The variable list allows for user defined values to be used in formulas.",
+          "readOnly": true
+        },
+        {
+          "name": "Height",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Returns height of the job along Y axis (same as YLength)",
+          "readOnly": true
+        },
+        {
+          "name": "IsAspire",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "Returns true if the script is running inside Aspire",
+          "readOnly": true
+        },
+        {
+          "name": "IsBetaBuild",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "Returns true if this is a Beta build rather than a release build",
+          "readOnly": true
+        },
+        {
+          "name": "InInches",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "Returns true if the current units are inches",
+          "readOnly": true
+        },
+        {
+          "name": "InMM",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "Returns true if the current units are mm",
+          "readOnly": true
+        },
+        {
+          "name": "JobParameters",
+          "kind": "Property",
+          "detail": "utParameterList",
+          "documentation": "Returns the utParameterList for the job. The parameter list allows scripts to store persistent data with the job.",
+          "readOnly": true
+        },
+        {
+          "name": "LayerManager",
+          "kind": "Property",
+          "detail": "CadLayerManager",
+          "documentation": "Returns the CadLayerManager for the job. This manages all the layers which in turn hold all the vector objects in the job.",
+          "readOnly": true
+        },
+        {
+          "name": "MinX",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Returns X coordinate of bottom left corner of job",
+          "readOnly": true
+        },
+        {
+          "name": "MinY",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Returns Y coordinate of bottom left corner of job",
+          "readOnly": true
+        },
+        {
+          "name": "Name",
+          "kind": "Property",
+          "detail": "string",
+          "documentation": "Returns the name of the current job WITHOUT the file extension (e.g. 'test' not 'test.crv')",
+          "readOnly": true
+        },
+        {
+          "name": "PostProcessorParameters",
+          "kind": "Property",
+          "detail": "utParameterList",
+          "documentation": "Returns the utParameterList for the last run of a post processor. This will hold information such as the PostP used, the tools used and the actual toolpath files output.",
+          "readOnly": true
+        },
+        {
+          "name": "Selection",
+          "kind": "Property",
+          "detail": "SelectionList",
+          "documentation": "Returns the SelectionList for the currently selected vectors in the job",
+          "readOnly": true
+        },
+        {
+          "name": "SheetManager",
+          "kind": "Property",
+          "detail": "CadSheetManager",
+          "documentation": "Returns the CadSheetManager for the job. This manages all the sheets in the job.",
+          "readOnly": true
+        },
+        {
+          "name": "Width",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Returns width of the job along X axis (same as XLength)",
+          "readOnly": true
+        },
+        {
+          "name": "XLength",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Returns length of the job along X axis (same as Width)",
+          "readOnly": true
+        },
+        {
+          "name": "YLength",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Returns length of the job along Y axis (same as Height)",
+          "readOnly": true
+        }
+      ],
+      "methods": [
+        {
+          "name": "ClearClipboard",
+          "kind": "Method",
+          "detail": "() → void",
+          "documentation": "Clear any data on the clipboard",
+          "signature": {
+            "label": "ClearClipboard()",
+            "documentation": "Clear any data on the clipboard",
+            "parameters": [],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "CreateHorizontalGuide",
+          "kind": "Method",
+          "detail": "(y_value: number, locked: boolean) → void",
+          "documentation": "Create a horizontal guide at the specified Y position",
+          "signature": {
+            "label": "CreateHorizontalGuide(y_value: number, locked: boolean)",
+            "documentation": "Create a horizontal guide",
+            "parameters": [
+              {
+                "label": "y_value",
+                "documentation": "y_value: number - Y value for guide position"
+              },
+              {
+                "label": "locked",
+                "documentation": "locked: boolean - if true guide is locked"
+              }
+            ],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "CopyToClipboard",
+          "kind": "Method",
+          "detail": "(text: string) → boolean",
+          "documentation": "Copies passed text to clipboard. Returns true if copied to clipboard OK else false.",
+          "signature": {
+            "label": "CopyToClipboard(text: string)",
+            "documentation": "Copies passed text to clipboard",
+            "parameters": [
+              {
+                "label": "text",
+                "documentation": "text: string - text to put on clipboard"
+              }
+            ],
+            "returns": "boolean"
+          }
+        },
+        {
+          "name": "CreateVerticalGuide",
+          "kind": "Method",
+          "detail": "(x_value: number, locked: boolean) → void",
+          "documentation": "Create a vertical guide at the specified X position",
+          "signature": {
+            "label": "CreateVerticalGuide(x_value: number, locked: boolean)",
+            "documentation": "Create a vertical guide",
+            "parameters": [
+              {
+                "label": "x_value",
+                "documentation": "x_value: number - X value for guide position"
+              },
+              {
+                "label": "locked",
+                "documentation": "locked: boolean - if true guide is locked"
+              }
+            ],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "DisplayToolpathPreviewForm",
+          "kind": "Method",
+          "detail": "() → void",
+          "documentation": "Display the toolpath preview form for simulation",
+          "signature": {
+            "label": "DisplayToolpathPreviewForm()",
+            "documentation": "Display the toolpath preview form for simulation",
+            "parameters": [],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "ExportSelectionToEps",
+          "kind": "Method",
+          "detail": "(pathname: string) → boolean",
+          "documentation": "Exports selected vectors to passed path as an EPS file. Returns true if data exported OK else false.",
+          "signature": {
+            "label": "ExportSelectionToEps(pathname: string)",
+            "documentation": "Exports selected vectors to EPS file",
+            "parameters": [
+              {
+                "label": "pathname",
+                "documentation": "pathname: string - path to output file"
+              }
+            ],
+            "returns": "boolean"
+          }
+        },
+        {
+          "name": "ExportSelectionToDxf",
+          "kind": "Method",
+          "detail": "(pathname: string) → boolean",
+          "documentation": "Exports selected vectors to passed path as a DXF file. Returns true if data exported OK else false.",
+          "signature": {
+            "label": "ExportSelectionToDxf(pathname: string)",
+            "documentation": "Exports selected vectors to DXF file",
+            "parameters": [
+              {
+                "label": "pathname",
+                "documentation": "pathname: string - path to output file"
+              }
+            ],
+            "returns": "boolean"
+          }
+        },
+        {
+          "name": "ExportSelectionToSvg",
+          "kind": "Method",
+          "detail": "(pathname: string) → boolean",
+          "documentation": "Exports selected vectors to passed path as a SVG file. Returns true if data exported OK else false.",
+          "signature": {
+            "label": "ExportSelectionToSvg(pathname: string)",
+            "documentation": "Exports selected vectors to SVG file",
+            "parameters": [
+              {
+                "label": "pathname",
+                "documentation": "pathname: string - path to output file"
+              }
+            ],
+            "returns": "boolean"
+          }
+        },
+        {
+          "name": "ExportDocumentVariables",
+          "kind": "Method",
+          "detail": "(pathname: string) → boolean",
+          "documentation": "Exports the job's DocumentVariableList to passed path as an INI file.",
+          "signature": {
+            "label": "ExportDocumentVariables(pathname: string)",
+            "documentation": "Exports document variables to INI file",
+            "parameters": [
+              {
+                "label": "pathname",
+                "documentation": "pathname: string - path to output file"
+              }
+            ],
+            "returns": "boolean"
+          }
+        },
+        {
+          "name": "GetBuildVersion",
+          "kind": "Method",
+          "detail": "() → number",
+          "documentation": "Returns application internal build version same for Aspire and VCarve Pro (e.g. 7.004 for Aspire 4.004 which matches VCarve Pro 7.004)",
+          "signature": {
+            "label": "GetBuildVersion()",
+            "documentation": "Returns application internal build version",
+            "parameters": [],
+            "returns": "number"
+          }
+        },
+        {
+          "name": "GetBounds",
+          "kind": "Method",
+          "detail": "() → Box2D",
+          "documentation": "Return the 2D bounding box for the drawing area",
+          "signature": {
+            "label": "GetBounds()",
+            "documentation": "Return the 2D bounding box for the drawing area",
+            "parameters": [],
+            "returns": "Box2D"
+          }
+        },
+        {
+          "name": "GetAppVersion",
+          "kind": "Method",
+          "detail": "() → number",
+          "documentation": "Returns application version number as a double (e.g. 4.004 for Aspire V4.0)",
+          "signature": {
+            "label": "GetAppVersion()",
+            "documentation": "Returns application version number",
+            "parameters": [],
+            "returns": "number"
+          }
+        },
+        {
+          "name": "GetWrapDiameter",
+          "kind": "Method",
+          "detail": "() → number",
+          "documentation": "Returns wrap diameter for a wrapped model",
+          "signature": {
+            "label": "GetWrapDiameter()",
+            "documentation": "Returns wrap diameter for a wrapped model",
+            "parameters": [],
+            "returns": "number"
+          }
+        },
+        {
+          "name": "GroupSelection",
+          "kind": "Method",
+          "detail": "() → boolean",
+          "documentation": "Returns true if the current selection could be grouped",
+          "signature": {
+            "label": "GroupSelection()",
+            "documentation": "Groups the current selection if possible",
+            "parameters": [],
+            "returns": "boolean"
+          }
+        },
+        {
+          "name": "GuidesVisible",
+          "kind": "Method",
+          "detail": "() → boolean",
+          "documentation": "Returns true if guides are visible else false",
+          "signature": {
+            "label": "GuidesVisible()",
+            "documentation": "Check if guides are visible",
+            "parameters": [],
+            "returns": "boolean"
+          }
+        },
+        {
+          "name": "ImportBitmap",
+          "kind": "Method",
+          "detail": "(pathname: string) → boolean",
+          "documentation": "Imports a bitmap from passed path. Returns true if file imported OK else false.",
+          "signature": {
+            "label": "ImportBitmap(pathname: string)",
+            "documentation": "Imports a bitmap file",
+            "parameters": [
+              {
+                "label": "pathname",
+                "documentation": "pathname: string - path to bitmap file"
+              }
+            ],
+            "returns": "boolean"
+          }
+        },
+        {
+          "name": "ImportDxfDwg",
+          "kind": "Method",
+          "detail": "(pathname: string) → boolean",
+          "documentation": "Imports a DXF or DWG file from passed path. Returns true if file imported OK else false. NOTE: after data is imported it is selected.",
+          "signature": {
+            "label": "ImportDxfDwg(pathname: string)",
+            "documentation": "Imports a DXF or DWG file",
+            "parameters": [
+              {
+                "label": "pathname",
+                "documentation": "pathname: string - path to DXF/DWG file"
+              }
+            ],
+            "returns": "boolean"
+          }
+        },
+        {
+          "name": "ImportSTLDirect",
+          "kind": "Method",
+          "detail": "(pathname: string) → boolean",
+          "documentation": "Directly import (without orientation form) an STL with passed path - automatically creates a component. Returns true if file imported OK else false. NOTE: Aspire only",
+          "signature": {
+            "label": "ImportSTLDirect(pathname: string)",
+            "documentation": "Imports an STL file directly (Aspire only)",
+            "parameters": [
+              {
+                "label": "pathname",
+                "documentation": "pathname: string - path to STL file"
+              }
+            ],
+            "returns": "boolean"
+          }
+        },
+        {
+          "name": "ImportSVG",
+          "kind": "Method",
+          "detail": "(pathname: string) → boolean",
+          "documentation": "Import an SVG file with the given path and creates the vectors and layers. Returns true if the file was imported with no issues, otherwise returns false.",
+          "signature": {
+            "label": "ImportSVG(pathname: string)",
+            "documentation": "Imports an SVG file",
+            "parameters": [
+              {
+                "label": "pathname",
+                "documentation": "pathname: string - path to SVG file"
+              }
+            ],
+            "returns": "boolean"
+          }
+        },
+        {
+          "name": "ImportDocumentVariables",
+          "kind": "Method",
+          "detail": "(pathname: string) → boolean",
+          "documentation": "Imports a DocumentVariableList from the passed path. Please note that any existing variables will be overwritten.",
+          "signature": {
+            "label": "ImportDocumentVariables(pathname: string)",
+            "documentation": "Imports document variables from INI file",
+            "parameters": [
+              {
+                "label": "pathname",
+                "documentation": "pathname: string - path to INI file"
+              }
+            ],
+            "returns": "boolean"
+          }
+        },
+        {
+          "name": "IsWrappedModel",
+          "kind": "Method",
+          "detail": "() → boolean",
+          "documentation": "Return true if this is a wrapped model",
+          "signature": {
+            "label": "IsWrappedModel()",
+            "documentation": "Check if this is a wrapped model",
+            "parameters": [],
+            "returns": "boolean"
+          }
+        },
+        {
+          "name": "MoveObjectToSheet",
+          "kind": "Method",
+          "detail": "(object: CadObject, sheet_id: UUID) → void",
+          "documentation": "Moves the passed object to the sheet with the passed id. For details of how to access the sheet ids see CadSheetManager.",
+          "signature": {
+            "label": "MoveObjectToSheet(object: CadObject, sheet_id: UUID)",
+            "documentation": "Moves an object to a different sheet",
+            "parameters": [
+              {
+                "label": "object",
+                "documentation": "object: CadObject - object to move"
+              },
+              {
+                "label": "sheet_id",
+                "documentation": "sheet_id: UUID - target sheet ID"
+              }
+            ],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "Refresh2DView",
+          "kind": "Method",
+          "detail": "() → void",
+          "documentation": "Refreshes the 2D view. Call this after you have created or modified geometry to update the 2D view.",
+          "signature": {
+            "label": "Refresh2DView()",
+            "documentation": "Refreshes the 2D view",
+            "parameters": [],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "SelectAllVectors",
+          "kind": "Method",
+          "detail": "() → boolean",
+          "documentation": "Returns true if all vectors in the current job could be selected",
+          "signature": {
+            "label": "SelectAllVectors()",
+            "documentation": "Selects all vectors in the job",
+            "parameters": [],
+            "returns": "boolean"
+          }
+        },
+        {
+          "name": "SetGuidesVisible",
+          "kind": "Method",
+          "detail": "(visible: boolean) → void",
+          "documentation": "Set visibility of guides",
+          "signature": {
+            "label": "SetGuidesVisible(visible: boolean)",
+            "documentation": "Set visibility of guides",
+            "parameters": [
+              {
+                "label": "visible",
+                "documentation": "visible: boolean - true if guides visible else false"
+              }
+            ],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "SetXY_Origin",
+          "kind": "Method",
+          "detail": "(origin: XYOrigin, x_offset: number, y_offset: number) → boolean",
+          "documentation": "Set the 2D origin for the job. Returns true if origin set OK else false. NOTE: no data is moved by this call!",
+          "signature": {
+            "label": "SetXY_Origin(origin: XYOrigin, x_offset: number, y_offset: number)",
+            "documentation": "Set the 2D origin for the job",
+            "parameters": [
+              {
+                "label": "origin",
+                "documentation": "origin: XYOrigin - the four corners or the centre"
+              },
+              {
+                "label": "x_offset",
+                "documentation": "x_offset: number - distance in X of specified point from 0,0"
+              },
+              {
+                "label": "y_offset",
+                "documentation": "y_offset: number - distance in Y of specified point from 0,0"
+              }
+            ],
+            "returns": "boolean"
+          }
+        },
+        {
+          "name": "UnGroupSelection",
+          "kind": "Method",
+          "detail": "(deep_ungroup: boolean, preserve_orig_layers: boolean) → boolean",
+          "documentation": "Returns true if the current selection could be ungrouped",
+          "signature": {
+            "label": "UnGroupSelection(deep_ungroup: boolean, preserve_orig_layers: boolean)",
+            "documentation": "Ungroups the current selection",
+            "parameters": [
+              {
+                "label": "deep_ungroup",
+                "documentation": "deep_ungroup: boolean - if true ungroup Groups recursively"
+              },
+              {
+                "label": "preserve_orig_layers",
+                "documentation": "preserve_orig_layers: boolean - if true preserve the original object layers"
+              }
+            ],
+            "returns": "boolean"
+          }
+        },
+        {
+          "name": "WrappingXValues",
+          "kind": "Method",
+          "detail": "() → boolean",
+          "documentation": "Return true if we are wrapping X values - else wrapping Y values",
+          "signature": {
+            "label": "WrappingXValues()",
+            "documentation": "Check if wrapping X values",
+            "parameters": [],
+            "returns": "boolean"
+          }
+        },
+        {
+          "name": "WrapZOnSurface",
+          "kind": "Method",
+          "detail": "() → boolean",
+          "documentation": "Returns true if Z for wrap is on surface of material, else in centre",
+          "signature": {
+            "label": "WrapZOnSurface()",
+            "documentation": "Check if wrap Z is on surface",
+            "parameters": [],
+            "returns": "boolean"
+          }
+        },
+        {
+          "name": "SwitchActiveSide",
+          "kind": "Method",
+          "detail": "() → void",
+          "documentation": "Switch the current side and make the opposite side active (double-sided jobs only)",
+          "signature": {
+            "label": "SwitchActiveSide()",
+            "documentation": "Switch to opposite side",
+            "parameters": [],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "SetActiveSide",
+          "kind": "Method",
+          "detail": "(side_id: UUID) → void",
+          "documentation": "Set the current side to be that of the given UUID (double-sided jobs only)",
+          "signature": {
+            "label": "SetActiveSide(side_id: UUID)",
+            "documentation": "Set active side by ID",
+            "parameters": [
+              {
+                "label": "side_id",
+                "documentation": "side_id: UUID - ID of side to activate"
+              }
+            ],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "GetSideList",
+          "kind": "Method",
+          "detail": "() → UUID_List",
+          "documentation": "Return UUID_List with the list of side UUIDs. This is useful for iterating over the sides in double-sided jobs.",
+          "signature": {
+            "label": "GetSideList()",
+            "documentation": "Get list of side IDs",
+            "parameters": [],
+            "returns": "UUID_List"
+          }
+        },
+        {
+          "name": "GetActiveSideId",
+          "kind": "Method",
+          "detail": "() → UUID",
+          "documentation": "Return the current side's UUID",
+          "signature": {
+            "label": "GetActiveSideId()",
+            "documentation": "Get active side ID",
+            "parameters": [],
+            "returns": "UUID"
+          }
+        },
+        {
+          "name": "GetSideName",
+          "kind": "Method",
+          "detail": "(side_id: UUID) → string",
+          "documentation": "Return a string with the name of the given side",
+          "signature": {
+            "label": "GetSideName(side_id: UUID)",
+            "documentation": "Get side name by ID",
+            "parameters": [
+              {
+                "label": "side_id",
+                "documentation": "side_id: UUID - ID of side"
+              }
+            ],
+            "returns": "string"
+          }
+        },
+        {
+          "name": "CopySelectionToOppositeSide",
+          "kind": "Method",
+          "detail": "() → void",
+          "documentation": "Copy the selected vectors and components to the opposite side and flip them (double-sided jobs only)",
+          "signature": {
+            "label": "CopySelectionToOppositeSide()",
+            "documentation": "Copy selection to opposite side",
+            "parameters": [],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "MoveSelectionToOppositeSide",
+          "kind": "Method",
+          "detail": "() → void",
+          "documentation": "Move the selected vectors and components to the opposite side and flip them (double-sided jobs only)",
+          "signature": {
+            "label": "MoveSelectionToOppositeSide()",
+            "documentation": "Move selection to opposite side",
+            "parameters": [],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "SideComponentManager",
+          "kind": "Method",
+          "detail": "(side_id: UUID) → ComponentManager",
+          "documentation": "Return the ComponentManager for the side which has the given UUID. If you just require the component manager of the current side, you can use the .ComponentManager property instead.",
+          "signature": {
+            "label": "SideComponentManager(side_id: UUID)",
+            "documentation": "Get ComponentManager for specific side",
+            "parameters": [
+              {
+                "label": "side_id",
+                "documentation": "side_id: UUID - ID of side"
+              }
+            ],
+            "returns": "ComponentManager"
+          }
+        },
+        {
+          "name": "IsSingleSided",
+          "kind": "Method",
+          "detail": "() → boolean",
+          "documentation": "Return true if we have a job and it's single-sided",
+          "signature": {
+            "label": "IsSingleSided()",
+            "documentation": "Check if job is single-sided",
+            "parameters": [],
+            "returns": "boolean"
+          }
+        },
+        {
+          "name": "IsDoubleSided",
+          "kind": "Method",
+          "detail": "() → boolean",
+          "documentation": "Return true if we have a job and it's double-sided",
+          "signature": {
+            "label": "IsDoubleSided()",
+            "documentation": "Check if job is double-sided",
+            "parameters": [],
+            "returns": "boolean"
+          }
+        }
+      ],
+      "constants": [
+        {
+          "name": "AROUND_X",
+          "value": "Flip material around X axis (for double-sided jobs)"
+        },
+        {
+          "name": "AROUND_Y",
+          "value": "Flip material around Y axis (for double-sided jobs)"
+        }
+      ]
     }
   ]
 }
