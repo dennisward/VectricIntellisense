@@ -181,6 +181,50 @@ function getCompletionContext(document: vscode.TextDocument, position: vscode.Po
     const lineText = document.lineAt(position).text;
     const textBeforeCursor = lineText.substring(0, position.character);
     
+    // Get the word being typed
+    const wordRange = document.getWordRangeAtPosition(position);
+    const currentWord = wordRange ? document.getText(wordRange) : '';
+    
+    // List of Lua keywords - don't provide completions when typing these
+    const luaKeywords = [
+        'and', 'break', 'do', 'else', 'elseif', 'end', 'false', 'for', 'function',
+        'if', 'in', 'local', 'nil', 'not', 'or', 'repeat', 'return', 'then',
+        'true', 'until', 'while'
+    ];
+    
+    // Check if we're typing a Lua keyword
+    if (luaKeywords.includes(currentWord.toLowerCase())) {
+        return {
+            type: 'keyword',
+            objectName: null,
+            className: null,
+            prefix: ''
+        };
+    }
+    
+    // Check if we're in a context where a keyword is likely next
+    // Pattern: after comparison operators, logical operators, or numbers
+    const keywordContextPatterns = [
+        /[=<>!]=?\s*\d+\s+\w*$/,           // After comparison with number: "!= 2 t"
+        /[=<>!]=?\s*["'][^"']*["']\s+\w*$/, // After comparison with string: "== 'test' t"
+        /[=<>!]=?\s*\w+\s+\w*$/,           // After comparison with variable: "== var t"
+        /\b(and|or|not)\s+\w*$/,           // After logical operators: "and t"
+        /\)\s+\w*$/,                       // After closing paren: ") t"
+    ];
+    
+    // Check if current context matches any keyword-likely pattern
+    for (const pattern of keywordContextPatterns) {
+        if (pattern.test(textBeforeCursor)) {
+            // We're likely typing a keyword, so don't show completions
+            return {
+                type: 'keyword',
+                objectName: null,
+                className: null,
+                prefix: ''
+            };
+        }
+    }
+    
     // Check if we're typing after a dot (.)
     const dotMatch = textBeforeCursor.match(/(\w+)\.(\w*)$/);
     if (dotMatch) {
@@ -328,6 +372,8 @@ function createMemberCompletions(cls: ApiClass, memberType: 'property' | 'method
                 `${prop.documentation}\n\n${prop.readOnly ? '*(Read-only)*' : '*(Read/write)*'}`
             );
             item.insertText = prop.name;
+            item.sortText = `~${prop.name}`; // ~ sorts after normal items
+            item.preselect = false; // Never auto-select
             items.push(item);
         });
     }
@@ -347,6 +393,8 @@ function createMemberCompletions(cls: ApiClass, memberType: 'property' | 'method
             } else {
                 item.insertText = new vscode.SnippetString(`${method.name}()$0`);
             }
+            item.sortText = `~${method.name}`; // ~ sorts after normal items
+            item.preselect = false; // Never auto-select
             items.push(item);
         });
     }
@@ -357,6 +405,8 @@ function createMemberCompletions(cls: ApiClass, memberType: 'property' | 'method
             item.detail = constant.value;
             item.documentation = new vscode.MarkdownString(constant.value);
             item.insertText = constant.name;
+            item.sortText = `~${constant.name}`; // ~ sorts after normal items
+            item.preselect = false; // Never auto-select
             items.push(item);
         });
     }
@@ -386,6 +436,11 @@ export function activate(context: vscode.ExtensionContext) {
             const items: vscode.CompletionItem[] = [];
             const context = getCompletionContext(document, position, classes);
             
+            // CONTEXT 0: Lua keyword - don't provide any completions
+            if (context.type === 'keyword') {
+                return [];
+            }
+            
             // CONTEXT 1: Member access (obj.property or ClassName.constant)
             if (context.type === 'member-access' && context.className) {
                 const cls = findClassByName(classes, context.className);
@@ -414,6 +469,8 @@ export function activate(context: vscode.ExtensionContext) {
                 const item = new vscode.CompletionItem(fn.name, vscode.CompletionItemKind.Function);
                 item.detail = fn.detail;
                 item.documentation = new vscode.MarkdownString(fn.documentation);
+                item.sortText = `~${fn.name}`; // ~ sorts after normal items
+                item.preselect = false; // Never auto-select
                 
                 if (fn.signature) {
                     item.insertText = new vscode.SnippetString(
@@ -428,6 +485,8 @@ export function activate(context: vscode.ExtensionContext) {
                 const item = new vscode.CompletionItem(cls.name, vscode.CompletionItemKind.Class);
                 item.detail = cls.detail;
                 item.documentation = new vscode.MarkdownString(cls.documentation);
+                item.sortText = `~${cls.name}`; // ~ sorts after normal items
+                item.preselect = false; // Never auto-select
                 
                 // If class has constructors, create snippet for the most common one
                 if (cls.constructors && cls.constructors.length > 0) {
