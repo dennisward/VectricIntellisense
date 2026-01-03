@@ -288,6 +288,8 @@ function getCompletionContext(document: vscode.TextDocument, position: vscode.Po
  * Infer the type of a variable by looking for its assignment
  */
 function inferVariableType(document: vscode.TextDocument, position: vscode.Position, varName: string, classes: ApiClass[], globalFunctions: ApiFunction[]): string | null {
+    console.log(`[Type Inference] Looking for type of variable: ${varName}`);
+    
     // Search backwards from current position to find variable declaration/assignment
     const currentLine = position.line;
     
@@ -349,14 +351,63 @@ function inferVariableType(document: vscode.TextDocument, position: vscode.Posit
         const funcMatch = line.match(functionAssignment);
         if (funcMatch) {
             const functionName = funcMatch[1];
+            console.log(`[Pattern 4] Found function assignment: ${varName} = ${functionName}(...)`);
             
             // Check if this is a global function with a known return type
             const globalFunc = globalFunctions.find(f => f.name === functionName);
-            if (globalFunc && globalFunc.signature.returns) {
+            console.log(`[Pattern 4] Global function found:`, globalFunc ? globalFunc.name : 'NOT FOUND');
+            if (globalFunc && globalFunc.signature && globalFunc.signature.returns) {
                 const returnType = globalFunc.signature.returns;
+                console.log(`[Pattern 4] Return type:`, returnType);
                 // Check if the return type is a known class
-                if (classes.find(c => c.name === returnType)) {
+                const foundClass = classes.find(c => c.name === returnType);
+                console.log(`[Pattern 4] Class found:`, foundClass ? foundClass.name : 'NOT FOUND');
+                if (foundClass) {
+                    console.log(`[Pattern 4] Returning type: ${returnType}`);
                     return returnType;
+                }
+            }
+        }
+        
+        // Pattern 4b: varName = object:MethodName(...) (method return type)
+        const methodAssignment = new RegExp(`\\b${varName}\\s*=\\s*(\\w+):(\\w+)\\s*\\(`);
+        const methodMatch = line.match(methodAssignment);
+        if (methodMatch) {
+            const objectName = methodMatch[1];
+            const methodName = methodMatch[2];
+            console.log(`[Pattern 4b] Found method assignment: ${varName} = ${objectName}:${methodName}(...)`);
+            
+            // First, infer the type of the object
+            const objectType = inferVariableType(document, new vscode.Position(lineNum, 0), objectName, classes, globalFunctions);
+            console.log(`[Pattern 4b] Object type:`, objectType);
+            
+            if (objectType) {
+                // Find the class and look up the method
+                const cls = classes.find(c => c.name === objectType);
+                console.log(`[Pattern 4b] Class found:`, cls ? cls.name : 'NOT FOUND');
+                
+                if (cls && cls.methods) {
+                    const method = cls.methods.find(m => m.name === methodName);
+                    console.log(`[Pattern 4b] Method found:`, method ? method.name : 'NOT FOUND');
+                    
+                    if (method && method.signature && method.signature.returns) {
+                        const returnType = method.signature.returns;
+                        console.log(`[Pattern 4b] Return type:`, returnType);
+                        
+                        // Handle multiple return values (e.g., "CadObject, POSITION")
+                        // Take the first return type
+                        const firstReturnType = returnType.split(',')[0].trim();
+                        console.log(`[Pattern 4b] First return type:`, firstReturnType);
+                        
+                        // Check if it's a known class
+                        const foundClass = classes.find(c => c.name === firstReturnType);
+                        console.log(`[Pattern 4b] Class found:`, foundClass ? foundClass.name : 'NOT FOUND');
+                        
+                        if (foundClass) {
+                            console.log(`[Pattern 4b] Returning type: ${firstReturnType}`);
+                            return firstReturnType;
+                        }
+                    }
                 }
             }
         }
@@ -376,6 +427,46 @@ function inferVariableType(document: vscode.TextDocument, position: vscode.Posit
  */
 function findClassByName(classes: ApiClass[], name: string): ApiClass | undefined {
     return classes.find(cls => cls.name === name);
+}
+
+/**
+ * Get all members of a class including inherited members from base classes
+ */
+function getClassWithInheritance(cls: ApiClass, classes: ApiClass[]): ApiClass {
+    // Check if this class extends another class
+    const extendsMatch = cls.detail.match(/extends\s+(\w+)/);
+    if (!extendsMatch) {
+        // No inheritance, return as-is
+        return cls;
+    }
+    
+    const baseClassName = extendsMatch[1];
+    const baseClass = findClassByName(classes, baseClassName);
+    
+    if (!baseClass) {
+        // Base class not found, return as-is
+        return cls;
+    }
+    
+    // Recursively get base class with its inheritance
+    const baseWithInheritance = getClassWithInheritance(baseClass, classes);
+    
+    // Merge properties, methods, and constants
+    return {
+        ...cls,
+        properties: [
+            ...(baseWithInheritance.properties || []),
+            ...(cls.properties || [])
+        ],
+        methods: [
+            ...(baseWithInheritance.methods || []),
+            ...(cls.methods || [])
+        ],
+        constants: [
+            ...(baseWithInheritance.constants || []),
+            ...(cls.constants || [])
+        ]
+    };
 }
 
 /**
@@ -461,6 +552,7 @@ export function activate(context: vscode.ExtensionContext) {
     const classes = loadClasses(context.extensionPath);
     
     console.log(`Total API loaded: ${globalFunctions.length} functions, ${classes.length} classes`);
+    console.log('Loaded classes:', classes.map(c => c.name).join(', '));
 
     // ==================== Completion Provider ====================
     
@@ -476,11 +568,16 @@ export function activate(context: vscode.ExtensionContext) {
             
             // CONTEXT 1: Member access (obj.property or ClassName.constant)
             if (context.type === 'member-access' && context.className) {
+                console.log(`[Completion] Member access for class: ${context.className}`);
                 const cls = findClassByName(classes, context.className);
+                console.log(`[Completion] Class found:`, cls ? cls.name : 'NOT FOUND');
                 if (cls) {
+                    // Get class with inherited members
+                    const clsWithInheritance = getClassWithInheritance(cls, classes);
+                    console.log(`[Completion] Adding ${clsWithInheritance.properties?.length || 0} properties and ${clsWithInheritance.constants?.length || 0} constants`);
                     // Add properties and constants
-                    items.push(...createMemberCompletions(cls, 'property'));
-                    items.push(...createMemberCompletions(cls, 'constant'));
+                    items.push(...createMemberCompletions(clsWithInheritance, 'property'));
+                    items.push(...createMemberCompletions(clsWithInheritance, 'constant'));
                 }
                 return items;
             }
@@ -489,8 +586,10 @@ export function activate(context: vscode.ExtensionContext) {
             if (context.type === 'method-access' && context.className) {
                 const cls = findClassByName(classes, context.className);
                 if (cls) {
+                    // Get class with inherited members
+                    const clsWithInheritance = getClassWithInheritance(cls, classes);
                     // Add methods only
-                    items.push(...createMemberCompletions(cls, 'method'));
+                    items.push(...createMemberCompletions(clsWithInheritance, 'method'));
                 }
                 return items;
             }
