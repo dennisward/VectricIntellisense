@@ -1100,6 +1100,336 @@
           "value": "Flip material around Y axis (for double-sided jobs)"
         }
       ]
+    },
+    {
+      "name": "SelectionList",
+      "kind": "Class",
+      "detail": "class SelectionList",
+      "documentation": "This object holds a list of CadObjects representing the current selection in the program. The selection is accessed via the job using job.Selection property. SelectionList provides methods to add, remove, and manipulate selected objects.",
+      "constructors": [],
+      "properties": [
+        {
+          "name": "Count",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Returns the number of objects in the selection list",
+          "readOnly": true
+        },
+        {
+          "name": "IsEmpty",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "Returns true if the selection list is empty (no objects selected)",
+          "readOnly": true
+        }
+      ],
+      "methods": [
+        {
+          "name": "Add",
+          "kind": "Method",
+          "detail": "(obj: CadObject, add_tail: boolean, group_add: boolean) → void",
+          "documentation": "Add the passed object to the selection list. If you are adding many objects, set group_add to true and call GroupSelectionFinished() when done to avoid unnecessary updating.",
+          "signature": {
+            "label": "Add(obj: CadObject, add_tail: boolean, group_add: boolean)",
+            "documentation": "Add object to selection list",
+            "parameters": [
+              {
+                "label": "obj",
+                "documentation": "obj: CadObject - object to add to selection"
+              },
+              {
+                "label": "add_tail",
+                "documentation": "add_tail: boolean - if true add to end of selection, else insert at start"
+              },
+              {
+                "label": "group_add",
+                "documentation": "group_add: boolean - if true, defer updates until GroupSelectionFinished() is called"
+              }
+            ],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "AddHead",
+          "kind": "Method",
+          "detail": "(obj: CadObject) → void",
+          "documentation": "Add the passed object to the front of the selection list",
+          "signature": {
+            "label": "AddHead(obj: CadObject)",
+            "documentation": "Add object to front of selection",
+            "parameters": [
+              {
+                "label": "obj",
+                "documentation": "obj: CadObject - object to add"
+              }
+            ],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "AddTail",
+          "kind": "Method",
+          "detail": "(obj: CadObject) → void",
+          "documentation": "Add the passed object to the end of the selection list",
+          "signature": {
+            "label": "AddTail(obj: CadObject)",
+            "documentation": "Add object to end of selection",
+            "parameters": [
+              {
+                "label": "obj",
+                "documentation": "obj: CadObject - object to add"
+              }
+            ],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "CanTransform",
+          "kind": "Method",
+          "detail": "(flags: number) → boolean",
+          "documentation": "Return true if selection can be transformed. Flags can be combined (e.g., 3 = Move + Rotate). 1=Move, 2=Rotate, 4=Mirror, 8=Scale Symmetric, 16=Scale Asymmetric",
+          "signature": {
+            "label": "CanTransform(flags: number)",
+            "documentation": "Check if selection can be transformed",
+            "parameters": [
+              {
+                "label": "flags",
+                "documentation": "flags: number - transform type flags (1=Move, 2=Rotate, 4=Mirror, 8=Scale Symmetric, 16=Scale Asymmetric)"
+              }
+            ],
+            "returns": "boolean"
+          }
+        },
+        {
+          "name": "CanSelect",
+          "kind": "Method",
+          "detail": "(obj: CadObject) → boolean",
+          "documentation": "Return true if the passed object can be selected",
+          "signature": {
+            "label": "CanSelect(obj: CadObject)",
+            "documentation": "Check if object can be selected",
+            "parameters": [
+              {
+                "label": "obj",
+                "documentation": "obj: CadObject - object to test"
+              }
+            ],
+            "returns": "boolean"
+          }
+        },
+        {
+          "name": "Clear",
+          "kind": "Method",
+          "detail": "() → void",
+          "documentation": "Clear the selection (list is emptied, all objects deselected)",
+          "signature": {
+            "label": "Clear()",
+            "documentation": "Clear the selection",
+            "parameters": [],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "GetAt",
+          "kind": "Method",
+          "detail": "(pos: POSITION) → CadObject",
+          "documentation": "Returns the object at the current position in the list",
+          "signature": {
+            "label": "GetAt(pos: POSITION)",
+            "documentation": "Get object at position",
+            "parameters": [
+              {
+                "label": "pos",
+                "documentation": "pos: POSITION - current position in list"
+              }
+            ],
+            "returns": "CadObject"
+          }
+        },
+        {
+          "name": "GetBoundingBox",
+          "kind": "Method",
+          "detail": "() → Box2D",
+          "documentation": "Return a Box2D with the bounds of all selected objects",
+          "signature": {
+            "label": "GetBoundingBox()",
+            "documentation": "Get bounding box of selection",
+            "parameters": [],
+            "returns": "Box2D"
+          }
+        },
+        {
+          "name": "GetHeadPosition",
+          "kind": "Method",
+          "detail": "() → POSITION",
+          "documentation": "Returns a POSITION variable to allow access to the head of the selection list",
+          "signature": {
+            "label": "GetHeadPosition()",
+            "documentation": "Get position at head of list",
+            "parameters": [],
+            "returns": "POSITION"
+          }
+        },
+        {
+          "name": "GetNext",
+          "kind": "Method",
+          "detail": "(pos: POSITION) → CadObject, POSITION",
+          "documentation": "Returns the object at the current position AND a new POSITION pointing to the next item (or nil if at end). Note: returns two values.",
+          "signature": {
+            "label": "GetNext(pos: POSITION)",
+            "documentation": "Get object and advance position",
+            "parameters": [
+              {
+                "label": "pos",
+                "documentation": "pos: POSITION - current position in list"
+              }
+            ],
+            "returns": "CadObject, POSITION"
+          }
+        },
+        {
+          "name": "GetPrev",
+          "kind": "Method",
+          "detail": "(pos: POSITION) → CadObject, POSITION",
+          "documentation": "Returns the object at the current position AND a new POSITION pointing to the previous item (or nil if at start). Note: returns two values.",
+          "signature": {
+            "label": "GetPrev(pos: POSITION)",
+            "documentation": "Get object and move position backward",
+            "parameters": [
+              {
+                "label": "pos",
+                "documentation": "pos: POSITION - current position in list"
+              }
+            ],
+            "returns": "CadObject, POSITION"
+          }
+        },
+        {
+          "name": "GetTailPosition",
+          "kind": "Method",
+          "detail": "() → POSITION",
+          "documentation": "Returns a POSITION variable to allow access to the tail (end) of the selection list",
+          "signature": {
+            "label": "GetTailPosition()",
+            "documentation": "Get position at tail of list",
+            "parameters": [],
+            "returns": "POSITION"
+          }
+        },
+        {
+          "name": "GroupSelectionFinished",
+          "kind": "Method",
+          "detail": "() → void",
+          "documentation": "Call this after using Add() or Remove() with group_add/group_remove set to true to update the application when finished modifying the selection",
+          "signature": {
+            "label": "GroupSelectionFinished()",
+            "documentation": "Signal that group selection operations are complete",
+            "parameters": [],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "RemoveOnLayer",
+          "kind": "Method",
+          "detail": "(layer_id: UUID) → void",
+          "documentation": "Remove any objects from the selection which are on the layer with the passed id. The objects are just removed from the selection, not deleted.",
+          "signature": {
+            "label": "RemoveOnLayer(layer_id: UUID)",
+            "documentation": "Remove all objects on specified layer from selection",
+            "parameters": [
+              {
+                "label": "layer_id",
+                "documentation": "layer_id: UUID - ID of layer"
+              }
+            ],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "Remove",
+          "kind": "Method",
+          "detail": "(obj: CadObject, group_remove: boolean) → void",
+          "documentation": "Remove the passed object from the selection. If removing many objects, set group_remove to true and call GroupSelectionFinished() when done.",
+          "signature": {
+            "label": "Remove(obj: CadObject, group_remove: boolean)",
+            "documentation": "Remove object from selection",
+            "parameters": [
+              {
+                "label": "obj",
+                "documentation": "obj: CadObject - object to remove"
+              },
+              {
+                "label": "group_remove",
+                "documentation": "group_remove: boolean - if true, defer updates until GroupSelectionFinished() is called"
+              }
+            ],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "RemoveHead",
+          "kind": "Method",
+          "detail": "() → CadObject",
+          "documentation": "Remove the object at the front of the list and return it",
+          "signature": {
+            "label": "RemoveHead()",
+            "documentation": "Remove and return object from front of list",
+            "parameters": [],
+            "returns": "CadObject"
+          }
+        },
+        {
+          "name": "RemoveTail",
+          "kind": "Method",
+          "detail": "() → CadObject",
+          "documentation": "Remove the object at the end of the list and return it",
+          "signature": {
+            "label": "RemoveTail()",
+            "documentation": "Remove and return object from end of list",
+            "parameters": [],
+            "returns": "CadObject"
+          }
+        },
+        {
+          "name": "Transform",
+          "kind": "Method",
+          "detail": "(xform: Matrix2D) → void",
+          "documentation": "Transform all objects in the selection by the passed transformation matrix",
+          "signature": {
+            "label": "Transform(xform: Matrix2D)",
+            "documentation": "Transform all selected objects",
+            "parameters": [
+              {
+                "label": "xform",
+                "documentation": "xform: Matrix2D - transformation matrix to apply"
+              }
+            ],
+            "returns": "void"
+          }
+        }
+      ],
+      "constants": [
+        {
+          "name": "TRANSFORM_MOVE",
+          "value": "1 - Move transformation flag"
+        },
+        {
+          "name": "TRANSFORM_ROTATE",
+          "value": "2 - Rotate transformation flag"
+        },
+        {
+          "name": "TRANSFORM_MIRROR",
+          "value": "4 - Mirror transformation flag"
+        },
+        {
+          "name": "TRANSFORM_SCALE_SYMMETRIC",
+          "value": "8 - Symmetric scale transformation flag"
+        },
+        {
+          "name": "TRANSFORM_SCALE_ASYMMETRIC",
+          "value": "16 - Asymmetric scale transformation flag"
+        }
+      ]
     }
   ]
 }

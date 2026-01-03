@@ -259,7 +259,32 @@ function inferVariableType(document: vscode.TextDocument, position: vscode.Posit
             }
         }
         
-        // Pattern 3: for varName in ... or function varName(...) - stop searching
+        // Pattern 3: varName = otherVar.PropertyName (property access)
+        const propertyAssignment = new RegExp(`\\b${varName}\\s*=\\s*(\\w+)\\.(\\w+)`);
+        const propMatch = line.match(propertyAssignment);
+        if (propMatch) {
+            const objectName = propMatch[1];
+            const propertyName = propMatch[2];
+            
+            // First, try to infer the type of the object being accessed
+            const objectType = inferVariableType(document, new vscode.Position(lineNum, 0), objectName, classes);
+            if (objectType) {
+                // Find the class and check the property's type
+                const cls = classes.find(c => c.name === objectType);
+                if (cls && cls.properties) {
+                    const property = cls.properties.find(p => p.name === propertyName);
+                    if (property) {
+                        // Extract class name from property detail (e.g., "SelectionList" from "SelectionList")
+                        // Check if the property type is a known class
+                        if (classes.find(c => c.name === property.detail)) {
+                            return property.detail;
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Pattern 4: for varName in ... or function varName(...) - stop searching
         const declarationPattern = new RegExp(`\\b(for|function)\\s+${varName}\\b`);
         if (declarationPattern.test(line)) {
             break; // Different kind of declaration, stop searching

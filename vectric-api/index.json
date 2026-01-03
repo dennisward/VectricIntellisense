@@ -55,7 +55,7 @@
         "id": "high_level",
         "name": "High Level Objects",
         "file": "classes_high_level.json",
-        "count": 2,
+        "count": 3,
         "description": "High level objects like MaterialBlock and VectricJob that provide access to the program's main functionality"
       },
       {
@@ -84,7 +84,7 @@
   },
   "summary": {
     "total_global_functions": 34,
-    "total_classes": 10,
+    "total_classes": 11,
     "total_api_items": 44
   }
 }
