@@ -177,7 +177,7 @@ function loadClasses(extensionPath: string): ApiClass[] {
 /**
  * Get the context of what's being typed (class name vs variable)
  */
-function getCompletionContext(document: vscode.TextDocument, position: vscode.Position, classes: ApiClass[]) {
+function getCompletionContext(document: vscode.TextDocument, position: vscode.Position, classes: ApiClass[], globalFunctions: ApiFunction[]) {
     const lineText = document.lineAt(position).text;
     const textBeforeCursor = lineText.substring(0, position.character);
     
@@ -185,19 +185,31 @@ function getCompletionContext(document: vscode.TextDocument, position: vscode.Po
     const wordRange = document.getWordRangeAtPosition(position);
     const currentWord = wordRange ? document.getText(wordRange) : '';
     
+    // List of Lua built-in types - don't provide completions when typing these
+    // These are more common in code than keywords, so check first
+    const luaBuiltInTypes = [
+        'boolean', 'number', 'string', 'function', 'userdata', 'thread', 'table'
+    ];
+    
     // List of Lua keywords - don't provide completions when typing these
     const luaKeywords = [
         'and', 'break', 'do', 'else', 'elseif', 'end', 'false', 'for', 'function',
         'if', 'in', 'local', 'nil', 'not', 'or', 'repeat', 'return', 'then',
         'true', 'until', 'while'
     ];
-
-    const luaBuiltInTypes = [
-        'nil', 'boolean', 'number', 'string', 'function', 'userdata', 'thread', 'table'
-    ];
     
-    // Check if we're typing a Lua keyword or built-in type
-    if (luaKeywords.includes(currentWord.toLowerCase()) || luaBuiltInTypes.includes(currentWord.toLowerCase())) {
+    // Check built-in types first (more common in code)
+    if (luaBuiltInTypes.includes(currentWord.toLowerCase())) {
+        return {
+            type: 'keyword',
+            objectName: null,
+            className: null,
+            prefix: ''
+        };
+    }
+    
+    // Check if we're typing a Lua keyword
+    if (luaKeywords.includes(currentWord.toLowerCase())) {
         return {
             type: 'keyword',
             objectName: null,
@@ -236,7 +248,7 @@ function getCompletionContext(document: vscode.TextDocument, position: vscode.Po
         const prefix = dotMatch[2] || '';
         
         // Try to infer the type of this variable
-        const inferredType = inferVariableType(document, position, objectName, classes);
+        const inferredType = inferVariableType(document, position, objectName, classes, globalFunctions);
         
         return {
             type: 'member-access',
@@ -253,7 +265,7 @@ function getCompletionContext(document: vscode.TextDocument, position: vscode.Po
         const prefix = colonMatch[2] || '';
         
         // Try to infer the type of this variable
-        const inferredType = inferVariableType(document, position, objectName, classes);
+        const inferredType = inferVariableType(document, position, objectName, classes, globalFunctions);
         
         return {
             type: 'method-access',
@@ -275,7 +287,7 @@ function getCompletionContext(document: vscode.TextDocument, position: vscode.Po
 /**
  * Infer the type of a variable by looking for its assignment
  */
-function inferVariableType(document: vscode.TextDocument, position: vscode.Position, varName: string, classes: ApiClass[]): string | null {
+function inferVariableType(document: vscode.TextDocument, position: vscode.Position, varName: string, classes: ApiClass[], globalFunctions: ApiFunction[]): string | null {
     // Search backwards from current position to find variable declaration/assignment
     const currentLine = position.line;
     
@@ -315,7 +327,7 @@ function inferVariableType(document: vscode.TextDocument, position: vscode.Posit
             const propertyName = propMatch[2];
             
             // First, try to infer the type of the object being accessed
-            const objectType = inferVariableType(document, new vscode.Position(lineNum, 0), objectName, classes);
+            const objectType = inferVariableType(document, new vscode.Position(lineNum, 0), objectName, classes, globalFunctions);
             if (objectType) {
                 // Find the class and check the property's type
                 const cls = classes.find(c => c.name === objectType);
@@ -332,7 +344,24 @@ function inferVariableType(document: vscode.TextDocument, position: vscode.Posit
             }
         }
         
-        // Pattern 4: for varName in ... or function varName(...) - stop searching
+        // Pattern 4: varName = FunctionName(...) (function return type)
+        const functionAssignment = new RegExp(`\\b${varName}\\s*=\\s*(\\w+)\\s*\\(`);
+        const funcMatch = line.match(functionAssignment);
+        if (funcMatch) {
+            const functionName = funcMatch[1];
+            
+            // Check if this is a global function with a known return type
+            const globalFunc = globalFunctions.find(f => f.name === functionName);
+            if (globalFunc && globalFunc.signature.returns) {
+                const returnType = globalFunc.signature.returns;
+                // Check if the return type is a known class
+                if (classes.find(c => c.name === returnType)) {
+                    return returnType;
+                }
+            }
+        }
+        
+        // Pattern 5: for varName in ... or function varName(...) - stop searching
         const declarationPattern = new RegExp(`\\b(for|function)\\s+${varName}\\b`);
         if (declarationPattern.test(line)) {
             break; // Different kind of declaration, stop searching
@@ -438,7 +467,7 @@ export function activate(context: vscode.ExtensionContext) {
     const completionProvider = vscode.languages.registerCompletionItemProvider('lua', {
         provideCompletionItems(document, position) {
             const items: vscode.CompletionItem[] = [];
-            const context = getCompletionContext(document, position, classes);
+            const context = getCompletionContext(document, position, classes, globalFunctions);
             
             // CONTEXT 0: Lua keyword - don't provide any completions
             if (context.type === 'keyword') {
