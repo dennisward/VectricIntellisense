@@ -1430,6 +1430,716 @@
           "value": "16 - Asymmetric scale transformation flag"
         }
       ]
+    },
+    {
+      "name": "CadObject",
+      "kind": "Class",
+      "detail": "class CadObject",
+      "documentation": "CadObject is the base class for all the different types of objects which can appear on a layer within the application. Objects derived from CadObject include polylines, groups, text, bitmaps, toolpath previews, etc. Every object can have named parameters associated with it for storing custom data.",
+      "constructors": [],
+      "properties": [
+        {
+          "name": "ClassName",
+          "kind": "Property",
+          "detail": "string",
+          "documentation": "Returns the name of the class within the application that the object represents (e.g., 'vcCadBitmap', 'vcCadContour', 'vcCadObjectGroup')",
+          "readOnly": true
+        },
+        {
+          "name": "Id",
+          "kind": "Property",
+          "detail": "luaUUID",
+          "documentation": "The unique identifier for this object. IMPORTANT: Do not set two different objects to have the same id!",
+          "readOnly": false
+        },
+        {
+          "name": "RawId",
+          "kind": "Property",
+          "detail": "UUID",
+          "documentation": "The unique identifier for this object",
+          "readOnly": true
+        },
+        {
+          "name": "IsBitmap",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "Returns true if this object is a bitmap or derived from a bitmap",
+          "readOnly": true
+        },
+        {
+          "name": "IsSelected",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "Returns true if this object is selected. The selected state is set when an object is added to the job's selection list.",
+          "readOnly": true
+        },
+        {
+          "name": "IsVisible",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "Get/Set the visibility state for an object. Normally controlled via its layer. Be careful not to create invisible objects that users cannot make visible.",
+          "readOnly": false
+        },
+        {
+          "name": "IsLocked",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "Get/Set the locked state for an object. Normally controlled via its layer. Be careful not to create locked objects that users cannot unlock.",
+          "readOnly": false
+        },
+        {
+          "name": "LayerId",
+          "kind": "Property",
+          "detail": "luaUUID",
+          "documentation": "Id of layer this object belongs to. Cannot be modified directly - use CadLayer methods to move objects between layers.",
+          "readOnly": true
+        },
+        {
+          "name": "RawLayerId",
+          "kind": "Property",
+          "detail": "UUID",
+          "documentation": "The unique identifier for the layer this object belongs to",
+          "readOnly": false
+        },
+        {
+          "name": "SheetId",
+          "kind": "Property",
+          "detail": "UUID",
+          "documentation": "The id of the sheet this object is on. To move an object to a new sheet use VectricJob:MoveObjectToSheet",
+          "readOnly": true
+        },
+        {
+          "name": "SideId",
+          "kind": "Property",
+          "detail": "UUID",
+          "documentation": "The Id of the side which this object belongs to. To compare with another UUID, use luaUUID(object.SideId).IsEqual(my_other_id)",
+          "readOnly": true
+        }
+      ],
+      "methods": [
+        {
+          "name": "CanTransform",
+          "kind": "Method",
+          "detail": "(flags: number) → boolean",
+          "documentation": "Returns true if object can be transformed. Flags: 1=Move, 2=Rotate, 4=Mirror, 8=Scale Symmetric, 16=Scale Asymmetric (can be combined)",
+          "signature": {
+            "label": "CanTransform(flags: number)",
+            "documentation": "Check if object can be transformed",
+            "parameters": [
+              {
+                "label": "flags",
+                "documentation": "flags: number - transform type flags (1=Move, 2=Rotate, 4=Mirror, 8=Scale Symmetric, 16=Scale Asymmetric)"
+              }
+            ],
+            "returns": "boolean"
+          }
+        },
+        {
+          "name": "Clone",
+          "kind": "Method",
+          "detail": "() → CadObject",
+          "documentation": "Return a new copy of this object with all new ids. The returned object is not on a layer yet.",
+          "signature": {
+            "label": "Clone()",
+            "documentation": "Create a copy of this object",
+            "parameters": [],
+            "returns": "CadObject"
+          }
+        },
+        {
+          "name": "GetBoundingBox",
+          "kind": "Method",
+          "detail": "() → Box2D",
+          "documentation": "Returns a Box2D representing the 2D bounds of this object",
+          "signature": {
+            "label": "GetBoundingBox()",
+            "documentation": "Get the bounding box",
+            "parameters": [],
+            "returns": "Box2D"
+          }
+        },
+        {
+          "name": "GetContour",
+          "kind": "Method",
+          "detail": "() → Contour",
+          "documentation": "Return the Contour representation for this object. Not all objects have a contour representation (e.g., groups return nil).",
+          "signature": {
+            "label": "GetContour()",
+            "documentation": "Get contour representation",
+            "parameters": [],
+            "returns": "Contour"
+          }
+        },
+        {
+          "name": "InvalidateBounds",
+          "kind": "Method",
+          "detail": "() → void",
+          "documentation": "Invalidates the cached bounding box for this object. Call this if you modify the raw data for the object.",
+          "signature": {
+            "label": "InvalidateBounds()",
+            "documentation": "Invalidate cached bounds",
+            "parameters": [],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "SetLayer",
+          "kind": "Method",
+          "detail": "(layer: CadLayer) → void",
+          "documentation": "Adds this object to the passed layer",
+          "signature": {
+            "label": "SetLayer(layer: CadLayer)",
+            "documentation": "Move object to a layer",
+            "parameters": [
+              {
+                "label": "layer",
+                "documentation": "layer: CadLayer - target layer"
+              }
+            ],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "Transform",
+          "kind": "Method",
+          "detail": "(matrix: Matrix2D) → void",
+          "documentation": "Transform the object using the passed transformation matrix. Can move, scale, rotate, or combine all three.",
+          "signature": {
+            "label": "Transform(matrix: Matrix2D)",
+            "documentation": "Apply transformation to object",
+            "parameters": [
+              {
+                "label": "matrix",
+                "documentation": "matrix: Matrix2D - transformation matrix"
+              }
+            ],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "GetBool",
+          "kind": "Method",
+          "detail": "(parameter_name: string, default_value: boolean, create_if_not_exist: boolean) → boolean",
+          "documentation": "Retrieve a Boolean parameter with the passed name. If not found, returns default value.",
+          "signature": {
+            "label": "GetBool(parameter_name: string, default_value: boolean, create_if_not_exist: boolean)",
+            "documentation": "Get boolean parameter",
+            "parameters": [
+              {
+                "label": "parameter_name",
+                "documentation": "parameter_name: string - parameter name"
+              },
+              {
+                "label": "default_value",
+                "documentation": "default_value: boolean - value to return if not found"
+              },
+              {
+                "label": "create_if_not_exist",
+                "documentation": "create_if_not_exist: boolean - if true, store default value when not found"
+              }
+            ],
+            "returns": "boolean"
+          }
+        },
+        {
+          "name": "GetDouble",
+          "kind": "Method",
+          "detail": "(parameter_name: string, default_value: number, create_if_not_exist: boolean) → number",
+          "documentation": "Retrieve a double parameter with the passed name. If not found, returns default value.",
+          "signature": {
+            "label": "GetDouble(parameter_name: string, default_value: number, create_if_not_exist: boolean)",
+            "documentation": "Get double parameter",
+            "parameters": [
+              {
+                "label": "parameter_name",
+                "documentation": "parameter_name: string - parameter name"
+              },
+              {
+                "label": "default_value",
+                "documentation": "default_value: number - value to return if not found"
+              },
+              {
+                "label": "create_if_not_exist",
+                "documentation": "create_if_not_exist: boolean - if true, store default value when not found"
+              }
+            ],
+            "returns": "number"
+          }
+        },
+        {
+          "name": "GetInt",
+          "kind": "Method",
+          "detail": "(parameter_name: string, default_value: number, create_if_not_exist: boolean) → number",
+          "documentation": "Retrieve an integer parameter with the passed name. If not found, returns default value.",
+          "signature": {
+            "label": "GetInt(parameter_name: string, default_value: number, create_if_not_exist: boolean)",
+            "documentation": "Get integer parameter",
+            "parameters": [
+              {
+                "label": "parameter_name",
+                "documentation": "parameter_name: string - parameter name"
+              },
+              {
+                "label": "default_value",
+                "documentation": "default_value: number - value to return if not found"
+              },
+              {
+                "label": "create_if_not_exist",
+                "documentation": "create_if_not_exist: boolean - if true, store default value when not found"
+              }
+            ],
+            "returns": "number"
+          }
+        },
+        {
+          "name": "GetString",
+          "kind": "Method",
+          "detail": "(parameter_name: string, default_value: string, create_if_not_exist: boolean) → string",
+          "documentation": "Retrieve a string parameter with the passed name. If not found, returns default value.",
+          "signature": {
+            "label": "GetString(parameter_name: string, default_value: string, create_if_not_exist: boolean)",
+            "documentation": "Get string parameter",
+            "parameters": [
+              {
+                "label": "parameter_name",
+                "documentation": "parameter_name: string - parameter name"
+              },
+              {
+                "label": "default_value",
+                "documentation": "default_value: string - value to return if not found"
+              },
+              {
+                "label": "create_if_not_exist",
+                "documentation": "create_if_not_exist: boolean - if true, store default value when not found"
+              }
+            ],
+            "returns": "string"
+          }
+        },
+        {
+          "name": "ParameterExists",
+          "kind": "Method",
+          "detail": "(parameter_name: string, type: utParameterType) → boolean",
+          "documentation": "Returns true if there is an existing parameter with passed name and type",
+          "signature": {
+            "label": "ParameterExists(parameter_name: string, type: utParameterType)",
+            "documentation": "Check if parameter exists",
+            "parameters": [
+              {
+                "label": "parameter_name",
+                "documentation": "parameter_name: string - parameter name"
+              },
+              {
+                "label": "type",
+                "documentation": "type: utParameterType - parameter type"
+              }
+            ],
+            "returns": "boolean"
+          }
+        },
+        {
+          "name": "SetBool",
+          "kind": "Method",
+          "detail": "(parameter_name: string, value: boolean) → void",
+          "documentation": "Store a Boolean parameter with the passed name and value",
+          "signature": {
+            "label": "SetBool(parameter_name: string, value: boolean)",
+            "documentation": "Set boolean parameter",
+            "parameters": [
+              {
+                "label": "parameter_name",
+                "documentation": "parameter_name: string - parameter name"
+              },
+              {
+                "label": "value",
+                "documentation": "value: boolean - value to store"
+              }
+            ],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "SetDouble",
+          "kind": "Method",
+          "detail": "(parameter_name: string, value: number) → void",
+          "documentation": "Store a double parameter with the passed name and value",
+          "signature": {
+            "label": "SetDouble(parameter_name: string, value: number)",
+            "documentation": "Set double parameter",
+            "parameters": [
+              {
+                "label": "parameter_name",
+                "documentation": "parameter_name: string - parameter name"
+              },
+              {
+                "label": "value",
+                "documentation": "value: number - value to store"
+              }
+            ],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "SetInt",
+          "kind": "Method",
+          "detail": "(parameter_name: string, value: number) → void",
+          "documentation": "Store an integer parameter with the passed name and value",
+          "signature": {
+            "label": "SetInt(parameter_name: string, value: number)",
+            "documentation": "Set integer parameter",
+            "parameters": [
+              {
+                "label": "parameter_name",
+                "documentation": "parameter_name: string - parameter name"
+              },
+              {
+                "label": "value",
+                "documentation": "value: number - value to store"
+              }
+            ],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "SetString",
+          "kind": "Method",
+          "detail": "(parameter_name: string, value: string) → void",
+          "documentation": "Store a string parameter with the passed name and value",
+          "signature": {
+            "label": "SetString(parameter_name: string, value: string)",
+            "documentation": "Set string parameter",
+            "parameters": [
+              {
+                "label": "parameter_name",
+                "documentation": "parameter_name: string - parameter name"
+              },
+              {
+                "label": "value",
+                "documentation": "value: string - value to store"
+              }
+            ],
+            "returns": "void"
+          }
+        }
+      ],
+      "constants": []
+    },
+    {
+      "name": "CadObjectGroup",
+      "kind": "Class",
+      "detail": "class CadObjectGroup extends CadObject",
+      "documentation": "CadObjectGroup is derived from CadObject and represents a group of CadObjects within the job. It inherits all properties and methods from CadObject and adds group-specific functionality for managing collections of objects.",
+      "constructors": [],
+      "properties": [
+        {
+          "name": "Count",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Returns the number of CadObjects in the group",
+          "readOnly": true
+        },
+        {
+          "name": "IsEmpty",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "Returns true if the CadObjectGroup is empty (contains no objects)",
+          "readOnly": true
+        }
+      ],
+      "methods": [
+        {
+          "name": "GetAt",
+          "kind": "Method",
+          "detail": "(pos: POSITION) → CadObject",
+          "documentation": "Returns the object at the current position in the group",
+          "signature": {
+            "label": "GetAt(pos: POSITION)",
+            "documentation": "Get object at position",
+            "parameters": [
+              {
+                "label": "pos",
+                "documentation": "pos: POSITION - current position in group"
+              }
+            ],
+            "returns": "CadObject"
+          }
+        },
+        {
+          "name": "GetHead",
+          "kind": "Method",
+          "detail": "() → CadObject",
+          "documentation": "Returns the first object in the group",
+          "signature": {
+            "label": "GetHead()",
+            "documentation": "Get first object in group",
+            "parameters": [],
+            "returns": "CadObject"
+          }
+        },
+        {
+          "name": "GetHeadPosition",
+          "kind": "Method",
+          "detail": "() → POSITION",
+          "documentation": "Returns a POSITION variable to allow access to the head of the group",
+          "signature": {
+            "label": "GetHeadPosition()",
+            "documentation": "Get position at head of group",
+            "parameters": [],
+            "returns": "POSITION"
+          }
+        },
+        {
+          "name": "GetNext",
+          "kind": "Method",
+          "detail": "(pos: POSITION) → CadObject, POSITION",
+          "documentation": "Returns the object at the current position AND a new POSITION pointing to the next item (or nil if at end). Returns two values.",
+          "signature": {
+            "label": "GetNext(pos: POSITION)",
+            "documentation": "Get object and advance position",
+            "parameters": [
+              {
+                "label": "pos",
+                "documentation": "pos: POSITION - current position in group"
+              }
+            ],
+            "returns": "CadObject, POSITION"
+          }
+        },
+        {
+          "name": "GetPrev",
+          "kind": "Method",
+          "detail": "(pos: POSITION) → CadObject, POSITION",
+          "documentation": "Returns the object at the current position AND a new POSITION pointing to the previous item (or nil if at start). Returns two values.",
+          "signature": {
+            "label": "GetPrev(pos: POSITION)",
+            "documentation": "Get object and move position backward",
+            "parameters": [
+              {
+                "label": "pos",
+                "documentation": "pos: POSITION - current position in group"
+              }
+            ],
+            "returns": "CadObject, POSITION"
+          }
+        },
+        {
+          "name": "GetTailPosition",
+          "kind": "Method",
+          "detail": "() → POSITION",
+          "documentation": "Returns a POSITION variable to allow access to the tail (end) of the group",
+          "signature": {
+            "label": "GetTailPosition()",
+            "documentation": "Get position at tail of group",
+            "parameters": [],
+            "returns": "POSITION"
+          }
+        }
+      ],
+      "constants": []
+    },
+    {
+      "name": "CadObjectList",
+      "kind": "Class",
+      "detail": "class CadObjectList",
+      "documentation": "CadObjectList holds a list of CadObjects. It can optionally own the objects, which means they will be deleted when the list goes out of scope. Provides methods for adding, removing, iterating, and transforming objects in the list.",
+      "constructors": [
+        {
+          "label": "CadObjectList(owns_objects: boolean)",
+          "documentation": "Creates a new CadObjectList. If owns_objects is true, the list owns the objects and will delete them when the list goes out of scope.",
+          "parameters": [
+            {
+              "label": "owns_objects",
+              "documentation": "owns_objects: boolean - true if this list should own and manage the lifetime of its objects"
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "name": "Count",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Returns the number of objects in the list",
+          "readOnly": true
+        },
+        {
+          "name": "IsEmpty",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "Returns true if the list is empty (contains no objects)",
+          "readOnly": true
+        }
+      ],
+      "methods": [
+        {
+          "name": "AddHead",
+          "kind": "Method",
+          "detail": "(obj: CadObject) → void",
+          "documentation": "Add the passed object to the front of the list",
+          "signature": {
+            "label": "AddHead(obj: CadObject)",
+            "documentation": "Add object to front of list",
+            "parameters": [
+              {
+                "label": "obj",
+                "documentation": "obj: CadObject - object to add"
+              }
+            ],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "AddTail",
+          "kind": "Method",
+          "detail": "(obj: CadObject) → void",
+          "documentation": "Add the passed object to the end of the list",
+          "signature": {
+            "label": "AddTail(obj: CadObject)",
+            "documentation": "Add object to end of list",
+            "parameters": [
+              {
+                "label": "obj",
+                "documentation": "obj: CadObject - object to add"
+              }
+            ],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "CanTransform",
+          "kind": "Method",
+          "detail": "(flags: number) → boolean",
+          "documentation": "Return true if objects in the list can be transformed. Flags: 1=Move, 2=Rotate, 4=Mirror, 8=Scale Symmetric, 16=Scale Asymmetric (can be combined)",
+          "signature": {
+            "label": "CanTransform(flags: number)",
+            "documentation": "Check if list can be transformed",
+            "parameters": [
+              {
+                "label": "flags",
+                "documentation": "flags: number - transform type flags (1=Move, 2=Rotate, 4=Mirror, 8=Scale Symmetric, 16=Scale Asymmetric)"
+              }
+            ],
+            "returns": "boolean"
+          }
+        },
+        {
+          "name": "GetAt",
+          "kind": "Method",
+          "detail": "(pos: POSITION) → CadObject",
+          "documentation": "Returns the object at the current position",
+          "signature": {
+            "label": "GetAt(pos: POSITION)",
+            "documentation": "Get object at position",
+            "parameters": [
+              {
+                "label": "pos",
+                "documentation": "pos: POSITION - current position in list"
+              }
+            ],
+            "returns": "CadObject"
+          }
+        },
+        {
+          "name": "GetHeadPosition",
+          "kind": "Method",
+          "detail": "() → POSITION",
+          "documentation": "Returns a POSITION variable to allow access to the head of the list",
+          "signature": {
+            "label": "GetHeadPosition()",
+            "documentation": "Get position at head of list",
+            "parameters": [],
+            "returns": "POSITION"
+          }
+        },
+        {
+          "name": "GetNext",
+          "kind": "Method",
+          "detail": "(pos: POSITION) → CadObject, POSITION",
+          "documentation": "Returns the object at the current position AND a new POSITION pointing to the next item (or nil if at end). Returns two values.",
+          "signature": {
+            "label": "GetNext(pos: POSITION)",
+            "documentation": "Get object and advance position",
+            "parameters": [
+              {
+                "label": "pos",
+                "documentation": "pos: POSITION - current position in list"
+              }
+            ],
+            "returns": "CadObject, POSITION"
+          }
+        },
+        {
+          "name": "GetPrev",
+          "kind": "Method",
+          "detail": "(pos: POSITION) → CadObject, POSITION",
+          "documentation": "Returns the object at the current position AND a new POSITION pointing to the previous item (or nil if at start). Returns two values.",
+          "signature": {
+            "label": "GetPrev(pos: POSITION)",
+            "documentation": "Get object and move position backward",
+            "parameters": [
+              {
+                "label": "pos",
+                "documentation": "pos: POSITION - current position in list"
+              }
+            ],
+            "returns": "CadObject, POSITION"
+          }
+        },
+        {
+          "name": "GetTailPosition",
+          "kind": "Method",
+          "detail": "() → POSITION",
+          "documentation": "Returns a POSITION variable to allow access to the tail (end) of the list",
+          "signature": {
+            "label": "GetTailPosition()",
+            "documentation": "Get position at tail of list",
+            "parameters": [],
+            "returns": "POSITION"
+          }
+        },
+        {
+          "name": "RemoveHead",
+          "kind": "Method",
+          "detail": "() → CadObject",
+          "documentation": "Remove the object at the front of the list and return it",
+          "signature": {
+            "label": "RemoveHead()",
+            "documentation": "Remove and return object from front",
+            "parameters": [],
+            "returns": "CadObject"
+          }
+        },
+        {
+          "name": "RemoveTail",
+          "kind": "Method",
+          "detail": "() → CadObject",
+          "documentation": "Remove the object at the end of the list and return it",
+          "signature": {
+            "label": "RemoveTail()",
+            "documentation": "Remove and return object from end",
+            "parameters": [],
+            "returns": "CadObject"
+          }
+        },
+        {
+          "name": "Transform",
+          "kind": "Method",
+          "detail": "(xform: Matrix2D) → void",
+          "documentation": "Transform all objects in the list by the passed transformation matrix",
+          "signature": {
+            "label": "Transform(xform: Matrix2D)",
+            "documentation": "Transform all objects in list",
+            "parameters": [
+              {
+                "label": "xform",
+                "documentation": "xform: Matrix2D - transformation matrix to apply"
+              }
+            ],
+            "returns": "void"
+          }
+        }
+      ],
+      "constants": []
     }
   ]
 }

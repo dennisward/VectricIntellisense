@@ -633,7 +633,35 @@ function createMethodHover(className: string, method: ApiMethod): vscode.Hover {
         }
         
         if (method.signature.returns) {
-            markdown += `**Returns:** ${method.signature.returns}\n`;
+            markdown += `**Returns:** ${method.signature.returns}\n\n`;
+            
+            // Check if method returns multiple values and add usage example
+            const hasMultipleReturns = method.signature.returns.includes(',');
+            if (hasMultipleReturns) {
+                markdown += `**Usage Example:**\n\`\`\`lua\n`;
+                
+                // Generate example based on common patterns
+                if (method.name === 'GetNext') {
+                    const varName = className === 'SelectionList' ? 'obj' : 
+                                   className === 'CadObjectGroup' ? 'member' :
+                                   className === 'CadObjectList' ? 'object' : 'item';
+                    markdown += `local ${varName}, pos = ${className.toLowerCase()}:GetNext(pos)\n`;
+                    markdown += `-- ${varName} is the object at current position\n`;
+                    markdown += `-- pos is the new position (or nil if at end)\n`;
+                } else if (method.name === 'GetPrev') {
+                    const varName = className === 'SelectionList' ? 'obj' : 'item';
+                    markdown += `local ${varName}, pos = ${className.toLowerCase()}:GetPrev(pos)\n`;
+                    markdown += `-- ${varName} is the object at current position\n`;
+                    markdown += `-- pos is the new position (or nil if at start)\n`;
+                } else {
+                    // Generic example for other multi-return methods
+                    const returns = method.signature.returns.split(',').map(r => r.trim());
+                    const varNames = returns.map((r, i) => `val${i + 1}`).join(', ');
+                    markdown += `local ${varNames} = ${className.toLowerCase()}:${method.name}(...)\n`;
+                }
+                
+                markdown += `\`\`\`\n`;
+            }
         }
     }
     
