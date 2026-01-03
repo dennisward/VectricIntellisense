@@ -1431,6 +1431,774 @@
         }
       ]
     },
+        {
+      "name": "CadLayerManager",
+      "kind": "Class",
+      "detail": "class CadLayerManager",
+      "documentation": "CadLayerManager is responsible for managing all the layers within the application. A reference to the CadLayerManager is obtained via the LayerManager property of the VectricJob. The CadLayerManager maintains a list of all the CadLayers in the job.",
+      "constructors": [],
+      "properties": [
+        {
+          "name": "Count",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Returns the number of layers being managed",
+          "readOnly": true
+        },
+        {
+          "name": "IsEmpty",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "Returns true if there are no layers else false",
+          "readOnly": true
+        }
+      ],
+      "methods": [
+        {
+          "name": "AddLayer",
+          "kind": "Method",
+          "detail": "(layer: CadLayer, index: number) → void",
+          "documentation": "Add the passed layer object to the list of layers in the job and set its position in the list to the passed index. Enter -1 to add the layer to the end of the list.",
+          "signature": {
+            "label": "AddLayer(layer: CadLayer, index: number)",
+            "documentation": "Add layer to the job at specified index",
+            "parameters": [
+              {
+                "label": "layer",
+                "documentation": "layer: CadLayer - layer to add to the job"
+              },
+              {
+                "label": "index",
+                "documentation": "index: number - position in layer list (-1 for end, otherwise > 0)"
+              }
+            ],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "FindLayerWithName",
+          "kind": "Method",
+          "detail": "(layer_name: string) → CadLayer",
+          "documentation": "Returns the CadLayer with passed name. If no layer exists with the passed name returns nil",
+          "signature": {
+            "label": "FindLayerWithName(layer_name: string)",
+            "documentation": "Find layer by name (returns nil if not found)",
+            "parameters": [
+              {
+                "label": "layer_name",
+                "documentation": "layer_name: string - name of layer to find"
+              }
+            ],
+            "returns": "CadLayer"
+          }
+        },
+        {
+          "name": "GetActiveLayer",
+          "kind": "Method",
+          "detail": "() → CadLayer",
+          "documentation": "Returns the current active CadLayer. If no layer exists returns nil",
+          "signature": {
+            "label": "GetActiveLayer()",
+            "documentation": "Get the currently active layer",
+            "parameters": [],
+            "returns": "CadLayer"
+          }
+        },
+        {
+          "name": "GetAt",
+          "kind": "Method",
+          "detail": "(pos: POSITION) → CadLayer",
+          "documentation": "Returns the layer at the passed position",
+          "signature": {
+            "label": "GetAt(pos: POSITION)",
+            "documentation": "Get layer at position",
+            "parameters": [
+              {
+                "label": "pos",
+                "documentation": "pos: POSITION - current position in list"
+              }
+            ],
+            "returns": "CadLayer"
+          }
+        },
+        {
+          "name": "GetHeadPosition",
+          "kind": "Method",
+          "detail": "() → POSITION",
+          "documentation": "Returns a POSITION variable to allow access to the head of the list of layers",
+          "signature": {
+            "label": "GetHeadPosition()",
+            "documentation": "Get position at head of layer list",
+            "parameters": [],
+            "returns": "POSITION"
+          }
+        },
+        {
+          "name": "GetLayerWithName",
+          "kind": "Method",
+          "detail": "(layer_name: string) → CadLayer",
+          "documentation": "Returns the CadLayer with passed name. If no layer exists with the passed name a new layer is created",
+          "signature": {
+            "label": "GetLayerWithName(layer_name: string)",
+            "documentation": "Get layer by name (creates new if not found)",
+            "parameters": [
+              {
+                "label": "layer_name",
+                "documentation": "layer_name: string - name of layer"
+              }
+            ],
+            "returns": "CadLayer"
+          }
+        },
+        {
+          "name": "GetLayerWithId",
+          "kind": "Method",
+          "detail": "(layer_id: UUID) → CadLayer",
+          "documentation": "Returns the CadLayer with passed id. The id is usually obtained from the .RawLayerId property of a CadObject",
+          "signature": {
+            "label": "GetLayerWithId(layer_id: UUID)",
+            "documentation": "Get layer by UUID",
+            "parameters": [
+              {
+                "label": "layer_id",
+                "documentation": "layer_id: UUID - ID of layer"
+              }
+            ],
+            "returns": "CadLayer"
+          }
+        },
+        {
+          "name": "GetNext",
+          "kind": "Method",
+          "detail": "(pos: POSITION) → CadLayer, POSITION",
+          "documentation": "Returns the layer at the current position AND a new value for position pointing to the next item in the list (or nil if at end of list). Note: returns two values.",
+          "signature": {
+            "label": "GetNext(pos: POSITION)",
+            "documentation": "Get layer and advance position",
+            "parameters": [
+              {
+                "label": "pos",
+                "documentation": "pos: POSITION - current position in list"
+              }
+            ],
+            "returns": "CadLayer, POSITION"
+          }
+        },
+        {
+          "name": "GetPrev",
+          "kind": "Method",
+          "detail": "(pos: POSITION) → CadLayer, POSITION",
+          "documentation": "Returns the layer at the current position AND a new value for position pointing to the previous item in the list (or nil if at start of list). Note: returns two values.",
+          "signature": {
+            "label": "GetPrev(pos: POSITION)",
+            "documentation": "Get layer and move position backward",
+            "parameters": [
+              {
+                "label": "pos",
+                "documentation": "pos: POSITION - current position in list"
+              }
+            ],
+            "returns": "CadLayer, POSITION"
+          }
+        },
+        {
+          "name": "GetTailPosition",
+          "kind": "Method",
+          "detail": "() → POSITION",
+          "documentation": "Returns a POSITION variable to allow access to the tail of the list of layers",
+          "signature": {
+            "label": "GetTailPosition()",
+            "documentation": "Get position at tail of layer list",
+            "parameters": [],
+            "returns": "POSITION"
+          }
+        },
+        {
+          "name": "HaveDataOnSheets",
+          "kind": "Method",
+          "detail": "() → boolean",
+          "documentation": "Returns true if there is data on more than one sheet",
+          "signature": {
+            "label": "HaveDataOnSheets()",
+            "documentation": "Check if data exists on multiple sheets",
+            "parameters": [],
+            "returns": "boolean"
+          }
+        },
+        {
+          "name": "RemoveLayer",
+          "kind": "Method",
+          "detail": "(layer: CadLayer) → void",
+          "documentation": "Remove the passed layer object from the list of layers in the job",
+          "signature": {
+            "label": "RemoveLayer(layer: CadLayer)",
+            "documentation": "Remove layer from job",
+            "parameters": [
+              {
+                "label": "layer",
+                "documentation": "layer: CadLayer - layer to remove from the job"
+              }
+            ],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "SetActiveLayer",
+          "kind": "Method",
+          "detail": "(layer: CadLayer) → void",
+          "documentation": "Sets passed layer to be the current active layer. If passed layer is nil, sets first layer to be active.",
+          "signature": {
+            "label": "SetActiveLayer(layer: CadLayer)",
+            "documentation": "Set the active layer",
+            "parameters": [
+              {
+                "label": "layer",
+                "documentation": "layer: CadLayer - layer to make active (nil for first layer)"
+              }
+            ],
+            "returns": "void"
+          }
+        }
+      ],
+      "constants": []
+    },
+    {
+      "name": "CadLayer",
+      "kind": "Class",
+      "detail": "class CadLayer",
+      "documentation": "CadLayer holds all the data for a layer within the application. Layers are created and accessed via the CadLayerManager object. A layer maintains a list of CadObjects.",
+      "constructors": [],
+      "properties": [
+        {
+          "name": "Colour",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Get/Set the colour for a layer as a COLORREF (32-bit colour value)",
+          "readOnly": false
+        },
+        {
+          "name": "Color",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Get/Set the color for a layer as a COLORREF (32-bit colour value) - U.S. spelling",
+          "readOnly": false
+        },
+        {
+          "name": "Count",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Returns the number of CadObjects present on the layer",
+          "readOnly": true
+        },
+        {
+          "name": "IsBitmapLayer",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "Returns true if this is a bitmap layer. The bitmap layer is used for imported bitmaps and is placed at the start of the layer list so that bitmaps are drawn before vectors.",
+          "readOnly": true
+        },
+        {
+          "name": "IsEmpty",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "Returns true if the layer has no objects on it",
+          "readOnly": true
+        },
+        {
+          "name": "IsSystemLayer",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "Returns true if this is a system layer. System layers are used for holding items such as toolpath previews.",
+          "readOnly": true
+        },
+        {
+          "name": "Locked",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "Get/Set the locked property for the layer",
+          "readOnly": false
+        },
+        {
+          "name": "Name",
+          "kind": "Property",
+          "detail": "string",
+          "documentation": "Get/Set the name for the layer",
+          "readOnly": false
+        },
+        {
+          "name": "Visible",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "Get/Set the visible property for the layer",
+          "readOnly": false
+        },
+        {
+          "name": "Id",
+          "kind": "Property",
+          "detail": "luaUUID",
+          "documentation": "Id of this layer",
+          "readOnly": true
+        },
+        {
+          "name": "RawId",
+          "kind": "Property",
+          "detail": "UUID",
+          "documentation": "The unique identifier for this layer",
+          "readOnly": true
+        }
+      ],
+      "methods": [
+        {
+          "name": "AddObject",
+          "kind": "Method",
+          "detail": "(object: CadObject, on_current_sheet: boolean) → void",
+          "documentation": "Add passed object to this layer. The on_current_sheet parameter should always be true - the object is created on the current sheet.",
+          "signature": {
+            "label": "AddObject(object: CadObject, on_current_sheet: boolean)",
+            "documentation": "Add object to layer",
+            "parameters": [
+              {
+                "label": "object",
+                "documentation": "object: CadObject - object to add to layer (becomes property of layer)"
+              },
+              {
+                "label": "on_current_sheet",
+                "documentation": "on_current_sheet: boolean - should always be true"
+              }
+            ],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "Find",
+          "kind": "Method",
+          "detail": "(id: UUID) → POSITION",
+          "documentation": "Returns the position in the list for the object with the passed id. If no object is found the returned position is nil",
+          "signature": {
+            "label": "Find(id: UUID)",
+            "documentation": "Find object by ID",
+            "parameters": [
+              {
+                "label": "id",
+                "documentation": "id: UUID - ID of object to find"
+              }
+            ],
+            "returns": "POSITION"
+          }
+        },
+        {
+          "name": "GetHeadPosition",
+          "kind": "Method",
+          "detail": "() → POSITION",
+          "documentation": "Returns a POSITION variable to allow access to the head of the list of objects on layer",
+          "signature": {
+            "label": "GetHeadPosition()",
+            "documentation": "Get position at head of object list",
+            "parameters": [],
+            "returns": "POSITION"
+          }
+        },
+        {
+          "name": "GetTailPosition",
+          "kind": "Method",
+          "detail": "() → POSITION",
+          "documentation": "Returns a POSITION variable to allow access to the tail of the list of objects on layer",
+          "signature": {
+            "label": "GetTailPosition()",
+            "documentation": "Get position at tail of object list",
+            "parameters": [],
+            "returns": "POSITION"
+          }
+        },
+        {
+          "name": "GetNext",
+          "kind": "Method",
+          "detail": "(pos: POSITION) → CadObject, POSITION",
+          "documentation": "Returns the object at the current position AND a new value for position pointing to the next item in the list (or nil if at end of list). Note: returns two values.",
+          "signature": {
+            "label": "GetNext(pos: POSITION)",
+            "documentation": "Get object and advance position",
+            "parameters": [
+              {
+                "label": "pos",
+                "documentation": "pos: POSITION - current position in list"
+              }
+            ],
+            "returns": "CadObject, POSITION"
+          }
+        },
+        {
+          "name": "GetPrev",
+          "kind": "Method",
+          "detail": "(pos: POSITION) → CadObject, POSITION",
+          "documentation": "Returns the object at the current position AND a new value for position pointing to the previous item in the list (or nil if at start of list). Note: returns two values.",
+          "signature": {
+            "label": "GetPrev(pos: POSITION)",
+            "documentation": "Get object and move position backward",
+            "parameters": [
+              {
+                "label": "pos",
+                "documentation": "pos: POSITION - current position in list"
+              }
+            ],
+            "returns": "CadObject, POSITION"
+          }
+        },
+        {
+          "name": "GetAt",
+          "kind": "Method",
+          "detail": "(pos: POSITION) → CadObject",
+          "documentation": "Returns the object at the passed position",
+          "signature": {
+            "label": "GetAt(pos: POSITION)",
+            "documentation": "Get object at position",
+            "parameters": [
+              {
+                "label": "pos",
+                "documentation": "pos: POSITION - position in list"
+              }
+            ],
+            "returns": "CadObject"
+          }
+        },
+        {
+          "name": "RemoveObject",
+          "kind": "Method",
+          "detail": "(object: CadObject) → CadObject",
+          "documentation": "Removes passed object from this layer. Object becomes property of the script. Returns object removed or nil if object was not found on layer.",
+          "signature": {
+            "label": "RemoveObject(object: CadObject)",
+            "documentation": "Remove object from layer",
+            "parameters": [
+              {
+                "label": "object",
+                "documentation": "object: CadObject - object to remove from layer"
+              }
+            ],
+            "returns": "CadObject"
+          }
+        },
+        {
+          "name": "RemoveAt",
+          "kind": "Method",
+          "detail": "(pos: POSITION) → CadObject",
+          "documentation": "Removes the CadObject at the passed position and returns it",
+          "signature": {
+            "label": "RemoveAt(pos: POSITION)",
+            "documentation": "Remove object at position",
+            "parameters": [
+              {
+                "label": "pos",
+                "documentation": "pos: POSITION - position in list"
+              }
+            ],
+            "returns": "CadObject"
+          }
+        },
+        {
+          "name": "SetColour",
+          "kind": "Method",
+          "detail": "(red: number, green: number, blue: number) → void",
+          "documentation": "Set the colour for the layer using RGB values in range 0.0 - 1.0",
+          "signature": {
+            "label": "SetColour(red: number, green: number, blue: number)",
+            "documentation": "Set layer colour (British spelling)",
+            "parameters": [
+              {
+                "label": "red",
+                "documentation": "red: number - red component (0.0 - 1.0)"
+              },
+              {
+                "label": "green",
+                "documentation": "green: number - green component (0.0 - 1.0)"
+              },
+              {
+                "label": "blue",
+                "documentation": "blue: number - blue component (0.0 - 1.0)"
+              }
+            ],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "SetColor",
+          "kind": "Method",
+          "detail": "(red: number, green: number, blue: number) → void",
+          "documentation": "Set the color for the layer using RGB values in range 0.0 - 1.0 (U.S. spelling)",
+          "signature": {
+            "label": "SetColor(red: number, green: number, blue: number)",
+            "documentation": "Set layer color (U.S. spelling)",
+            "parameters": [
+              {
+                "label": "red",
+                "documentation": "red: number - red component (0.0 - 1.0)"
+              },
+              {
+                "label": "green",
+                "documentation": "green: number - green component (0.0 - 1.0)"
+              },
+              {
+                "label": "blue",
+                "documentation": "blue: number - blue component (0.0 - 1.0)"
+              }
+            ],
+            "returns": "void"
+          }
+        }
+      ],
+      "constants": []
+    },
+    {
+      "name": "CadSheetManager",
+      "kind": "Class",
+      "detail": "class CadSheetManager",
+      "documentation": "CadSheetManager is responsible for managing all the sheets within the application. A reference to the CadSheetManager is obtained via the SheetManager property of the VectricJob. The CadSheetManager maintains a list of all the sheet ids in the job.",
+      "constructors": [],
+      "properties": [
+        {
+          "name": "ActiveSheetId",
+          "kind": "Property",
+          "detail": "UUID",
+          "documentation": "Get the id of the active sheet. Set this value to the id of a different sheet to change the active sheet.",
+          "readOnly": false
+        },
+        {
+          "name": "NumberOfSheets",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Returns the number of sheets in the job",
+          "readOnly": true
+        }
+      ],
+      "methods": [
+        {
+          "name": "CreateNewSheet",
+          "kind": "Method",
+          "detail": "(sheet_name: string) → UUID",
+          "documentation": "Create a new sheet with the passed name. The sheet properties are based on the active sheet. Returns the sheet_id of the new sheet.",
+          "signature": {
+            "label": "CreateNewSheet(sheet_name: string)",
+            "documentation": "Create new sheet based on active sheet",
+            "parameters": [
+              {
+                "label": "sheet_name",
+                "documentation": "sheet_name: string - name for the new sheet"
+              }
+            ],
+            "returns": "UUID"
+          }
+        },
+        {
+          "name": "CreateSheets",
+          "kind": "Method",
+          "detail": "(num_sheets: number, sheet_id: UUID, material_bounds?: Box2D) → void",
+          "documentation": "Create num_sheets new sheets with the same properties as the sheet with id sheet_id. Optionally specify material_bounds for width and height dimensions.",
+          "signature": {
+            "label": "CreateSheets(num_sheets: number, sheet_id: UUID, material_bounds?: Box2D)",
+            "documentation": "Create multiple sheets",
+            "parameters": [
+              {
+                "label": "num_sheets",
+                "documentation": "num_sheets: number - number of new sheets to create"
+              },
+              {
+                "label": "sheet_id",
+                "documentation": "sheet_id: UUID - sheet to copy properties from"
+              },
+              {
+                "label": "material_bounds",
+                "documentation": "material_bounds?: Box2D - optional dimensions for new sheets"
+              }
+            ],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "GetSheetIds",
+          "kind": "Method",
+          "detail": "() → iterator",
+          "documentation": "Returns a Lua iterator that can be used to iterate over all of the sheet ids in the job",
+          "signature": {
+            "label": "GetSheetIds()",
+            "documentation": "Get iterator for all sheet IDs",
+            "parameters": [],
+            "returns": "iterator"
+          }
+        },
+        {
+          "name": "GetSheetName",
+          "kind": "Method",
+          "detail": "(sheet_id: UUID) → string",
+          "documentation": "Returns the name of the sheet with the passed id as a string",
+          "signature": {
+            "label": "GetSheetName(sheet_id: UUID)",
+            "documentation": "Get sheet name by ID",
+            "parameters": [
+              {
+                "label": "sheet_id",
+                "documentation": "sheet_id: UUID - ID of sheet"
+              }
+            ],
+            "returns": "string"
+          }
+        },
+        {
+          "name": "RemoveSheet",
+          "kind": "Method",
+          "detail": "(sheet_id: UUID) → void",
+          "documentation": "Deletes the sheet with the passed id",
+          "signature": {
+            "label": "RemoveSheet(sheet_id: UUID)",
+            "documentation": "Delete sheet",
+            "parameters": [
+              {
+                "label": "sheet_id",
+                "documentation": "sheet_id: UUID - ID of sheet to delete"
+              }
+            ],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "RenameSheet",
+          "kind": "Method",
+          "detail": "(sheet_id: UUID, new_name: string) → void",
+          "documentation": "Renames the sheet with the passed id to be the passed new_name",
+          "signature": {
+            "label": "RenameSheet(sheet_id: UUID, new_name: string)",
+            "documentation": "Rename sheet",
+            "parameters": [
+              {
+                "label": "sheet_id",
+                "documentation": "sheet_id: UUID - ID of sheet to rename"
+              },
+              {
+                "label": "new_name",
+                "documentation": "new_name: string - new name for sheet"
+              }
+            ],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "ResizeSheet",
+          "kind": "Method",
+          "detail": "(sheet_id: UUID, width: number, height: number, thickness: number, scale_design: boolean) → void",
+          "documentation": "Resizes the flat sheet with the passed id to have the passed dimensions. If scale_design is true, design elements are scaled to fit within the new dimensions.",
+          "signature": {
+            "label": "ResizeSheet(sheet_id: UUID, width: number, height: number, thickness: number, scale_design: boolean)",
+            "documentation": "Resize flat sheet",
+            "parameters": [
+              {
+                "label": "sheet_id",
+                "documentation": "sheet_id: UUID - sheet to resize"
+              },
+              {
+                "label": "width",
+                "documentation": "width: number - new width"
+              },
+              {
+                "label": "height",
+                "documentation": "height: number - new height"
+              },
+              {
+                "label": "thickness",
+                "documentation": "thickness: number - new thickness"
+              },
+              {
+                "label": "scale_design",
+                "documentation": "scale_design: boolean - if true, scale existing design"
+              }
+            ],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "SetColor",
+          "kind": "Method",
+          "detail": "(sheet_id: UUID, red: number, green: number, blue: number) → void",
+          "documentation": "Set the color for the passed sheet using RGB values in range 0.0 - 1.0 (U.S. spelling)",
+          "signature": {
+            "label": "SetColor(sheet_id: UUID, red: number, green: number, blue: number)",
+            "documentation": "Set sheet color (U.S. spelling)",
+            "parameters": [
+              {
+                "label": "sheet_id",
+                "documentation": "sheet_id: UUID - sheet to change color"
+              },
+              {
+                "label": "red",
+                "documentation": "red: number - red component (0.0 - 1.0)"
+              },
+              {
+                "label": "green",
+                "documentation": "green: number - green component (0.0 - 1.0)"
+              },
+              {
+                "label": "blue",
+                "documentation": "blue: number - blue component (0.0 - 1.0)"
+              }
+            ],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "SetColour",
+          "kind": "Method",
+          "detail": "(sheet_id: UUID, red: number, green: number, blue: number) → void",
+          "documentation": "Set the colour for the passed sheet using RGB values in range 0.0 - 1.0 (British spelling)",
+          "signature": {
+            "label": "SetColour(sheet_id: UUID, red: number, green: number, blue: number)",
+            "documentation": "Set sheet colour (British spelling)",
+            "parameters": [
+              {
+                "label": "sheet_id",
+                "documentation": "sheet_id: UUID - sheet to change colour"
+              },
+              {
+                "label": "red",
+                "documentation": "red: number - red component (0.0 - 1.0)"
+              },
+              {
+                "label": "green",
+                "documentation": "green: number - green component (0.0 - 1.0)"
+              },
+              {
+                "label": "blue",
+                "documentation": "blue: number - blue component (0.0 - 1.0)"
+              }
+            ],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "SetTexture",
+          "kind": "Method",
+          "detail": "(sheet_id: UUID, texture_category: string, texture_name: string) → void",
+          "documentation": "Sets the texture for the passed sheet to be that defined by the texture_category / texture_name. For example: SetTexture(sheet_id, 'Wood', 'Canadian Maple')",
+          "signature": {
+            "label": "SetTexture(sheet_id: UUID, texture_category: string, texture_name: string)",
+            "documentation": "Set sheet texture",
+            "parameters": [
+              {
+                "label": "sheet_id",
+                "documentation": "sheet_id: UUID - sheet to change texture"
+              },
+              {
+                "label": "texture_category",
+                "documentation": "texture_category: string - category containing the texture (e.g., 'Wood')"
+              },
+              {
+                "label": "texture_name",
+                "documentation": "texture_name: string - name of texture (e.g., 'Canadian Maple')"
+              }
+            ],
+            "returns": "void"
+          }
+        }
+      ],
+      "constants": []
+    },
     {
       "name": "CadObject",
       "kind": "Class",
