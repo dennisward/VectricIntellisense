@@ -66,6 +66,150 @@
         ],
         "returns": "void"
       }
+    },
+    {
+      "name": "CastCadObjectToCadBitmap",
+      "kind": "Function",
+      "detail": "(obj: CadObject) → CadBitmap",
+      "documentation": "Casts passed CadObject to a CadBitmap. Returns a CadBitmap object to work with. Use this when you have identified an object as a bitmap (object.ClassName == 'vcCadBitmap').",
+      "signature": {
+        "label": "CastCadObjectToCadBitmap(obj: CadObject)",
+        "documentation": "Cast CadObject to CadBitmap",
+        "parameters": [
+          {
+            "label": "obj",
+            "documentation": "obj: CadObject - object to be cast to a CadBitmap"
+          }
+        ],
+        "returns": "CadBitmap"
+      }
+    },
+    {
+      "name": "CastCadObjectToCadContour",
+      "kind": "Function",
+      "detail": "(obj: CadObject) → CadContour",
+      "documentation": "Casts passed CadObject to a CadContour. Returns a CadContour object to work with. Use this when you have identified an object as a contour (object.ClassName == 'vcCadContour').",
+      "signature": {
+        "label": "CastCadObjectToCadContour(obj: CadObject)",
+        "documentation": "Cast CadObject to CadContour",
+        "parameters": [
+          {
+            "label": "obj",
+            "documentation": "obj: CadObject - object to be cast to a CadContour"
+          }
+        ],
+        "returns": "CadContour"
+      }
+    },
+    {
+      "name": "CastCadObjectToCadObjectGroup",
+      "kind": "Function",
+      "detail": "(obj: CadObject) → CadObjectGroup",
+      "documentation": "Casts passed CadObject to a CadObjectGroup. Returns a CadObjectGroup object to work with. Use this when you have identified an object as a group (object.ClassName == 'vcCadObjectGroup').",
+      "signature": {
+        "label": "CastCadObjectToCadObjectGroup(obj: CadObject)",
+        "documentation": "Cast CadObject to CadObjectGroup",
+        "parameters": [
+          {
+            "label": "obj",
+            "documentation": "obj: CadObject - object to be cast to a CadObjectGroup"
+          }
+        ],
+        "returns": "CadObjectGroup"
+      }
+    },
+    {
+      "name": "CastCadObjectToCadPolyline",
+      "kind": "Function",
+      "detail": "(obj: CadObject) → CadPolyline",
+      "documentation": "Casts passed CadObject to a CadPolyline. Returns a CadPolyline object to work with. Use this when you have identified an object as a polyline (object.ClassName == 'vcCadPolyline').",
+      "signature": {
+        "label": "CastCadObjectToCadPolyline(obj: CadObject)",
+        "documentation": "Cast CadObject to CadPolyline",
+        "parameters": [
+          {
+            "label": "obj",
+            "documentation": "obj: CadObject - object to be cast to a CadPolyline"
+          }
+        ],
+        "returns": "CadPolyline"
+      }
+    },
+    {
+      "name": "CastSpanToLineSpan",
+      "kind": "Function",
+      "detail": "(span: Span) → LineSpan",
+      "documentation": "Returns a LineSpan object for the passed span object. The passed span's .IsLineType property must be true.",
+      "signature": {
+        "label": "CastSpanToLineSpan(span: Span)",
+        "documentation": "Cast Span to LineSpan",
+        "parameters": [
+          {
+            "label": "span",
+            "documentation": "span: Span - the span to cast to a line (must have .IsLineType == true)"
+          }
+        ],
+        "returns": "LineSpan"
+      }
+    },
+    {
+      "name": "CastSpanToArcSpan",
+      "kind": "Function",
+      "detail": "(span: Span) → ArcSpan",
+      "documentation": "Returns an ArcSpan object for the passed span object. The passed span's .IsArcType property must be true.",
+      "signature": {
+        "label": "CastSpanToArcSpan(span: Span)",
+        "documentation": "Cast Span to ArcSpan",
+        "parameters": [
+          {
+            "label": "span",
+            "documentation": "span: Span - the span to cast to an arc (must have .IsArcType == true)"
+          }
+        ],
+        "returns": "ArcSpan"
+      }
+    },
+    {
+      "name": "CastSpanToBezierSpan",
+      "kind": "Function",
+      "detail": "(span: Span) → BezierSpan",
+      "documentation": "Returns a BezierSpan object for the passed span object. The passed span's .IsBezierType property must be true.",
+      "signature": {
+        "label": "CastSpanToBezierSpan(span: Span)",
+        "documentation": "Cast Span to BezierSpan",
+        "parameters": [
+          {
+            "label": "span",
+            "documentation": "span: Span - the span to cast to a bezier (must have .IsBezierType == true)"
+          }
+        ],
+        "returns": "BezierSpan"
+      }
+    },
+    {
+      "name": "ArcBulgeFromMidPoint",
+      "kind": "Function",
+      "detail": "(start: Point2D, end: Point2D, mid: Point2D) → number",
+      "documentation": "Return the bulge factor for an arc through the specified 3 points. Note: mid is the mid point for the arc, NOT the center point.",
+      "signature": {
+        "label": "ArcBulgeFromMidPoint(start: Point2D, end: Point2D, mid: Point2D)",
+        "documentation": "Calculate arc bulge from three points",
+        "parameters": [
+          {
+            "label": "start",
+            "documentation": "start: Point2D - start point for arc"
+          },
+          {
+            "label": "end",
+            "documentation": "end: Point2D - end point for arc"
+          },
+          {
+            "label": "mid",
+            "documentation": "mid: Point2D - mid point for arc (NOT center point)"
+          }
+        ],
+        "returns": "number"
+      }
     }
   ]
 }

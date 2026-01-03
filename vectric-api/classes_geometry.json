@@ -3,6 +3,740 @@
   "category": "Geometry Objects",
   "description": "Low level geometric primitives which can greatly simplify writing scripts which involve geometry manipulation. The Point2D and Point3D primitives are widely used to set the end points of spans and while building geometry. The Box2D and Box3D objects are extremely useful for determining the size and position of objects.",
   "classes": [
+        {
+      "name": "ContourCarriage",
+      "kind": "Class",
+      "detail": "class ContourCarriage",
+      "documentation": "ContourCarriage is used to move along a contour a fixed distance at a time irrespective of the number of spans in the contour or the type of spans. It maintains a position on a contour and can move forward or backward along it.",
+      "constructors": [
+        {
+          "label": "ContourCarriage(ctr: Contour, pt: Point2D)",
+          "documentation": "Creates a 'carriage' for the passed contour and positions it at the nearest point on the contour to the passed point",
+          "parameters": [
+            {
+              "label": "ctr",
+              "documentation": "ctr: Contour - the contour that the carriage travels along"
+            },
+            {
+              "label": "pt",
+              "documentation": "pt: Point2D - the carriage is positioned at the closest point to this"
+            }
+          ]
+        },
+        {
+          "label": "ContourCarriage(span_index: number, parameter: number)",
+          "documentation": "Creates a 'carriage' for a contour and sets its position for the span with the passed index at the passed parameter position (in range 0-1.0). Usually specified as (0, 0.0) to position at start of first span.",
+          "parameters": [
+            {
+              "label": "span_index",
+              "documentation": "span_index: number - index of span carriage will be positioned at"
+            },
+            {
+              "label": "parameter",
+              "documentation": "parameter: number - parameter along span (0.0 - 1.0)"
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "name": "IsInvalid",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "Returns true if current position is invalid",
+          "readOnly": true
+        },
+        {
+          "name": "SpanIndex",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Returns span index for current position of carriage",
+          "readOnly": true
+        },
+        {
+          "name": "SpanParameter",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Returns span parameter (in range 0-1.0) for current position of carriage",
+          "readOnly": true
+        }
+      ],
+      "methods": [
+        {
+          "name": "Move",
+          "kind": "Method",
+          "detail": "(ctr: Contour, distance: number) → boolean",
+          "documentation": "Moves the carriage the requested distance along the contour. Returns true if managed to move requested distance successfully. If the contour is closed we will wrap around at the end. Negative values move backward.",
+          "signature": {
+            "label": "Move(ctr: Contour, distance: number)",
+            "documentation": "Move carriage along contour",
+            "parameters": [
+              {
+                "label": "ctr",
+                "documentation": "ctr: Contour - the contour this carriage rides along"
+              },
+              {
+                "label": "distance",
+                "documentation": "distance: number - distance to move (negative = backward)"
+              }
+            ],
+            "returns": "boolean"
+          }
+        },
+        {
+          "name": "Position",
+          "kind": "Method",
+          "detail": "(ctr: Contour) → Point2D",
+          "documentation": "Returns a Point2D representing the current position of the carriage on the passed contour",
+          "signature": {
+            "label": "Position(ctr: Contour)",
+            "documentation": "Get current position on contour",
+            "parameters": [
+              {
+                "label": "ctr",
+                "documentation": "ctr: Contour - the contour this carriage rides along"
+              }
+            ],
+            "returns": "Point2D"
+          }
+        },
+        {
+          "name": "UpdatePosition",
+          "kind": "Method",
+          "detail": "(ctr: Contour, pt: Point2D) → void",
+          "documentation": "Update the position of the carriage to the nearest position on the contour to the passed point",
+          "signature": {
+            "label": "UpdatePosition(ctr: Contour, pt: Point2D)",
+            "documentation": "Update carriage to nearest point",
+            "parameters": [
+              {
+                "label": "ctr",
+                "documentation": "ctr: Contour - the contour that the carriage travels along"
+              },
+              {
+                "label": "pt",
+                "documentation": "pt: Point2D - position to snap to"
+              }
+            ],
+            "returns": "void"
+          }
+        }
+      ],
+      "constants": []
+    },
+    {
+      "name": "Span",
+      "kind": "Class",
+      "detail": "class Span",
+      "documentation": "Span is the base class for spans in a Contour. Spans are either lines, arcs, beziers, or a single 'point'. Most spans are created as LineSpan, ArcSpan, or BezierSpan. Use type properties to determine span type.",
+      "constructors": [
+        {
+          "label": "Span(pt3d: Point3D)",
+          "documentation": "Creates a new span representing a single point",
+          "parameters": [
+            {
+              "label": "pt3d",
+              "documentation": "pt3d: Point3D - 3D position for a point"
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "name": "EndPoint3D",
+          "kind": "Property",
+          "detail": "Point3D",
+          "documentation": "The 3D end point of the span",
+          "readOnly": true
+        },
+        {
+          "name": "EndPoint2D",
+          "kind": "Property",
+          "detail": "Point2D",
+          "documentation": "The 2D end point of the span",
+          "readOnly": true
+        },
+        {
+          "name": "StartPoint3D",
+          "kind": "Property",
+          "detail": "Point3D",
+          "documentation": "The 3D start point of the span",
+          "readOnly": true
+        },
+        {
+          "name": "StartPoint2D",
+          "kind": "Property",
+          "detail": "Point2D",
+          "documentation": "The 2D start point of the span",
+          "readOnly": true
+        },
+        {
+          "name": "IsLineType",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "Returns true if span is a line",
+          "readOnly": true
+        },
+        {
+          "name": "IsArcType",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "Returns true if span is an arc",
+          "readOnly": true
+        },
+        {
+          "name": "IsBezierType",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "Returns true if span is a bezier",
+          "readOnly": true
+        },
+        {
+          "name": "IsLeadInType",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "Returns true if span is a lead in",
+          "readOnly": true
+        },
+        {
+          "name": "IsLeadOutType",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "Returns true if span is a lead out",
+          "readOnly": true
+        },
+        {
+          "name": "IsOvercutType",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "Returns true if span is part of an overcut",
+          "readOnly": true
+        },
+        {
+          "name": "NumberOfControlPoints",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Number of control points for span (2 for Bezier, 1 for arc (mid point), 0 for line)",
+          "readOnly": true
+        },
+        {
+          "name": "Type",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Enum identifying type of the span. Usual values are Span.NormalLine, Span.Arc, and Span.Bezier",
+          "readOnly": true
+        }
+      ],
+      "methods": [
+        {
+          "name": "ChordLength",
+          "kind": "Method",
+          "detail": "() → number",
+          "documentation": "Return the straight line distance between start and end points of the span",
+          "signature": {
+            "label": "ChordLength()",
+            "documentation": "Get chord length",
+            "parameters": [],
+            "returns": "number"
+          }
+        },
+        {
+          "name": "EndVector",
+          "kind": "Method",
+          "detail": "(normalise: boolean) → Vector2D",
+          "documentation": "Return a Vector2D representing the direction of the span at the end",
+          "signature": {
+            "label": "EndVector(normalise: boolean)",
+            "documentation": "Get direction at end",
+            "parameters": [
+              {
+                "label": "normalise",
+                "documentation": "normalise: boolean - if true, returned vector is normalized"
+              }
+            ],
+            "returns": "Vector2D"
+          }
+        },
+        {
+          "name": "StartVector",
+          "kind": "Method",
+          "detail": "(normalise: boolean) → Vector2D",
+          "documentation": "Return a Vector2D representing the direction of the span at the start",
+          "signature": {
+            "label": "StartVector(normalise: boolean)",
+            "documentation": "Get direction at start",
+            "parameters": [
+              {
+                "label": "normalise",
+                "documentation": "normalise: boolean - if true, returned vector is normalized"
+              }
+            ],
+            "returns": "Vector2D"
+          }
+        },
+        {
+          "name": "GetControlPointPosition",
+          "kind": "Method",
+          "detail": "(index: number) → Point2D",
+          "documentation": "Return a Point2D with position of requested control point. Only valid on Bezier or Arc. For Bezier: 0=first control point, 1=second. For Arc: 0=mid point.",
+          "signature": {
+            "label": "GetControlPointPosition(index: number)",
+            "documentation": "Get control point position",
+            "parameters": [
+              {
+                "label": "index",
+                "documentation": "index: number - index of control point"
+              }
+            ],
+            "returns": "Point2D"
+          }
+        },
+        {
+          "name": "GetLength",
+          "kind": "Method",
+          "detail": "(tolerance: number) → number",
+          "documentation": "Return the length of the span. The tolerance is used for beziers to approximate length.",
+          "signature": {
+            "label": "GetLength(tolerance: number)",
+            "documentation": "Get span length",
+            "parameters": [
+              {
+                "label": "tolerance",
+                "documentation": "tolerance: number - tolerance for polygonizing beziers"
+              }
+            ],
+            "returns": "number"
+          }
+        },
+        {
+          "name": "MoveControlPoint",
+          "kind": "Method",
+          "detail": "(index: number, pt: Point2D) → boolean",
+          "documentation": "Only valid for arc or Bezier. Attempts to move the specified control point to the passed position. Returns false if control point can't be moved (e.g., would make invalid arc).",
+          "signature": {
+            "label": "MoveControlPoint(index: number, pt: Point2D)",
+            "documentation": "Move control point",
+            "parameters": [
+              {
+                "label": "index",
+                "documentation": "index: number - index of control point"
+              },
+              {
+                "label": "pt",
+                "documentation": "pt: Point2D - new position for control point"
+              }
+            ],
+            "returns": "boolean"
+          }
+        },
+        {
+          "name": "PointAtParameter",
+          "kind": "Method",
+          "detail": "(param: number, tolerance: number) → Point2D",
+          "documentation": "Return a Point2D representing the point on the span at passed parameter in range 0-1.0",
+          "signature": {
+            "label": "PointAtParameter(param: number, tolerance: number)",
+            "documentation": "Get point at parameter",
+            "parameters": [
+              {
+                "label": "param",
+                "documentation": "param: number - parameter (0.0 - 1.0)"
+              },
+              {
+                "label": "tolerance",
+                "documentation": "tolerance: number - tolerance for polygonizing beziers"
+              }
+            ],
+            "returns": "Point2D"
+          }
+        },
+        {
+          "name": "Reverse",
+          "kind": "Method",
+          "detail": "() → void",
+          "documentation": "Reverse the span - swap start and end points. For arcs: swap sign of bulge. For beziers: swap control points.",
+          "signature": {
+            "label": "Reverse()",
+            "documentation": "Reverse span direction",
+            "parameters": [],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "SetStartPoint3D",
+          "kind": "Method",
+          "detail": "(pt: Point3D) → void",
+          "documentation": "Set start point for span. WARNING: Be EXTREMELY careful - calling this on spans in a contour can open gaps between adjoining spans.",
+          "signature": {
+            "label": "SetStartPoint3D(pt: Point3D)",
+            "documentation": "Set start point (use with caution)",
+            "parameters": [
+              {
+                "label": "pt",
+                "documentation": "pt: Point3D - new 3D start position"
+              }
+            ],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "SetStartPoint2D",
+          "kind": "Method",
+          "detail": "(pt: Point2D) → void",
+          "documentation": "Set start point for span. WARNING: Be EXTREMELY careful - calling this on spans in a contour can open gaps between adjoining spans.",
+          "signature": {
+            "label": "SetStartPoint2D(pt: Point2D)",
+            "documentation": "Set start point (use with caution)",
+            "parameters": [
+              {
+                "label": "pt",
+                "documentation": "pt: Point2D - new 2D start position"
+              }
+            ],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "SetEndPoint3D",
+          "kind": "Method",
+          "detail": "(pt: Point3D) → void",
+          "documentation": "Set end point for span. WARNING: Be EXTREMELY careful - calling this on spans in a contour can open gaps between adjoining spans.",
+          "signature": {
+            "label": "SetEndPoint3D(pt: Point3D)",
+            "documentation": "Set end point (use with caution)",
+            "parameters": [
+              {
+                "label": "pt",
+                "documentation": "pt: Point3D - new 3D end position"
+              }
+            ],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "SetEndPoint2D",
+          "kind": "Method",
+          "detail": "(pt: Point2D) → void",
+          "documentation": "Set end point for span. WARNING: Be EXTREMELY careful - calling this on spans in a contour can open gaps between adjoining spans.",
+          "signature": {
+            "label": "SetEndPoint2D(pt: Point2D)",
+            "documentation": "Set end point (use with caution)",
+            "parameters": [
+              {
+                "label": "pt",
+                "documentation": "pt: Point2D - new 2D end position"
+              }
+            ],
+            "returns": "void"
+          }
+        }
+      ],
+      "constants": []
+    },
+    {
+      "name": "LineSpan",
+      "kind": "Class",
+      "detail": "class LineSpan extends Span",
+      "documentation": "LineSpan represents a line span in a Contour. It is derived from the Span class and all methods and properties of the Span class are valid on this object. You can use the LineTo methods on Contour to avoid span creation.",
+      "constructors": [
+        {
+          "label": "LineSpan(start_pt: Point3D, end_pt: Point3D)",
+          "documentation": "Creates a new line span with 3D points",
+          "parameters": [
+            {
+              "label": "start_pt",
+              "documentation": "start_pt: Point3D - 3D start point"
+            },
+            {
+              "label": "end_pt",
+              "documentation": "end_pt: Point3D - 3D end point"
+            }
+          ]
+        },
+        {
+          "label": "LineSpan(start_pt: Point2D, end_pt: Point2D)",
+          "documentation": "Creates a new line span with 2D points",
+          "parameters": [
+            {
+              "label": "start_pt",
+              "documentation": "start_pt: Point2D - 2D start point"
+            },
+            {
+              "label": "end_pt",
+              "documentation": "end_pt: Point2D - 2D end point"
+            }
+          ]
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "name": "ClosestParameterToPoint",
+          "kind": "Method",
+          "detail": "(pt: Point2D) → number",
+          "documentation": "Return the parameter of the point on the line which is closest to the passed point",
+          "signature": {
+            "label": "ClosestParameterToPoint(pt: Point2D)",
+            "documentation": "Find closest parameter to point",
+            "parameters": [
+              {
+                "label": "pt",
+                "documentation": "pt: Point2D - point to find closest parameter to"
+              }
+            ],
+            "returns": "number"
+          }
+        }
+      ],
+      "constants": []
+    },
+    {
+      "name": "ArcSpan",
+      "kind": "Class",
+      "detail": "class ArcSpan extends Span",
+      "documentation": "ArcSpan represents an arc span in a Contour. It is derived from the Span class and all methods and properties of the Span class are valid. Arcs are represented internally using start/end points and a 'bulge factor' which controls the arc shape (bulge = (2*arc_height) / chord_length). Maximum arc angle is 180 degrees.",
+      "constructors": [
+        {
+          "label": "ArcSpan(start_pt: Point2D, end_pt: Point2D, pt_on_arc: Point2D)",
+          "documentation": "Creates arc through three 2D points (max 180 degrees)",
+          "parameters": [
+            {
+              "label": "start_pt",
+              "documentation": "start_pt: Point2D - start point"
+            },
+            {
+              "label": "end_pt",
+              "documentation": "end_pt: Point2D - end point"
+            },
+            {
+              "label": "pt_on_arc",
+              "documentation": "pt_on_arc: Point2D - point on arc"
+            }
+          ]
+        },
+        {
+          "label": "ArcSpan(start_pt: Point2D, end_pt: Point2D, centre_pt: Point2D, ccw: boolean)",
+          "documentation": "Creates arc with 2D points and center (max 180 degrees)",
+          "parameters": [
+            {
+              "label": "start_pt",
+              "documentation": "start_pt: Point2D - start point"
+            },
+            {
+              "label": "end_pt",
+              "documentation": "end_pt: Point2D - end point"
+            },
+            {
+              "label": "centre_pt",
+              "documentation": "centre_pt: Point2D - center point (not mid-point)"
+            },
+            {
+              "label": "ccw",
+              "documentation": "ccw: boolean - true if counter-clockwise"
+            }
+          ]
+        },
+        {
+          "label": "ArcSpan(start_pt: Point3D, end_pt: Point3D, centre_pt: Point3D, ccw: boolean)",
+          "documentation": "Creates arc with 3D points and center (max 180 degrees)",
+          "parameters": [
+            {
+              "label": "start_pt",
+              "documentation": "start_pt: Point3D - start point"
+            },
+            {
+              "label": "end_pt",
+              "documentation": "end_pt: Point3D - end point (same Z as start)"
+            },
+            {
+              "label": "centre_pt",
+              "documentation": "centre_pt: Point3D - center point"
+            },
+            {
+              "label": "ccw",
+              "documentation": "ccw: boolean - true if counter-clockwise"
+            }
+          ]
+        },
+        {
+          "label": "ArcSpan(start_pt: Point2D, end_pt: Point2D, bulge: number)",
+          "documentation": "Creates arc with 2D points and bulge factor (max 180 degrees)",
+          "parameters": [
+            {
+              "label": "start_pt",
+              "documentation": "start_pt: Point2D - start point"
+            },
+            {
+              "label": "end_pt",
+              "documentation": "end_pt: Point2D - end point"
+            },
+            {
+              "label": "bulge",
+              "documentation": "bulge: number - bulge factor for arc"
+            }
+          ]
+        },
+        {
+          "label": "ArcSpan(start_pt: Point3D, end_pt: Point3D, bulge: number)",
+          "documentation": "Creates arc with 3D points and bulge factor (max 180 degrees)",
+          "parameters": [
+            {
+              "label": "start_pt",
+              "documentation": "start_pt: Point3D - start point"
+            },
+            {
+              "label": "end_pt",
+              "documentation": "end_pt: Point3D - end point (same Z as start)"
+            },
+            {
+              "label": "bulge",
+              "documentation": "bulge: number - bulge factor for arc"
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "name": "Bulge",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Signed bulge for arc",
+          "readOnly": true
+        },
+        {
+          "name": "IsAntiClockwise",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "Returns true if arc is anti-clockwise (same as IsCCW)",
+          "readOnly": true
+        },
+        {
+          "name": "IsCCW",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "Returns true if arc is counter-clockwise (same as IsAntiClockwise)",
+          "readOnly": true
+        },
+        {
+          "name": "IsClockwise",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "Returns true if arc is clockwise (same as IsCW)",
+          "readOnly": true
+        },
+        {
+          "name": "IsCW",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "Returns true if arc is clockwise (same as IsClockwise)",
+          "readOnly": true
+        }
+      ],
+      "methods": [
+        {
+          "name": "ArcMidPoint",
+          "kind": "Method",
+          "detail": "() → Point3D",
+          "documentation": "Returns a Point3D holding the mid point of the arc",
+          "signature": {
+            "label": "ArcMidPoint()",
+            "documentation": "Get arc mid point",
+            "parameters": [],
+            "returns": "Point3D"
+          }
+        },
+        {
+          "name": "RadiusAndCentre",
+          "kind": "Method",
+          "detail": "(ret_centre_pt: Point3D) → number",
+          "documentation": "Calculate the center point of the arc and the radius. Returns the radius and sets the passed point to the center position.",
+          "signature": {
+            "label": "RadiusAndCentre(ret_centre_pt: Point3D)",
+            "documentation": "Get radius and center",
+            "parameters": [
+              {
+                "label": "ret_centre_pt",
+                "documentation": "ret_centre_pt: Point3D - returned center point position"
+              }
+            ],
+            "returns": "number"
+          }
+        },
+        {
+          "name": "SetBulge",
+          "kind": "Method",
+          "detail": "(bulge: number) → void",
+          "documentation": "Set the bulge factor for this arc",
+          "signature": {
+            "label": "SetBulge(bulge: number)",
+            "documentation": "Set arc bulge",
+            "parameters": [
+              {
+                "label": "bulge",
+                "documentation": "bulge: number - bulge factor for arc"
+              }
+            ],
+            "returns": "void"
+          }
+        }
+      ],
+      "constants": []
+    },
+    {
+      "name": "BezierSpan",
+      "kind": "Class",
+      "detail": "class BezierSpan extends Span",
+      "documentation": "BezierSpan represents a bezier span in a Contour. It is derived from the Span class and all methods and properties of the Span class are valid on this object. You can use the BezierTo methods on Contour to avoid span creation.",
+      "constructors": [
+        {
+          "label": "BezierSpan(start_pt: Point2D, end_pt: Point2D, ctrl_pt_1: Point2D, ctrl_pt_2: Point2D)",
+          "documentation": "Creates a bezier span with 2D points",
+          "parameters": [
+            {
+              "label": "start_pt",
+              "documentation": "start_pt: Point2D - start point"
+            },
+            {
+              "label": "end_pt",
+              "documentation": "end_pt: Point2D - end point"
+            },
+            {
+              "label": "ctrl_pt_1",
+              "documentation": "ctrl_pt_1: Point2D - first control point"
+            },
+            {
+              "label": "ctrl_pt_2",
+              "documentation": "ctrl_pt_2: Point2D - second control point"
+            }
+          ]
+        },
+        {
+          "label": "BezierSpan(start_pt: Point3D, end_pt: Point3D, ctrl_pt_1: Point2D, ctrl_pt_2: Point2D)",
+          "documentation": "Creates a bezier span with 3D start/end and 2D control points",
+          "parameters": [
+            {
+              "label": "start_pt",
+              "documentation": "start_pt: Point3D - 3D start point"
+            },
+            {
+              "label": "end_pt",
+              "documentation": "end_pt: Point3D - 3D end point (same Z as start)"
+            },
+            {
+              "label": "ctrl_pt_1",
+              "documentation": "ctrl_pt_1: Point2D - first control point"
+            },
+            {
+              "label": "ctrl_pt_2",
+              "documentation": "ctrl_pt_2: Point2D - second control point"
+            }
+          ]
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "constants": []
+    },
     {
       "name": "Point2D",
       "kind": "Class",

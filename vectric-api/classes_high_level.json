@@ -2908,6 +2908,132 @@
         }
       ],
       "constants": []
+    },
+        {
+      "name": "CadContour",
+      "kind": "Class",
+      "detail": "class CadContour extends CadObject",
+      "documentation": "CadContour is derived from CadObject and represents a single vector within the job. A CadContour holds a Contour object which contains the actual data for the vector shape. A CadContour is created from a Contour object using the CreateCadContour() method. To access the Contour data from a CadContour object, use the :GetContour() method from the base CadObject class. Inherits all properties and methods from CadObject.",
+      "constructors": [],
+      "properties": [],
+      "methods": [
+        {
+          "name": "InsertToolpathTabAtPoint",
+          "kind": "Method",
+          "detail": "(point: Point2D) → ToolpathTab",
+          "documentation": "This method inserts a toolpath tab at the point on the CadContour closest to the specified point. It returns a ToolpathTab object.",
+          "signature": {
+            "label": "InsertToolpathTabAtPoint(point: Point2D)",
+            "documentation": "Insert toolpath tab at specified point",
+            "parameters": [
+              {
+                "label": "point",
+                "documentation": "point: Point2D - the point where to place the toolpath tab"
+              }
+            ],
+            "returns": "ToolpathTab"
+          }
+        }
+      ],
+      "constants": []
+    },
+    {
+      "name": "CadBitmap",
+      "kind": "Class",
+      "detail": "class CadBitmap extends CadObject",
+      "documentation": "CadBitmap represents an imported bitmap in the program. It is identified by object.ClassName == 'vcCadBitmap'. To convert a CadObject to a CadBitmap, use the helper function CastCadObjectToCadBitmap(). Inherits all properties and methods from CadObject.",
+      "constructors": [],
+      "properties": [
+        {
+          "name": "Brightness",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Get/Set brightness value in range 0 - 255",
+          "readOnly": false
+        }
+      ],
+      "methods": [],
+      "constants": []
+    },
+    {
+      "name": "CadPolyline",
+      "kind": "Class",
+      "detail": "class CadPolyline extends CadObject",
+      "documentation": "CadPolyline represents a vector in the program which has been created by the polyline drawing tool. It has all the same properties and methods as a CadContour and can be treated as one. It is identified by object.ClassName == 'vcCadPolyline'. To convert a CadObject to a CadPolyline, use the helper function CastCadObjectToCadPolyline(). Inherits all properties and methods from CadObject.",
+      "constructors": [],
+      "properties": [],
+      "methods": [],
+      "constants": []
+    },
+    {
+      "name": "CadMarker",
+      "kind": "Class",
+      "detail": "class CadMarker extends CadObject",
+      "documentation": "CadMarker represents a 'marker' in the program which can be used to label items. CadMarkers are not machinable or selectable. It is derived from CadObject and has all the properties of CadObject available.",
+      "constructors": [
+        {
+          "label": "CadMarker(text: string, pt: Point2D, pixel_size: number)",
+          "documentation": "Creates a CadMarker at the passed position with the specified text and pixel size",
+          "parameters": [
+            {
+              "label": "text",
+              "documentation": "text: string - text for marker object"
+            },
+            {
+              "label": "pt",
+              "documentation": "pt: Point2D - position for marker"
+            },
+            {
+              "label": "pixel_size",
+              "documentation": "pixel_size: number - size marker is drawn at in pixels"
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "name": "Text",
+          "kind": "Property",
+          "detail": "string",
+          "documentation": "Get/Set text displayed at marker",
+          "readOnly": false
+        },
+        {
+          "name": "Position",
+          "kind": "Property",
+          "detail": "Point2D",
+          "documentation": "Get/Set position for marker",
+          "readOnly": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "SetColor",
+          "kind": "Method",
+          "detail": "(red: number, green: number, blue: number) → void",
+          "documentation": "Set colour for marker using RGB values in range 0.0 - 1.0",
+          "signature": {
+            "label": "SetColor(red: number, green: number, blue: number)",
+            "documentation": "Set marker color",
+            "parameters": [
+              {
+                "label": "red",
+                "documentation": "red: number - red value for colour (0.0 - 1.0)"
+              },
+              {
+                "label": "green",
+                "documentation": "green: number - green value for colour (0.0 - 1.0)"
+              },
+              {
+                "label": "blue",
+                "documentation": "blue: number - blue value for colour (0.0 - 1.0)"
+              }
+            ],
+            "returns": "void"
+          }
+        }
+      ],
+      "constants": []
     }
   ]
 }
