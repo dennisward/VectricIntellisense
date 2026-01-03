@@ -191,9 +191,13 @@ function getCompletionContext(document: vscode.TextDocument, position: vscode.Po
         'if', 'in', 'local', 'nil', 'not', 'or', 'repeat', 'return', 'then',
         'true', 'until', 'while'
     ];
+
+    const luaBuiltInTypes = [
+        'nil', 'boolean', 'number', 'string', 'function', 'userdata', 'thread', 'table'
+    ];
     
-    // Check if we're typing a Lua keyword
-    if (luaKeywords.includes(currentWord.toLowerCase())) {
+    // Check if we're typing a Lua keyword or built-in type
+    if (luaKeywords.includes(currentWord.toLowerCase()) || luaBuiltInTypes.includes(currentWord.toLowerCase())) {
         return {
             type: 'keyword',
             objectName: null,
