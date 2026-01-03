@@ -1,0 +1,71 @@
+{
+  "version": "12.5",
+  "category": "General Global Methods",
+  "functions": [
+    {
+      "name": "IsAspire",
+      "kind": "Function",
+      "detail": "() → boolean",
+      "documentation": "Returns true if the script is running inside Aspire.",
+      "signature": {
+        "label": "IsAspire()",
+        "documentation": "Returns true if the script is running inside Aspire.",
+        "parameters": [],
+        "returns": "boolean"
+      }
+    },
+    {
+      "name": "IsBetaBuild",
+      "kind": "Function",
+      "detail": "() → boolean",
+      "documentation": "Returns true if this is a Beta build rather than a release build.",
+      "signature": {
+        "label": "IsBetaBuild()",
+        "documentation": "Returns true if this is a Beta build rather than a release build.",
+        "parameters": [],
+        "returns": "boolean"
+      }
+    },
+    {
+      "name": "GetAppVersion",
+      "kind": "Function",
+      "detail": "() → number",
+      "documentation": "Returns application version number as a double e.g 4.004 for Aspire V4.0",
+      "signature": {
+        "label": "GetAppVersion()",
+        "documentation": "Returns application version number as a double e.g 4.004 for Aspire V4.0",
+        "parameters": [],
+        "returns": "number"
+      }
+    },
+    {
+      "name": "GetBuildVersion",
+      "kind": "Function",
+      "detail": "() → number",
+      "documentation": "Returns application internal build version which is the same for both Aspire and VCarve Pro. This is different to the AppVersion above as Aspire 4.004 will report e.g. 7.004 which matches VCarve Pro 7.004 as they are built off the same code base and have the same script level support.",
+      "signature": {
+        "label": "GetBuildVersion()",
+        "documentation": "Returns application internal build version which is the same for both Aspire and VCarve Pro. This is different to the AppVersion above as Aspire 4.004 will report e.g. 7.004 which matches VCarve Pro 7.004 as they are built off the same code base and have the same script level support.",
+        "parameters": [],
+        "returns": "number"
+      }
+    },
+    {
+      "name": "MessageBox",
+      "kind": "Function",
+      "detail": "(text: string) → void",
+      "documentation": "Displays a message box with passed text to user. The text can include HTML formatting.\n\ntext – string – text to display in the message box",
+      "signature": {
+        "label": "MessageBox(text: string)",
+        "documentation": "Displays a message box with passed text to user. The text can include HTML formatting.",
+        "parameters": [
+          {
+            "label": "text",
+            "documentation": "text: string"
+          }
+        ],
+        "returns": "void"
+      }
+    }
+  ]
+}

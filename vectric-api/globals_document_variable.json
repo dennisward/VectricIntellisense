@@ -1,0 +1,23 @@
+{
+  "version": "12.5",
+  "category": "Document Variable Related Global Methods",
+  "functions": [
+    {
+      "name": "IsInvalidDocumentVariableName",
+      "kind": "Function",
+      "detail": "(name: string) → boolean",
+      "documentation": "Returns true if the passed name is invalid for a DocumentVariable. Document variable names must begin with a letter and then may consist of letters, numbers and underscores.",
+      "signature": {
+        "label": "IsInvalidDocumentVariableName(name: string)",
+        "documentation": "Returns true if the passed name is invalid for a DocumentVariable. Document variable names must begin with a letter and then may consist of letters, numbers and underscores.",
+        "parameters": [
+          {
+            "label": "name",
+            "documentation": "name: string"
+          }
+        ],
+        "returns": "boolean"
+      }
+    }
+  ]
+}

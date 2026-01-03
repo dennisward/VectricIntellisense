@@ -1,0 +1,117 @@
+{
+  "version": "12.5",
+  "category": "Geometry Objects",
+  "description": "Low level geometric primitives which can greatly simplify writing scripts which involve geometry manipulation. The Point2D and Point3D primitives are widely used to set the end points of spans and while building geometry. The Box2D and Box3D objects are extremely useful for determining the size and position of objects.",
+  "classes": [
+    {
+      "name": "Point2D",
+      "kind": "Class",
+      "detail": "class Point2D",
+      "documentation": "Represents a 2D point (X and Y values only). Used by many other objects and can be used with geometry objects such as Vector2D to perform calculations.",
+      "constructors": [
+        {"label": "Point2D()", "documentation": "Constructs an un-initialised point with invalid x and y values.", "parameters": []},
+        {"label": "Point2D(x: number, y: number)", "documentation": "Creates a new point with the specified X and Y values.", "parameters": [{"label": "x", "documentation": "The value for the x coordinate of the point"}, {"label": "y", "documentation": "The value for the y coordinate of the point"}]},
+        {"label": "Point2D(pt: Point2D)", "documentation": "Creates a new point with the same X and Y values as the passed point.", "parameters": [{"label": "pt", "documentation": "An existing point to copy X and Y values from"}]}
+      ],
+      "properties": [
+        {"name": "X", "kind": "Property", "detail": "number", "documentation": "X coordinate for point (read/write)", "readOnly": false},
+        {"name": "x", "kind": "Property", "detail": "number", "documentation": "X coordinate for point (read/write)", "readOnly": false},
+        {"name": "Y", "kind": "Property", "detail": "number", "documentation": "Y coordinate for point (read/write)", "readOnly": false},
+        {"name": "y", "kind": "Property", "detail": "number", "documentation": "Y coordinate for point (read/write)", "readOnly": false},
+        {"name": "IsInvalid", "kind": "Property", "detail": "boolean", "documentation": "Returns true if the point is invalid - not initialised or SetInvalid called", "readOnly": true}
+      ],
+      "methods": [
+        {"name": "Clone", "kind": "Method", "detail": "() → Point2D", "documentation": "Returns a new Point2D which is an exact copy of this one", "signature": {"label": "Clone()", "documentation": "Returns a new Point2D which is an exact copy of this one", "parameters": [], "returns": "Point2D"}},
+        {"name": "Equals", "kind": "Method", "detail": "(pt: Point2D, tolerance: number) → boolean", "documentation": "Returns true if this point equals the passed point within the passed tolerance. Tolerance can be 0.0", "signature": {"label": "Equals(pt: Point2D, tolerance: number)", "documentation": "Returns true if this point equals the passed point within the passed tolerance", "parameters": [{"label": "pt", "documentation": "pt: Point2D - point to compare with"}, {"label": "tolerance", "documentation": "tolerance: number - tolerance for comparison (can be 0.0)"}], "returns": "boolean"}},
+        {"name": "Length", "kind": "Method", "detail": "() → number", "documentation": "Returns the length of the vector from the origin (0,0) to this point", "signature": {"label": "Length()", "documentation": "Returns the length of the vector from the origin (0,0) to this point", "parameters": [], "returns": "number"}},
+        {"name": "Offset", "kind": "Method", "detail": "(x: number, y: number) → void", "documentation": "Offset this point by the passed x and y values", "signature": {"label": "Offset(x: number, y: number)", "documentation": "Offset this point by the passed x and y values", "parameters": [{"label": "x", "documentation": "x: number - x offset"}, {"label": "y", "documentation": "y: number - y offset"}], "returns": "void"}},
+        {"name": "SetInvalid", "kind": "Method", "detail": "() → void", "documentation": "Set the point to an invalid state", "signature": {"label": "SetInvalid()", "documentation": "Set the point to an invalid state", "parameters": [], "returns": "void"}}
+      ],
+      "operators": ["Matrix2D * Point2D", "Point2D - Point2D", "Point2D + Vector2D", "Point2D - Vector2D"]
+    },
+    {
+      "name": "Point3D",
+      "kind": "Class",
+      "detail": "class Point3D",
+      "documentation": "Represents a 3D point (X, Y and Z values). Used by many other objects and can be used with geometry objects such as Vector3D to perform calculations.",
+      "constructors": [
+        {"label": "Point3D()", "documentation": "Constructs an un-initialised point with invalid x, y and z values.", "parameters": []},
+        {"label": "Point3D(x: number, y: number, z: number)", "documentation": "Creates a new point with the specified X, Y and Z values.", "parameters": [{"label": "x", "documentation": "The value for the x coordinate"}, {"label": "y", "documentation": "The value for the y coordinate"}, {"label": "z", "documentation": "The value for the z coordinate"}]},
+        {"label": "Point3D(pt: Point3D)", "documentation": "Creates a new point with the same X, Y and Z values as the passed point.", "parameters": [{"label": "pt", "documentation": "An existing point to copy values from"}]},
+        {"label": "Point3D(pt: Point2D, z: number)", "documentation": "Creates a new 3D point using the X and Y values from the passed 2D point and the specified Z value.", "parameters": [{"label": "pt", "documentation": "Point2D to get X and Y from"}, {"label": "z", "documentation": "Z coordinate value"}]}
+      ],
+      "properties": [
+        {"name": "X", "kind": "Property", "detail": "number", "documentation": "X coordinate for point (read/write)", "readOnly": false},
+        {"name": "x", "kind": "Property", "detail": "number", "documentation": "X coordinate for point (read/write)", "readOnly": false},
+        {"name": "Y", "kind": "Property", "detail": "number", "documentation": "Y coordinate for point (read/write)", "readOnly": false},
+        {"name": "y", "kind": "Property", "detail": "number", "documentation": "Y coordinate for point (read/write)", "readOnly": false},
+        {"name": "Z", "kind": "Property", "detail": "number", "documentation": "Z coordinate for point (read/write)", "readOnly": false},
+        {"name": "z", "kind": "Property", "detail": "number", "documentation": "Z coordinate for point (read/write)", "readOnly": false},
+        {"name": "IsInvalid", "kind": "Property", "detail": "boolean", "documentation": "Returns true if the point is invalid - not initialised or SetInvalid called", "readOnly": true}
+      ],
+      "methods": [
+        {"name": "Clone", "kind": "Method", "detail": "() → Point3D", "documentation": "Returns a new Point3D which is an exact copy of this one", "signature": {"label": "Clone()", "documentation": "Returns a new Point3D which is an exact copy of this one", "parameters": [], "returns": "Point3D"}},
+        {"name": "Equals", "kind": "Method", "detail": "(pt: Point3D, tolerance: number) → boolean", "documentation": "Returns true if this point equals the passed point within the passed tolerance", "signature": {"label": "Equals(pt: Point3D, tolerance: number)", "documentation": "Returns true if this point equals the passed point within the passed tolerance", "parameters": [{"label": "pt", "documentation": "pt: Point3D - point to compare with"}, {"label": "tolerance", "documentation": "tolerance: number - tolerance for comparison (can be 0.0)"}], "returns": "boolean"}},
+        {"name": "Length", "kind": "Method", "detail": "() → number", "documentation": "Returns the length of the vector from the origin (0,0,0) to this point", "signature": {"label": "Length()", "documentation": "Returns the length of the vector from the origin (0,0,0) to this point", "parameters": [], "returns": "number"}},
+        {"name": "Offset", "kind": "Method", "detail": "(x: number, y: number, z: number) → void", "documentation": "Offset this point by the passed x, y and z values", "signature": {"label": "Offset(x: number, y: number, z: number)", "documentation": "Offset this point by the passed x, y and z values", "parameters": [{"label": "x", "documentation": "x: number - x offset"}, {"label": "y", "documentation": "y: number - y offset"}, {"label": "z", "documentation": "z: number - z offset"}], "returns": "void"}},
+        {"name": "SetInvalid", "kind": "Method", "detail": "() → void", "documentation": "Set the point to an invalid state", "signature": {"label": "SetInvalid()", "documentation": "Set the point to an invalid state", "parameters": [], "returns": "void"}}
+      ],
+      "operators": ["Matrix2D * Point3D", "Point3D - Point3D", "Point3D + Vector3D"]
+    },
+    {
+      "name": "Vector2D",
+      "kind": "Class",
+      "detail": "class Vector2D",
+      "documentation": "Represents a 2D vector (X and Y components). Used for geometric calculations and transformations.",
+      "constructors": [
+        {"label": "Vector2D()", "documentation": "Creates a zero vector (0, 0).", "parameters": []},
+        {"label": "Vector2D(x: number, y: number)", "documentation": "Creates a new vector with the specified X and Y components.", "parameters": [{"label": "x", "documentation": "The value for the x component"}, {"label": "y", "documentation": "The value for the y component"}]},
+        {"label": "Vector2D(vec: Vector2D)", "documentation": "Creates a new vector with the same X and Y values as the passed vector.", "parameters": [{"label": "vec", "documentation": "An existing vector to copy values from"}]}
+      ],
+      "properties": [
+        {"name": "X", "kind": "Property", "detail": "number", "documentation": "X component of vector (read/write)", "readOnly": false},
+        {"name": "x", "kind": "Property", "detail": "number", "documentation": "X component of vector (read/write)", "readOnly": false},
+        {"name": "Y", "kind": "Property", "detail": "number", "documentation": "Y component of vector (read/write)", "readOnly": false},
+        {"name": "y", "kind": "Property", "detail": "number", "documentation": "Y component of vector (read/write)", "readOnly": false}
+      ],
+      "methods": [
+        {"name": "Angle", "kind": "Method", "detail": "() → number", "documentation": "Returns the angle of the vector in radians (from positive X axis)", "signature": {"label": "Angle()", "documentation": "Returns the angle of the vector in radians", "parameters": [], "returns": "number"}},
+        {"name": "Clone", "kind": "Method", "detail": "() → Vector2D", "documentation": "Returns a new Vector2D which is an exact copy of this one", "signature": {"label": "Clone()", "documentation": "Returns a new Vector2D which is an exact copy of this one", "parameters": [], "returns": "Vector2D"}},
+        {"name": "Length", "kind": "Method", "detail": "() → number", "documentation": "Returns the length (magnitude) of the vector", "signature": {"label": "Length()", "documentation": "Returns the length (magnitude) of the vector", "parameters": [], "returns": "number"}},
+        {"name": "Normalize", "kind": "Method", "detail": "() → void", "documentation": "Normalize this vector to unit length", "signature": {"label": "Normalize()", "documentation": "Normalize this vector to unit length", "parameters": [], "returns": "void"}},
+        {"name": "Perpendicular", "kind": "Method", "detail": "(clockwise: boolean) → Vector2D", "documentation": "Returns a perpendicular vector to this one", "signature": {"label": "Perpendicular(clockwise: boolean)", "documentation": "Returns a perpendicular vector to this one", "parameters": [{"label": "clockwise", "documentation": "clockwise: boolean - if true return clockwise perpendicular, else anti-clockwise"}], "returns": "Vector2D"}},
+        {"name": "Rotate", "kind": "Method", "detail": "(angle: number) → void", "documentation": "Rotate this vector by the specified angle in radians", "signature": {"label": "Rotate(angle: number)", "documentation": "Rotate this vector by the specified angle in radians", "parameters": [{"label": "angle", "documentation": "angle: number - angle in radians"}], "returns": "void"}}
+      ],
+      "operators": ["Matrix2D * Vector2D", "Vector2D + Vector2D", "Vector2D - Vector2D"]
+    },
+    {
+      "name": "Box2D",
+      "kind": "Class",
+      "detail": "class Box2D",
+      "documentation": "Represents a 2D bounding box defined by minimum and maximum X and Y coordinates. Extremely useful for determining the size and position of objects.",
+      "constructors": [
+        {"label": "Box2D()", "documentation": "Creates an empty (invalid) bounding box.", "parameters": []},
+        {"label": "Box2D(min_x: number, min_y: number, max_x: number, max_y: number)", "documentation": "Creates a bounding box with the specified minimum and maximum coordinates.", "parameters": [{"label": "min_x", "documentation": "Minimum X coordinate"}, {"label": "min_y", "documentation": "Minimum Y coordinate"}, {"label": "max_x", "documentation": "Maximum X coordinate"}, {"label": "max_y", "documentation": "Maximum Y coordinate"}]},
+        {"label": "Box2D(pt1: Point2D, pt2: Point2D)", "documentation": "Creates a bounding box from two corner points.", "parameters": [{"label": "pt1", "documentation": "First corner point"}, {"label": "pt2", "documentation": "Second corner point"}]}
+      ],
+      "properties": [
+        {"name": "IsEmpty", "kind": "Property", "detail": "boolean", "documentation": "Returns true if the box is empty (invalid)", "readOnly": true},
+        {"name": "BLC", "kind": "Property", "detail": "Point2D", "documentation": "Bottom left corner of box (read only)", "readOnly": true},
+        {"name": "BRC", "kind": "Property", "detail": "Point2D", "documentation": "Bottom right corner of box (read only)", "readOnly": true},
+        {"name": "TLC", "kind": "Property", "detail": "Point2D", "documentation": "Top left corner of box (read only)", "readOnly": true},
+        {"name": "TRC", "kind": "Property", "detail": "Point2D", "documentation": "Top right corner of box (read only)", "readOnly": true},
+        {"name": "Centre", "kind": "Property", "detail": "Point2D", "documentation": "Centre point of box (read only)", "readOnly": true},
+        {"name": "XLength", "kind": "Property", "detail": "number", "documentation": "Length of box in X direction (read only)", "readOnly": true},
+        {"name": "YLength", "kind": "Property", "detail": "number", "documentation": "Length of box in Y direction (read only)", "readOnly": true}
+      ],
+      "methods": [
+        {"name": "Clone", "kind": "Method", "detail": "() → Box2D", "documentation": "Returns a new Box2D which is an exact copy of this one", "signature": {"label": "Clone()", "documentation": "Returns a new Box2D which is an exact copy of this one", "parameters": [], "returns": "Box2D"}},
+        {"name": "Expand", "kind": "Method", "detail": "(amount: number) → void", "documentation": "Expand the box by the specified amount in all directions", "signature": {"label": "Expand(amount: number)", "documentation": "Expand the box by the specified amount in all directions", "parameters": [{"label": "amount", "documentation": "amount: number - amount to expand by"}], "returns": "void"}},
+        {"name": "IncludeBox", "kind": "Method", "detail": "(box: Box2D) → void", "documentation": "Expand this box to include the passed box", "signature": {"label": "IncludeBox(box: Box2D)", "documentation": "Expand this box to include the passed box", "parameters": [{"label": "box", "documentation": "box: Box2D - box to include"}], "returns": "void"}},
+        {"name": "IncludePoint", "kind": "Method", "detail": "(pt: Point2D) → void", "documentation": "Expand this box to include the passed point", "signature": {"label": "IncludePoint(pt: Point2D)", "documentation": "Expand this box to include the passed point", "parameters": [{"label": "pt", "documentation": "pt: Point2D - point to include"}], "returns": "void"}},
+        {"name": "IsPointInside", "kind": "Method", "detail": "(pt: Point2D) → boolean", "documentation": "Returns true if the passed point is inside the box", "signature": {"label": "IsPointInside(pt: Point2D)", "documentation": "Returns true if the passed point is inside the box", "parameters": [{"label": "pt", "documentation": "pt: Point2D - point to test"}], "returns": "boolean"}},
+        {"name": "Overlaps", "kind": "Method", "detail": "(box: Box2D) → boolean", "documentation": "Returns true if this box overlaps the passed box", "signature": {"label": "Overlaps(box: Box2D)", "documentation": "Returns true if this box overlaps the passed box", "parameters": [{"label": "box", "documentation": "box: Box2D - box to test overlap with"}], "returns": "boolean"}}
+      ]
+    }
+  ]
+}

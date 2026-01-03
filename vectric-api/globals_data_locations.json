@@ -1,0 +1,90 @@
+{
+  "version": "12.5",
+  "category": "Data File Locations Related Global Methods",
+  "functions": [
+    {
+      "name": "GetDataLocation",
+      "kind": "Function",
+      "detail": "() → string",
+      "documentation": "Returns the 'root' data location for the application e.g.\n\"C:\\ProgramData\\Vectric\\Aspire\\V4.0\" For V4.0 of Aspire on Windows 7.\n\"C:\\ProgramData\\Vectric\\VCarve Pro\\V7.0\" For V7.0 of VCarve Pro on Windows 7.\nThis is the same folder accessible via \"File – OpenApplication Data Folder …\" within the program.",
+      "signature": {
+        "label": "GetDataLocation()",
+        "documentation": "Returns the 'root' data location for the application e.g. \"C:\\ProgramData\\Vectric\\Aspire\\V4.0\" For V4.0 of Aspire on Windows 7.",
+        "parameters": [],
+        "returns": "string"
+      }
+    },
+    {
+      "name": "GetPostProcessorLocation",
+      "kind": "Function",
+      "detail": "() → string",
+      "documentation": "Returns the PostP folder location for the program e.g\n\"C:\\ProgramData\\Vectric\\Aspire\\V4.0\\PostP\" For V4.0 of Aspire on Windows 7.",
+      "signature": {
+        "label": "GetPostProcessorLocation()",
+        "documentation": "Returns the PostP folder location for the program e.g \"C:\\ProgramData\\Vectric\\Aspire\\V4.0\\PostP\" For V4.0 of Aspire on Windows 7.",
+        "parameters": [],
+        "returns": "string"
+      }
+    },
+    {
+      "name": "GetToolDatabaseLocation",
+      "kind": "Function",
+      "detail": "() → string",
+      "documentation": "Returns the Tool Database folder location for the program e.g\n\"C:\\ProgramData\\Vectric\\Aspire\\V4.0\\ToolDatabase\" For V4.0 of Aspire on Windows 7.",
+      "signature": {
+        "label": "GetToolDatabaseLocation()",
+        "documentation": "Returns the Tool Database folder location for the program e.g \"C:\\ProgramData\\Vectric\\Aspire\\V4.0\\ToolDatabase\" For V4.0 of Aspire on Windows 7.",
+        "parameters": [],
+        "returns": "string"
+      }
+    },
+    {
+      "name": "GetGadgetsLocation",
+      "kind": "Function",
+      "detail": "() → string",
+      "documentation": "Returns the Gadgets folder location for the program e.g\n\"C:\\ProgramData\\Vectric\\Aspire\\V4.0\\Gadgets\" For V4.0 of Aspire on Windows 7.\nNote that the user can also install Gadgets in their local documents folder under …\n\"Vectric Files\\Gadgets\\Aspire V4.0\"",
+      "signature": {
+        "label": "GetGadgetsLocation()",
+        "documentation": "Returns the Gadgets folder location for the program e.g \"C:\\ProgramData\\Vectric\\Aspire\\V4.0\\Gadgets\" For V4.0 of Aspire on Windows 7.",
+        "parameters": [],
+        "returns": "string"
+      }
+    },
+    {
+      "name": "GetToolpathDefaultsLocation",
+      "kind": "Function",
+      "detail": "() → string",
+      "documentation": "Returns the ToolpathDefaults folder location for the program e.g\n\"C:\\ProgramData\\Vectric\\Aspire\\V4.0\\ToolpathDefaults\" For V4.0 of Aspire on Windows 7.",
+      "signature": {
+        "label": "GetToolpathDefaultsLocation()",
+        "documentation": "Returns the ToolpathDefaults folder location for the program e.g \"C:\\ProgramData\\Vectric\\Aspire\\V4.0\\ToolpathDefaults\" For V4.0 of Aspire on Windows 7.",
+        "parameters": [],
+        "returns": "string"
+      }
+    },
+    {
+      "name": "GetBitmapTexturesLocation",
+      "kind": "Function",
+      "detail": "() → string",
+      "documentation": "Returns the BitmapTextures folder location for the program which stores the bitmaps used for displaying different material types e.g\n\"C:\\ProgramData\\Vectric\\Aspire\\V4.0\\BitmapTextures\" For V4.0 of Aspire on Windows 7.\nNote that the user can also install additional textures in their local documents folder under …\n\"Vectric Files\\Material Images\"",
+      "signature": {
+        "label": "GetBitmapTexturesLocation()",
+        "documentation": "Returns the BitmapTextures folder location for the program which stores the bitmaps used for displaying different material types e.g \"C:\\ProgramData\\Vectric\\Aspire\\V4.0\\BitmapTextures\" For V4.0 of Aspire on Windows 7.",
+        "parameters": [],
+        "returns": "string"
+      }
+    },
+    {
+      "name": "GetVectorTexturesLocation",
+      "kind": "Function",
+      "detail": "() → string",
+      "documentation": "Returns VectorTextures folder location for the program e.g\n\"C:\\ProgramData\\Vectric\\Aspire\\V4.0\\VectorTextures\" For V4.0 of Aspire on Windows 7.",
+      "signature": {
+        "label": "GetVectorTexturesLocation()",
+        "documentation": "Returns VectorTextures folder location for the program e.g \"C:\\ProgramData\\Vectric\\Aspire\\V4.0\\VectorTextures\" For V4.0 of Aspire on Windows 7.",
+        "parameters": [],
+        "returns": "string"
+      }
+    }
+  ]
+}

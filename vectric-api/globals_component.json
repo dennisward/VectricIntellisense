@@ -1,0 +1,52 @@
+{
+  "version": "12.5",
+  "category": "Component Related Global Methods (Aspire Only)",
+  "functions": [
+    {
+      "name": "IsTransparent",
+      "kind": "Function",
+      "detail": "(value: number) → boolean",
+      "documentation": "Returns true if the specified value is considered transparent",
+      "signature": {
+        "label": "IsTransparent(value: number)",
+        "documentation": "Returns true if the specified value is considered transparent",
+        "parameters": [
+          {
+            "label": "value",
+            "documentation": "value: number"
+          }
+        ],
+        "returns": "boolean"
+      }
+    },
+    {
+      "name": "GetTransparentHeight",
+      "kind": "Function",
+      "detail": "() → number",
+      "documentation": "Returns as a float the heights in reliefs considered transparent. This is the value used internally to represent a 'transparent' point.",
+      "signature": {
+        "label": "GetTransparentHeight()",
+        "documentation": "Returns as a float the heights in reliefs considered transparent. This is the value used internally to represent a 'transparent' point.",
+        "parameters": [],
+        "returns": "number"
+      }
+    },
+    {
+      "name": "CastComponentToComponentGroup",
+      "kind": "Function",
+      "detail": "(component: Component) → ComponentGroup",
+      "documentation": "Casts passed Component to a ComponentGroup - returns a ComponentGroup object to work with",
+      "signature": {
+        "label": "CastComponentToComponentGroup(component: Component)",
+        "documentation": "Casts passed Component to a ComponentGroup - returns a ComponentGroup object to work with",
+        "parameters": [
+          {
+            "label": "component",
+            "documentation": "component: Component"
+          }
+        ],
+        "returns": "ComponentGroup"
+      }
+    }
+  ]
+}

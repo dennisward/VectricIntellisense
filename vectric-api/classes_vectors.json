@@ -1,0 +1,43 @@
+{
+  "version": "12.5",
+  "category": "Creating Vectors From Script",
+  "description": "These objects allow you to create vector geometry programmatically within Lua scripts.",
+  "classes": [
+    {
+      "name": "Contour",
+      "kind": "Class",
+      "detail": "class Contour",
+      "documentation": "Represents a vector contour (path) consisting of one or more spans (lines, arcs, or beziers).",
+      "constructors": [{"label": "Contour(tolerance: number)", "documentation": "Creates a new empty contour with the specified tolerance.", "parameters": [{"label": "tolerance", "documentation": "tolerance: number"}]}],
+      "properties": [
+        {"name": "Area", "kind": "Property", "detail": "number", "documentation": "Area enclosed by the contour", "readOnly": true},
+        {"name": "BoundingBox", "kind": "Property", "detail": "Box2D", "documentation": "2D bounding box for the contour", "readOnly": true},
+        {"name": "IsClosed", "kind": "Property", "detail": "boolean", "documentation": "True if the contour is closed", "readOnly": true},
+        {"name": "IsClockwise", "kind": "Property", "detail": "boolean", "documentation": "True if the contour is wound clockwise", "readOnly": true},
+        {"name": "Perimeter", "kind": "Property", "detail": "number", "documentation": "Total length of all spans", "readOnly": true}
+      ],
+      "methods": [
+        {"name": "AppendPoint", "kind": "Method", "detail": "(pt2d: Point2D) → boolean", "documentation": "Start a new contour or append a line", "signature": {"label": "AppendPoint(pt2d: Point2D)", "documentation": "Start a new contour", "parameters": [{"label": "pt2d", "documentation": "pt2d: Point2D"}], "returns": "boolean"}},
+        {"name": "LineTo", "kind": "Method", "detail": "(x: number, y: number) → boolean", "documentation": "Append a line span", "signature": {"label": "LineTo(x: number, y: number)", "documentation": "Append a line span", "parameters": [{"label": "x", "documentation": "x: number"}, {"label": "y", "documentation": "y: number"}], "returns": "boolean"}},
+        {"name": "ArcTo", "kind": "Method", "detail": "(end_pt2d: Point2D, center_pt2d: Point2D, ccw: boolean) → boolean", "documentation": "Append an arc span", "signature": {"label": "ArcTo(end_pt2d: Point2D, center_pt2d: Point2D, ccw: boolean)", "documentation": "Append an arc span", "parameters": [{"label": "end_pt2d", "documentation": "end_pt2d: Point2D"}, {"label": "center_pt2d", "documentation": "center_pt2d: Point2D"}, {"label": "ccw", "documentation": "ccw: boolean"}], "returns": "boolean"}},
+        {"name": "Clone", "kind": "Method", "detail": "() → Contour", "documentation": "Return a copy of this contour", "signature": {"label": "Clone()", "documentation": "Return a copy", "parameters": [], "returns": "Contour"}}
+      ]
+    },
+    {
+      "name": "ContourGroup",
+      "kind": "Class",
+      "detail": "class ContourGroup",
+      "documentation": "A collection of Contour objects.",
+      "constructors": [{"label": "ContourGroup(owns_contours: boolean)", "documentation": "Creates a new contour group.", "parameters": [{"label": "owns_contours", "documentation": "owns_contours: boolean"}]}],
+      "properties": [
+        {"name": "Count", "kind": "Property", "detail": "number", "documentation": "Number of contours in the group", "readOnly": true},
+        {"name": "IsEmpty", "kind": "Property", "detail": "boolean", "documentation": "True if the group contains no contours", "readOnly": true}
+      ],
+      "methods": [
+        {"name": "AddHead", "kind": "Method", "detail": "(ctr: Contour) → void", "documentation": "Add a contour to the head", "signature": {"label": "AddHead(ctr: Contour)", "documentation": "Add a contour to the head", "parameters": [{"label": "ctr", "documentation": "ctr: Contour"}], "returns": "void"}},
+        {"name": "AddTail", "kind": "Method", "detail": "(ctr: Contour) → void", "documentation": "Add a contour to the tail", "signature": {"label": "AddTail(ctr: Contour)", "documentation": "Add a contour to the tail", "parameters": [{"label": "ctr", "documentation": "ctr: Contour"}], "returns": "void"}},
+        {"name": "Clone", "kind": "Method", "detail": "() → ContourGroup", "documentation": "Return a copy", "signature": {"label": "Clone()", "documentation": "Return a copy", "parameters": [], "returns": "ContourGroup"}}
+      ]
+    }
+  ]
+}

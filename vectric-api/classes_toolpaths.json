@@ -1,0 +1,34 @@
+{
+  "version": "12.5",
+  "category": "Toolpath Objects",
+  "description": "These objects represent toolpaths and tools within the program.",
+  "classes": [
+    {
+      "name": "ToolpathManager",
+      "kind": "Class",
+      "detail": "class ToolpathManager",
+      "documentation": "Manages all toolpaths in the current job.",
+      "constructors": [],
+      "properties": [
+        {"name": "Count", "kind": "Property", "detail": "number", "documentation": "Number of toolpaths", "readOnly": true}
+      ],
+      "methods": [
+        {"name": "GetHeadPosition", "kind": "Method", "detail": "() → POSITION", "documentation": "Returns a POSITION for iterating", "signature": {"label": "GetHeadPosition()", "documentation": "Returns a POSITION", "parameters": [], "returns": "POSITION"}}
+      ]
+    },
+    {
+      "name": "Toolpath",
+      "kind": "Class",
+      "detail": "class Toolpath",
+      "documentation": "Represents a single toolpath operation.",
+      "constructors": [],
+      "properties": [
+        {"name": "Name", "kind": "Property", "detail": "string", "documentation": "Name of the toolpath", "readOnly": false},
+        {"name": "Visible", "kind": "Property", "detail": "boolean", "documentation": "True if visible", "readOnly": false}
+      ],
+      "methods": [
+        {"name": "GetTool", "kind": "Method", "detail": "() → Tool", "documentation": "Returns the Tool object", "signature": {"label": "GetTool()", "documentation": "Returns the Tool", "parameters": [], "returns": "Tool"}}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,229 @@
+{
+  "version": "12.5",
+  "category": "Vector Object Related Global Methods",
+  "functions": [
+    {
+      "name": "CastCadObjectToCadBitmap",
+      "kind": "Function",
+      "detail": "(obj: CadObject) → CadBitmap",
+      "documentation": "Casts passed CadObject to a CadBitmap - returns a CadBitmap object to work with\n\nobj - CadObject - Object to be cast to a CadBitmap",
+      "signature": {
+        "label": "CastCadObjectToCadBitmap(obj: CadObject)",
+        "documentation": "Casts passed CadObject to a CadBitmap - returns a CadBitmap object to work with",
+        "parameters": [
+          {
+            "label": "obj",
+            "documentation": "obj: CadObject"
+          }
+        ],
+        "returns": "CadBitmap"
+      }
+    },
+    {
+      "name": "CastCadObjectToCadContour",
+      "kind": "Function",
+      "detail": "(obj: CadObject) → CadContour",
+      "documentation": "Casts passed CadObject to a CadContour - returns a CadContour object to work with\n\nobj - CadObject - Object to be cast to a CadContour",
+      "signature": {
+        "label": "CastCadObjectToCadContour(obj: CadObject)",
+        "documentation": "Casts passed CadObject to a CadContour - returns a CadContour object to work with",
+        "parameters": [
+          {
+            "label": "obj",
+            "documentation": "obj: CadObject"
+          }
+        ],
+        "returns": "CadContour"
+      }
+    },
+    {
+      "name": "CastCadObjectToCadObjectGroup",
+      "kind": "Function",
+      "detail": "(obj: CadObject) → CadObjectGroup",
+      "documentation": "Casts passed CadObject to a CadObjectGroup - returns a CadObjectGroup object to work with\n\nobj - CadObject - Object to be cast to a CadObjectGroup",
+      "signature": {
+        "label": "CastCadObjectToCadObjectGroup(obj: CadObject)",
+        "documentation": "Casts passed CadObject to a CadObjectGroup - returns a CadObjectGroup object to work with",
+        "parameters": [
+          {
+            "label": "obj",
+            "documentation": "obj: CadObject"
+          }
+        ],
+        "returns": "CadObjectGroup"
+      }
+    },
+    {
+      "name": "CastCadObjectToCadPolyline",
+      "kind": "Function",
+      "detail": "(obj: CadObject) → CadPolyline",
+      "documentation": "Casts passed CadObject to a CadPolyline - returns a CadPolyline object to work with\n\nobj - CadObject - Object to be cast to a CadPolyline",
+      "signature": {
+        "label": "CastCadObjectToCadPolyline(obj: CadObject)",
+        "documentation": "Casts passed CadObject to a CadPolyline - returns a CadPolyline object to work with",
+        "parameters": [
+          {
+            "label": "obj",
+            "documentation": "obj: CadObject"
+          }
+        ],
+        "returns": "CadPolyline"
+      }
+    },
+    {
+      "name": "CastCadObjectToCadToolpathOutline",
+      "kind": "Function",
+      "detail": "(obj: CadObject) → CadToolpathOutline",
+      "documentation": "Casts passed CadObject to a CadToolpathOutline - returns a CadToolpathOutline object to work with\n\nobj - CadObject - Object to be cast to a CadToolpathOutline",
+      "signature": {
+        "label": "CastCadObjectToCadToolpathOutline(obj: CadObject)",
+        "documentation": "Casts passed CadObject to a CadToolpathOutline - returns a CadToolpathOutline object to work with",
+        "parameters": [
+          {
+            "label": "obj",
+            "documentation": "obj: CadObject"
+          }
+        ],
+        "returns": "CadToolpathOutline"
+      }
+    },
+    {
+      "name": "CastCadObjectToCadToolpathPreview",
+      "kind": "Function",
+      "detail": "(obj: CadObject) → CadToolpathPreview",
+      "documentation": "Casts passed CadObject to a CadToolpathPreview - returns a CadToolpathPreview object to work with\n\nobj - CadObject - Object to be cast to a CadToolpathPreview",
+      "signature": {
+        "label": "CastCadObjectToCadToolpathPreview(obj: CadObject)",
+        "documentation": "Casts passed CadObject to a CadToolpathPreview - returns a CadToolpathPreview object to work with",
+        "parameters": [
+          {
+            "label": "obj",
+            "documentation": "obj: CadObject"
+          }
+        ],
+        "returns": "CadToolpathPreview"
+      }
+    },
+    {
+      "name": "CastCadObjectToTxtBlock",
+      "kind": "Function",
+      "detail": "(obj: CadObject) → TxtBlock",
+      "documentation": "Casts passed CadObject to a TxtBlock - returns a TxtBlock object\n\nobj - CadObject - Object to be cast to a TxtBlock",
+      "signature": {
+        "label": "CastCadObjectToTxtBlock(obj: CadObject)",
+        "documentation": "Casts passed CadObject to a TxtBlock - returns a TxtBlock object",
+        "parameters": [
+          {
+            "label": "obj",
+            "documentation": "obj: CadObject"
+          }
+        ],
+        "returns": "TxtBlock"
+      }
+    },
+    {
+      "name": "CreateCircle",
+      "kind": "Function",
+      "detail": "(x: number, y: number, radius: number, tolerance: number, z_value: number) → Contour",
+      "documentation": "Create a Contour object for a circle consisting of 4 arcs.\n\nx – double – x coord of centre of circle\ny – double – y coord of centre of circle\nradius – double – radius of circle\ntolerance – double – tolerance of contour – use 0.0 for default\nz_value – double – z coord for contour",
+      "signature": {
+        "label": "CreateCircle(x: number, y: number, radius: number, tolerance: number, z_value: number)",
+        "documentation": "Create a Contour object for a circle consisting of 4 arcs.",
+        "parameters": [
+          {
+            "label": "x",
+            "documentation": "x: number"
+          },
+          {
+            "label": "y",
+            "documentation": "y: number"
+          },
+          {
+            "label": "radius",
+            "documentation": "radius: number"
+          },
+          {
+            "label": "tolerance",
+            "documentation": "tolerance: number"
+          },
+          {
+            "label": "z_value",
+            "documentation": "z_value: number"
+          }
+        ],
+        "returns": "Contour"
+      }
+    },
+    {
+      "name": "CreateCopyOfSelectedContours",
+      "kind": "Function",
+      "detail": "(smash_beziers: boolean, smash_arcs: boolean, smash_tol: number) → ContourGroup",
+      "documentation": "Create a ContourGroup containing a copy of the currently selected contours in the job.\n\nsmash_beziers – bool – if true, any Bezier spans in the selection are replaced with a series of straight line spans which match the original Bezier within the specified tolerance.\nsmash_arc – bool – if true, any Arc spans in the selection are replaced with a series of straight line spans which match the original Arc within the specified tolerance.\nsmash_tol – double – tolerance (max allowed deviation) to use when approximating arcs or beziers with a series of straight lines.",
+      "signature": {
+        "label": "CreateCopyOfSelectedContours(smash_beziers: boolean, smash_arcs: boolean, smash_tol: number)",
+        "documentation": "Create a ContourGroup containing a copy of the currently selected contours in the job.",
+        "parameters": [
+          {
+            "label": "smash_beziers",
+            "documentation": "smash_beziers: boolean"
+          },
+          {
+            "label": "smash_arcs",
+            "documentation": "smash_arcs: boolean"
+          },
+          {
+            "label": "smash_tol",
+            "documentation": "smash_tol: number"
+          }
+        ],
+        "returns": "ContourGroup"
+      }
+    },
+    {
+      "name": "CreateCadContour",
+      "kind": "Function",
+      "detail": "(ctr: Contour) → CadContour",
+      "documentation": "Returns a CadContour which owns the passed Contour object.\n\nctr - Contour - the data which is held by the created CadContour",
+      "signature": {
+        "label": "CreateCadContour(ctr: Contour)",
+        "documentation": "Returns a CadContour which owns the passed Contour object.",
+        "parameters": [
+          {
+            "label": "ctr",
+            "documentation": "ctr: Contour"
+          }
+        ],
+        "returns": "CadContour"
+      }
+    },
+    {
+      "name": "CreateCadGroup",
+      "kind": "Function",
+      "detail": "(ctr_group: ContourGroup) → CadContourGroup",
+      "documentation": "Returns a CadContourGroup which owns the passed ContourGroup object.\n\nctr_group - ContourGroup - the data which is held by the created CadContourGroup",
+      "signature": {
+        "label": "CreateCadGroup(ctr_group: ContourGroup)",
+        "documentation": "Returns a CadContourGroup which owns the passed ContourGroup object.",
+        "parameters": [
+          {
+            "label": "ctr_group",
+            "documentation": "ctr_group: ContourGroup"
+          }
+        ],
+        "returns": "CadContourGroup"
+      }
+    },
+    {
+      "name": "GetDefaultContourTolerance",
+      "kind": "Function",
+      "detail": "() → number",
+      "documentation": "Returns a double value which is the default value for contour tolerances used within the program. This is usually 0.001 if working in metric or 0.00004 if working in inches.",
+      "signature": {
+        "label": "GetDefaultContourTolerance()",
+        "documentation": "Returns a double value which is the default value for contour tolerances used within the program. This is usually 0.001 if working in metric or 0.00004 if working in inches.",
+        "parameters": [],
+        "returns": "number"
+      }
+    }
+  ]
+}

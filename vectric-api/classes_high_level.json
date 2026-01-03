@@ -1,0 +1,365 @@
+{
+  "version": "12.5",
+  "category": "High Level Objects",
+  "description": "The objects in this section represent the high level objects within the program. Access to the program normally starts with the VectricJob, and from there you can access the layers holding all the geometry and the current selection state for the job.",
+  "classes": [
+    {
+      "name": "MaterialBlock",
+      "kind": "Class",
+      "detail": "class MaterialBlock",
+      "documentation": "This object represents the material block within the program. It holds the width, height and thickness of the job and also the XY and Z origins. There is a single instance of the material block in the program. A number of methods are provided to convert between 'absolute' z values and z values relative to the surface of the material.",
+      "constructors": [
+        {
+          "label": "MaterialBlock()",
+          "documentation": "A new object which refers to the single material block within the program.",
+          "parameters": []
+        }
+      ],
+      "properties": [
+        {
+          "name": "ActualXYOrigin",
+          "kind": "Property",
+          "detail": "Point2D",
+          "documentation": "XY position for user specified origin position on material (see .XYOrigin)",
+          "readOnly": true
+        },
+        {
+          "name": "BlcOrigin",
+          "kind": "Property",
+          "detail": "Point3D",
+          "documentation": "XYZ position for bottom left corner of material block",
+          "readOnly": true
+        },
+        {
+          "name": "Height",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Height of material - length in Y",
+          "readOnly": true
+        },
+        {
+          "name": "InMM",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "True if the job is in MM else it is in inches",
+          "readOnly": true
+        },
+        {
+          "name": "MaterialBox",
+          "kind": "Property",
+          "detail": "Box3D",
+          "documentation": "The 3D bounding box for the material",
+          "readOnly": true
+        },
+        {
+          "name": "MaterialSurfaceZ",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Z value for surface of material",
+          "readOnly": true
+        },
+        {
+          "name": "Thickness",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Thickness of material - length in Z",
+          "readOnly": true
+        },
+        {
+          "name": "Width",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Width of material - length in X",
+          "readOnly": true
+        },
+        {
+          "name": "CylinderDiameter",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "(Rotary Only) The diameter of the material cylinder",
+          "readOnly": true
+        },
+        {
+          "name": "CylinderLength",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "(Rotary Only) The length of the material cylinder",
+          "readOnly": true
+        },
+        {
+          "name": "XYOrigin",
+          "kind": "Property",
+          "detail": "XYOrigin",
+          "documentation": "Value indicating position in material chosen as XY origin. Valid values: MaterialBlock.BLC, MaterialBlock.BRC, MaterialBlock.TRC, MaterialBlock.TLC, MaterialBlock.CENTRE",
+          "readOnly": true
+        },
+        {
+          "name": "ZOrigin",
+          "kind": "Property",
+          "detail": "ZOrigin",
+          "documentation": "Value indicating position of Z origin. Valid values: MaterialBlock.Z_TOP, MaterialBlock.Z_CENTRE, MaterialBlock.Z_BOTTOM",
+          "readOnly": true
+        },
+        {
+          "name": "FlipDirection",
+          "kind": "Property",
+          "detail": "FlipDirection",
+          "documentation": "(Double-Sided Only) Values indicating how we flip the material in a two sided job. Valid values: VectricJob.AROUND_X, VectricJob.AROUND_Y",
+          "readOnly": false
+        },
+        {
+          "name": "JobType",
+          "kind": "Property",
+          "detail": "JobType",
+          "documentation": "Values indicating the type of the current job. Valid values: MaterialBlock.SINGLE_SIDED, MaterialBlock.DOUBLE_SIDED, MaterialBlock.ROTARY",
+          "readOnly": false
+        },
+        {
+          "name": "RotationAxis",
+          "kind": "Property",
+          "detail": "RotationAxis",
+          "documentation": "(Rotary Only) Values indicating the rotation axis of the cylinder. Valid values: MaterialBlock.X_AXIS, MaterialBlock.Y_AXIS",
+          "readOnly": true
+        }
+      ],
+      "methods": [
+        {
+          "name": "CalcAbsoluteZ",
+          "kind": "Method",
+          "detail": "(z_value: number) → number",
+          "documentation": "Returns an 'absolute' z value from a z value relative to the surface of the block. Z_value can be negative for values below the surface or positive for values above the surface.",
+          "signature": {
+            "label": "CalcAbsoluteZ(z_value: number)",
+            "documentation": "Returns an 'absolute' z value from a z value relative to the surface of the block.",
+            "parameters": [
+              {
+                "label": "z_value",
+                "documentation": "z_value: number - z value relative to surface of material"
+              }
+            ],
+            "returns": "number"
+          }
+        },
+        {
+          "name": "CalcAbsoluteZFromDepth",
+          "kind": "Method",
+          "detail": "(z_value: number) → number",
+          "documentation": "Returns an absolute z value from a depth value below the surface.",
+          "signature": {
+            "label": "CalcAbsoluteZFromDepth(z_value: number)",
+            "documentation": "Returns an absolute z value from a depth value below the surface.",
+            "parameters": [
+              {
+                "label": "z_value",
+                "documentation": "z_value: number - depth value"
+              }
+            ],
+            "returns": "number"
+          }
+        },
+        {
+          "name": "CalcDepthFromAbsoluteZ",
+          "kind": "Method",
+          "detail": "(z_value: number) → number",
+          "documentation": "Returns a depth below the surface of the material from an absolute z value.",
+          "signature": {
+            "label": "CalcDepthFromAbsoluteZ(z_value: number)",
+            "documentation": "Returns a depth below the surface of the material from an absolute z value.",
+            "parameters": [
+              {
+                "label": "z_value",
+                "documentation": "z_value: number - absolute z value"
+              }
+            ],
+            "returns": "number"
+          }
+        },
+        {
+          "name": "SideZOrigin",
+          "kind": "Method",
+          "detail": "(side_id: UUID) → number",
+          "documentation": "Similar to .ZOrigin, but for the given side",
+          "signature": {
+            "label": "SideZOrigin(side_id: UUID)",
+            "documentation": "Similar to .ZOrigin, but for the given side",
+            "parameters": [
+              {
+                "label": "side_id",
+                "documentation": "side_id: UUID"
+              }
+            ],
+            "returns": "number"
+          }
+        },
+        {
+          "name": "SideMaterialSurfaceZ",
+          "kind": "Method",
+          "detail": "(side_id: UUID) → number",
+          "documentation": "Similar to .MaterialSurfaceZ for the given side",
+          "signature": {
+            "label": "SideMaterialSurfaceZ(side_id: UUID)",
+            "documentation": "Similar to .MaterialSurfaceZ for the given side",
+            "parameters": [
+              {
+                "label": "side_id",
+                "documentation": "side_id: UUID"
+              }
+            ],
+            "returns": "number"
+          }
+        },
+        {
+          "name": "SideMaterialBox",
+          "kind": "Method",
+          "detail": "(side_id: UUID) → Box3D",
+          "documentation": "Similar to .MaterialBox for the given side",
+          "signature": {
+            "label": "SideMaterialBox(side_id: UUID)",
+            "documentation": "Similar to .MaterialBox for the given side",
+            "parameters": [
+              {
+                "label": "side_id",
+                "documentation": "side_id: UUID"
+              }
+            ],
+            "returns": "Box3D"
+          }
+        },
+        {
+          "name": "SideBlcOrigin",
+          "kind": "Method",
+          "detail": "(side_id: UUID) → Point3D",
+          "documentation": "Similar to .BlcOrigin for the given side",
+          "signature": {
+            "label": "SideBlcOrigin(side_id: UUID)",
+            "documentation": "Similar to .BlcOrigin for the given side",
+            "parameters": [
+              {
+                "label": "side_id",
+                "documentation": "side_id: UUID"
+              }
+            ],
+            "returns": "Point3D"
+          }
+        },
+        {
+          "name": "CalcSideAbsoluteZ",
+          "kind": "Method",
+          "detail": "(side_id: UUID, z_value: number) → number",
+          "documentation": "Similar to CalcAbsoluteZ() for the given side",
+          "signature": {
+            "label": "CalcSideAbsoluteZ(side_id: UUID, z_value: number)",
+            "documentation": "Similar to CalcAbsoluteZ() for the given side",
+            "parameters": [
+              {
+                "label": "side_id",
+                "documentation": "side_id: UUID"
+              },
+              {
+                "label": "z_value",
+                "documentation": "z_value: number"
+              }
+            ],
+            "returns": "number"
+          }
+        },
+        {
+          "name": "CalcSideDepthFromAbsoluteZ",
+          "kind": "Method",
+          "detail": "(side_id: UUID, z_value: number) → number",
+          "documentation": "Similar to CalcDepthFromAbsoluteZ() for the given side",
+          "signature": {
+            "label": "CalcSideDepthFromAbsoluteZ(side_id: UUID, z_value: number)",
+            "documentation": "Similar to CalcDepthFromAbsoluteZ() for the given side",
+            "parameters": [
+              {
+                "label": "side_id",
+                "documentation": "side_id: UUID"
+              },
+              {
+                "label": "z_value",
+                "documentation": "z_value: number"
+              }
+            ],
+            "returns": "number"
+          }
+        },
+        {
+          "name": "CalcSideAbsoluteZFromDepth",
+          "kind": "Method",
+          "detail": "(side_id: UUID, depth: number) → number",
+          "documentation": "Similar to CalcAbsoluteZFromDepth() for the given side",
+          "signature": {
+            "label": "CalcSideAbsoluteZFromDepth(side_id: UUID, depth: number)",
+            "documentation": "Similar to CalcAbsoluteZFromDepth() for the given side",
+            "parameters": [
+              {
+                "label": "side_id",
+                "documentation": "side_id: UUID"
+              },
+              {
+                "label": "depth",
+                "documentation": "depth: number"
+              }
+            ],
+            "returns": "number"
+          }
+        }
+      ],
+      "constants": [
+        {
+          "name": "BLC",
+          "value": "Bottom Left Corner of material"
+        },
+        {
+          "name": "BRC",
+          "value": "Bottom Right Corner of material"
+        },
+        {
+          "name": "TRC",
+          "value": "Top Right Corner of material"
+        },
+        {
+          "name": "TLC",
+          "value": "Top Left Corner of material"
+        },
+        {
+          "name": "CENTRE",
+          "value": "Centre of material"
+        },
+        {
+          "name": "Z_TOP",
+          "value": "Top of material"
+        },
+        {
+          "name": "Z_CENTRE",
+          "value": "Centre of material"
+        },
+        {
+          "name": "Z_BOTTOM",
+          "value": "Bottom of material"
+        },
+        {
+          "name": "SINGLE_SIDED",
+          "value": "Single sided job type"
+        },
+        {
+          "name": "DOUBLE_SIDED",
+          "value": "Double sided job type"
+        },
+        {
+          "name": "ROTARY",
+          "value": "Rotary job type"
+        },
+        {
+          "name": "X_AXIS",
+          "value": "Rotation around X axis"
+        },
+        {
+          "name": "Y_AXIS",
+          "value": "Rotation around Y axis"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "version": "12.5",
+  "date": "2025-06-19",
+  "description": "Vectric Lua Interface - Complete API Documentation",
+  "globals": {
+    "categories": [
+      {
+        "id": "general",
+        "name": "General Global Methods",
+        "file": "globals_general.json",
+        "count": 5,
+        "description": "Application-level global methods for version checking and UI interaction"
+      },
+      {
+        "id": "job",
+        "name": "Job Related Global Methods",
+        "file": "globals_job.json",
+        "count": 6,
+        "description": "Methods for creating, opening, saving, and closing jobs"
+      },
+      {
+        "id": "vector",
+        "name": "Vector Object Related Global Methods",
+        "file": "globals_vector.json",
+        "count": 12,
+        "description": "Methods for creating and casting vector objects and contours"
+      },
+      {
+        "id": "component",
+        "name": "Component Related Global Methods (Aspire Only)",
+        "file": "globals_component.json",
+        "count": 3,
+        "description": "Component and transparency methods available only in Aspire"
+      },
+      {
+        "id": "document_variable",
+        "name": "Document Variable Related Global Methods",
+        "file": "globals_document_variable.json",
+        "count": 1,
+        "description": "Methods for validating document variable names"
+      },
+      {
+        "id": "data_locations",
+        "name": "Data File Locations Related Global Methods",
+        "file": "globals_data_locations.json",
+        "count": 7,
+        "description": "Methods for retrieving application data folder locations"
+      }
+    ],
+    "total_functions": 34
+  },
+  "classes": {
+    "categories": [
+      {
+        "id": "high_level",
+        "name": "High Level Objects",
+        "file": "classes_high_level.json",
+        "count": 1,
+        "description": "High level objects like MaterialBlock that provide access to the program's main functionality"
+      },
+      {
+        "id": "geometry",
+        "name": "Geometry Objects",
+        "file": "classes_geometry.json",
+        "count": 4,
+        "description": "Low level geometric primitives (Point2D, Point3D, Vector2D, Box2D)"
+      },
+      {
+        "id": "vectors",
+        "name": "Creating Vectors From Script",
+        "file": "classes_vectors.json",
+        "count": 2,
+        "description": "Objects for creating vector geometry programmatically (Contour, ContourGroup)"
+      },
+      {
+        "id": "toolpaths",
+        "name": "Toolpath Objects",
+        "file": "classes_toolpaths.json",
+        "count": 2,
+        "description": "Objects for managing toolpaths and tools"
+      }
+    ],
+    "total_classes": 9
+  },
+  "summary": {
+    "total_global_functions": 34,
+    "total_classes": 9,
+    "total_api_items": 43
+  }
+}

@@ -1,0 +1,158 @@
+{
+  "version": "12.5",
+  "category": "Job Related Global Methods",
+  "functions": [
+    {
+      "name": "CloseCurrentJob",
+      "kind": "Function",
+      "detail": "() → void",
+      "documentation": "Close the current job - same as File - Close, if there are any unsaved changes user will be prompted to save before closing.",
+      "signature": {
+        "label": "CloseCurrentJob()",
+        "documentation": "Close the current job - same as File - Close, if there are any unsaved changes user will be prompted to save before closing.",
+        "parameters": [],
+        "returns": "void"
+      }
+    },
+    {
+      "name": "CreateNewJob",
+      "kind": "Function",
+      "detail": "(name: string, bounds: Box2D, thickness: number, in_mm: boolean, origin_on_surface: boolean) → boolean",
+      "documentation": "Creates a new job with passed name, and settings. Returns true if job created OK else false.\n\nname - string - name for job (without extension)\nbounds - Box2D - the 2d bounding box for the job area\nthickness - double - thickness of material block\nin_mm - bool - true if job is in mm, else in inches\norigin_on_surface - true if z zero on material surface, else on machine bed",
+      "signature": {
+        "label": "CreateNewJob(name: string, bounds: Box2D, thickness: number, in_mm: boolean, origin_on_surface: boolean)",
+        "documentation": "Creates a new job with passed name, and settings. Returns true if job created OK else false.",
+        "parameters": [
+          {
+            "label": "name",
+            "documentation": "name: string"
+          },
+          {
+            "label": "bounds",
+            "documentation": "bounds: Box2D"
+          },
+          {
+            "label": "thickness",
+            "documentation": "thickness: number"
+          },
+          {
+            "label": "in_mm",
+            "documentation": "in_mm: boolean"
+          },
+          {
+            "label": "origin_on_surface",
+            "documentation": "origin_on_surface: boolean"
+          }
+        ],
+        "returns": "boolean"
+      }
+    },
+    {
+      "name": "CreateNew2SidedJob",
+      "kind": "Function",
+      "detail": "(name: string, bounds: Box2D, thickness: number, in_mm: boolean, origin_on_surface: boolean, flip_direction: SideFlipDirection) → boolean",
+      "documentation": "Creates a new two sided job using the given parameters. Return true if the job was created, otherwise, false.\n\nname - string - name for job (without extension)\nbounds - Box2D - the 2d bounding box for the job area\nthickness - double - thickness of material block\nin_mm - bool - true if job is in mm, else in inches\norigin_on_surface - true if z zero on material surface, else on machine bed\nflip_direction – the axis around which we flip the job (VectricJob.AROUND_X or VectricJob.AROUND_Y)",
+      "signature": {
+        "label": "CreateNew2SidedJob(name: string, bounds: Box2D, thickness: number, in_mm: boolean, origin_on_surface: boolean, flip_direction: SideFlipDirection)",
+        "documentation": "Creates a new two sided job using the given parameters. Return true if the job was created, otherwise, false.",
+        "parameters": [
+          {
+            "label": "name",
+            "documentation": "name: string"
+          },
+          {
+            "label": "bounds",
+            "documentation": "bounds: Box2D"
+          },
+          {
+            "label": "thickness",
+            "documentation": "thickness: number"
+          },
+          {
+            "label": "in_mm",
+            "documentation": "in_mm: boolean"
+          },
+          {
+            "label": "origin_on_surface",
+            "documentation": "origin_on_surface: boolean"
+          },
+          {
+            "label": "flip_direction",
+            "documentation": "flip_direction: SideFlipDirection"
+          }
+        ],
+        "returns": "boolean"
+      }
+    },
+    {
+      "name": "CreateNewRotaryJob",
+      "kind": "Function",
+      "detail": "(name: string, length: number, diameter: number, xy_origin: MaterialBlock.XYOrigin, in_mm: boolean, origin_on_surface: boolean, wrapped_along_x_axis: boolean) → boolean",
+      "documentation": "Creates a new rotary job using the given parameters. Return true if the job was created, otherwise, false.\n\nname - string - name for job (without extension)\nlength - double - the length of the material cylinder (Accessible from MaterialBlock.CylinderLength)\ndiameter – double – the diameter of the material cylinder (Accessible from MaterialBlock.CylinderDiameter)\nxy_origin – MaterialBlock.XYOrigin – The XY origin of the block (Maps to the enum values of MaterialBlock.XYOrigin)\nin_mm – bool – true if the job is in mm, else in inches\norigin_on_surface – bool – true if z zero on material surface, else on machine bed\nwrapped_along_x_axis – bool – true if we're wrapping along the X axis and wrapping the Y values (Accessible from MaterialBlock.RotationAxis)",
+      "signature": {
+        "label": "CreateNewRotaryJob(name: string, length: number, diameter: number, xy_origin: MaterialBlock.XYOrigin, in_mm: boolean, origin_on_surface: boolean, wrapped_along_x_axis: boolean)",
+        "documentation": "Creates a new rotary job using the given parameters. Return true if the job was created, otherwise, false.",
+        "parameters": [
+          {
+            "label": "name",
+            "documentation": "name: string"
+          },
+          {
+            "label": "length",
+            "documentation": "length: number"
+          },
+          {
+            "label": "diameter",
+            "documentation": "diameter: number"
+          },
+          {
+            "label": "xy_origin",
+            "documentation": "xy_origin: MaterialBlock.XYOrigin"
+          },
+          {
+            "label": "in_mm",
+            "documentation": "in_mm: boolean"
+          },
+          {
+            "label": "origin_on_surface",
+            "documentation": "origin_on_surface: boolean"
+          },
+          {
+            "label": "wrapped_along_x_axis",
+            "documentation": "wrapped_along_x_axis: boolean"
+          }
+        ],
+        "returns": "boolean"
+      }
+    },
+    {
+      "name": "OpenExistingJob",
+      "kind": "Function",
+      "detail": "(pathname: string) → boolean",
+      "documentation": "Opens an existing CRV or CRV3D file. Returns true if file opened OK, else false\n\npathname - string - path to file",
+      "signature": {
+        "label": "OpenExistingJob(pathname: string)",
+        "documentation": "Opens an existing CRV or CRV3D file. Returns true if file opened OK, else false",
+        "parameters": [
+          {
+            "label": "pathname",
+            "documentation": "pathname: string"
+          }
+        ],
+        "returns": "boolean"
+      }
+    },
+    {
+      "name": "SaveCurrentJob",
+      "kind": "Function",
+      "detail": "() → void",
+      "documentation": "Save the current job - same as File - Save, if no path has been set for the job this method will display the File Save As dialog.",
+      "signature": {
+        "label": "SaveCurrentJob()",
+        "documentation": "Save the current job - same as File - Save, if no path has been set for the job this method will display the File Save As dialog.",
+        "parameters": [],
+        "returns": "void"
+      }
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-# VectricIntellisense README
+# Vectric Intellisense README
 
 This is a visual studio extension for the Vectric Lua Interface for Gadgets.  It was extracted from the PDF included in the Vectric Gadget SDK version 12.
 
@@ -22,7 +22,7 @@ Any missing or inaccurate content can be corrected with simple change to json fi
 
 ## Release Notes
 
-No release notes (yet).
+The initial release doesn't cover the Gadget API 100%.  It's missing User Interface and Aspire classes.
 
 ### 1.0.0
 
