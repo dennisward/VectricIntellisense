@@ -18,9 +18,7 @@ No settings are required.
 
 ## Known Issues
 
-Selection traversal methods (GetNext(), GetPrev()) return multiple objects which isn't supported by this
-extension due to a limitation in VS Code's Intellisense.  Because of this, the types returned by these
-methods can't be inferred, and the intellisense doesn't properly work.
+The Gadget API isn't covered 100% yet.
 
 Any missing or inaccurate content can be corrected with simple change to json files without any code changes.
 

@@ -142,6 +142,94 @@
         ],
         "returns": "number"
       }
+    },
+    {
+      "name": "IdentityMatrix2D",
+      "kind": "Function",
+      "detail": "() → Matrix2D",
+      "documentation": "Returns a Matrix2D which is an identity matrix (no transformation)",
+      "signature": {
+        "label": "IdentityMatrix2D()",
+        "documentation": "Create identity matrix",
+        "parameters": [],
+        "returns": "Matrix2D"
+      }
+    },
+    {
+      "name": "ReflectionMatrix2D",
+      "kind": "Function",
+      "detail": "(p1: Point2D, p2: Point2D) → Matrix2D",
+      "documentation": "Returns a Matrix2D which performs reflection about a line between the passed points",
+      "signature": {
+        "label": "ReflectionMatrix2D(p1: Point2D, p2: Point2D)",
+        "documentation": "Create reflection matrix about a line",
+        "parameters": [
+          {
+            "label": "p1",
+            "documentation": "p1: Point2D - start point of the line about which reflection will take place"
+          },
+          {
+            "label": "p2",
+            "documentation": "p2: Point2D - end point of the line about which reflection will take place"
+          }
+        ],
+        "returns": "Matrix2D"
+      }
+    },
+    {
+      "name": "RotationMatrix2D",
+      "kind": "Function",
+      "detail": "(rotation_pt: Point2D, angle: number) → Matrix2D",
+      "documentation": "Returns a Matrix2D which performs rotation about the specified point by the specified amount. Positive angles rotate counter-clockwise.",
+      "signature": {
+        "label": "RotationMatrix2D(rotation_pt: Point2D, angle: number)",
+        "documentation": "Create rotation matrix",
+        "parameters": [
+          {
+            "label": "rotation_pt",
+            "documentation": "rotation_pt: Point2D - point about which rotation will take place"
+          },
+          {
+            "label": "angle",
+            "documentation": "angle: number - angle to rotate by in degrees (positive = CCW)"
+          }
+        ],
+        "returns": "Matrix2D"
+      }
+    },
+    {
+      "name": "ScalingMatrix2D",
+      "kind": "Function",
+      "detail": "(scale_vec: Vector2D) → Matrix2D",
+      "documentation": "Returns a Matrix2D which performs scaling around the origin (0,0) by the specified amount. The X and Y values of the vector specify the amount to scale in X and Y.",
+      "signature": {
+        "label": "ScalingMatrix2D(scale_vec: Vector2D)",
+        "documentation": "Create scaling matrix (around origin)",
+        "parameters": [
+          {
+            "label": "scale_vec",
+            "documentation": "scale_vec: Vector2D - X and Y values specify the amount to scale in X and Y"
+          }
+        ],
+        "returns": "Matrix2D"
+      }
+    },
+    {
+      "name": "TranslationMatrix2D",
+      "kind": "Function",
+      "detail": "(vec: Vector2D) → Matrix2D",
+      "documentation": "Returns a Matrix2D which performs the translation specified by the vector. The X and Y values of the vector specify the distances to translate in X and Y.",
+      "signature": {
+        "label": "TranslationMatrix2D(vec: Vector2D)",
+        "documentation": "Create translation matrix",
+        "parameters": [
+          {
+            "label": "vec",
+            "documentation": "vec: Vector2D - X and Y values specify the distances to translate in X and Y"
+          }
+        ],
+        "returns": "Matrix2D"
+      }
     }
   ]
 }

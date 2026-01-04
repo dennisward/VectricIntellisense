@@ -298,7 +298,18 @@ function inferVariableType(document: vscode.TextDocument, position: vscode.Posit
         const line = document.lineAt(lineNum).text;
         
         // Pattern 1: local varName = ClassName(...)
-        const localAssignment = new RegExp(`local\\s+${varName}\\s*=\\s*(\\w+)\\s*\\(`);
+        // Also handles: local var1, var2 = ClassName(...)
+        // IMPORTANT: Only infers type if varName is the FIRST variable in the assignment
+        
+        // First check if varName appears after a comma (meaning it's NOT the first variable)
+        const notFirstVarLocal = new RegExp(`local\\s+\\w+\\s*,\\s*.*\\b${varName}\\b.*=`);
+        if (notFirstVarLocal.test(line)) {
+            // varName is not the first variable, skip this pattern
+            continue;
+        }
+        
+        // Now check if varName is the first variable in a local constructor assignment
+        const localAssignment = new RegExp(`local\\s+${varName}\\s*(?:,\\s*\\w+)?\\s*=\\s*(\\w+)\\s*\\(`);
         const localMatch = line.match(localAssignment);
         if (localMatch) {
             const className = localMatch[1];
@@ -309,7 +320,18 @@ function inferVariableType(document: vscode.TextDocument, position: vscode.Posit
         }
         
         // Pattern 2: varName = ClassName(...)
-        const assignment = new RegExp(`\\b${varName}\\s*=\\s*(\\w+)\\s*\\(`);
+        // Also handles: var1, var2 = ClassName(...)
+        // IMPORTANT: Only infers type if varName is the FIRST variable in the assignment
+        
+        // First check if varName appears after a comma (meaning it's NOT the first variable)
+        const notFirstVarAssign = new RegExp(`\\w+\\s*,\\s*.*\\b${varName}\\b.*=`);
+        if (notFirstVarAssign.test(line)) {
+            // varName is not the first variable, skip this pattern
+            continue;
+        }
+        
+        // Now check if varName is the first variable in an assignment
+        const assignment = new RegExp(`\\b${varName}\\s*(?:,\\s*\\w+)?\\s*=\\s*(\\w+)\\s*\\(`);
         const assignMatch = line.match(assignment);
         if (assignMatch) {
             const className = assignMatch[1];
@@ -345,7 +367,18 @@ function inferVariableType(document: vscode.TextDocument, position: vscode.Posit
         }
         
         // Pattern 4: varName = FunctionName(...) (function return type)
-        const functionAssignment = new RegExp(`\\b${varName}\\s*=\\s*(\\w+)\\s*\\(`);
+        // Also handles: local var1, var2 = FunctionName(...)
+        // IMPORTANT: Only infers type if varName is the FIRST variable in the assignment
+        
+        // First check if varName appears after a comma (meaning it's NOT the first variable)
+        const notFirstVarFunc = new RegExp(`(?:local\\s+)?\\w+\\s*,\\s*.*\\b${varName}\\b.*=`);
+        if (notFirstVarFunc.test(line)) {
+            // varName is not the first variable, skip this pattern
+            continue;
+        }
+        
+        // Now check if varName is the first variable in a function assignment
+        const functionAssignment = new RegExp(`(?:local\\s+)?\\b${varName}\\s*(?:,\\s*\\w+)?\\s*=\\s*(\\w+)\\s*\\(`);
         const funcMatch = line.match(functionAssignment);
         if (funcMatch) {
             const functionName = funcMatch[1];
@@ -354,16 +387,29 @@ function inferVariableType(document: vscode.TextDocument, position: vscode.Posit
             const globalFunc = globalFunctions.find(f => f.name === functionName);
             if (globalFunc && globalFunc.signature && globalFunc.signature.returns) {
                 const returnType = globalFunc.signature.returns;
+                // Handle multiple return values - take first return type
+                const firstReturnType = returnType.split(',')[0].trim();
                 // Check if the return type is a known class
-                const foundClass = classes.find(c => c.name === returnType);
+                const foundClass = classes.find(c => c.name === firstReturnType);
                 if (foundClass) {
-                    return returnType;
+                    return firstReturnType;
                 }
             }
         }
         
         // Pattern 4b: varName = object:MethodName(...) (method return type)
-        const methodAssignment = new RegExp(`\\b${varName}\\s*=\\s*(\\w+):(\\w+)\\s*\\(`);
+        // Also handles: local var1, var2 = object:MethodName(...)
+        // IMPORTANT: Only infers type if varName is the FIRST variable in the assignment
+        
+        // First check if varName appears after a comma (meaning it's NOT the first variable)
+        const notFirstVar = new RegExp(`(?:local\\s+)?\\w+\\s*,\\s*.*\\b${varName}\\b.*=`);
+        if (notFirstVar.test(line)) {
+            // varName is not the first variable, skip this pattern
+            continue;
+        }
+        
+        // Now check if varName is the first variable in a method assignment
+        const methodAssignment = new RegExp(`(?:local\\s+)?\\b${varName}\\s*(?:,\\s*\\w+)?\\s*=\\s*(\\w+):(\\w+)\\s*\\(`);
         const methodMatch = line.match(methodAssignment);
         if (methodMatch) {
             const objectName = methodMatch[1];

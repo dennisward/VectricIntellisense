@@ -846,6 +846,121 @@
         {"name": "IsPointInside", "kind": "Method", "detail": "(pt: Point2D) → boolean", "documentation": "Returns true if the passed point is inside the box", "signature": {"label": "IsPointInside(pt: Point2D)", "documentation": "Returns true if the passed point is inside the box", "parameters": [{"label": "pt", "documentation": "pt: Point2D - point to test"}], "returns": "boolean"}},
         {"name": "Overlaps", "kind": "Method", "detail": "(box: Box2D) → boolean", "documentation": "Returns true if this box overlaps the passed box", "signature": {"label": "Overlaps(box: Box2D)", "documentation": "Returns true if this box overlaps the passed box", "parameters": [{"label": "box", "documentation": "box: Box2D - box to test overlap with"}], "returns": "boolean"}}
       ]
+    },
+    {
+      "name": "Box3D",
+      "kind": "Class",
+      "detail": "class Box3D",
+      "documentation": "Represents a 3D bounding box defined by minimum and maximum X, Y and Z coordinates. Extremely useful for determining the size and position of 3D objects.",
+      "constructors": [],
+      "properties": [
+        {"name": "BLC", "kind": "Property", "detail": "Point3D", "documentation": "Bottom left corner of bounding box", "readOnly": true},
+        {"name": "BRC", "kind": "Property", "detail": "Point3D", "documentation": "Bottom right corner of bounding box", "readOnly": true},
+        {"name": "Centre", "kind": "Property", "detail": "Point3D", "documentation": "Centre point of bounding box", "readOnly": true},
+        {"name": "MaxLength", "kind": "Property", "detail": "number", "documentation": "The length of the longest side for the bounding box", "readOnly": true},
+        {"name": "MaxX", "kind": "Property", "detail": "number", "documentation": "The maximum X value for the bounding box", "readOnly": true},
+        {"name": "MaxY", "kind": "Property", "detail": "number", "documentation": "The maximum Y value for the bounding box", "readOnly": true},
+        {"name": "MaxZ", "kind": "Property", "detail": "number", "documentation": "The maximum Z value for the bounding box", "readOnly": true},
+        {"name": "MinLength", "kind": "Property", "detail": "number", "documentation": "The length of the shortest side for the bounding box", "readOnly": true},
+        {"name": "MinX", "kind": "Property", "detail": "number", "documentation": "The minimum X value for the bounding box", "readOnly": true},
+        {"name": "MinY", "kind": "Property", "detail": "number", "documentation": "The minimum Y value for the bounding box", "readOnly": true},
+        {"name": "MinZ", "kind": "Property", "detail": "number", "documentation": "The minimum Z value for the bounding box", "readOnly": true},
+        {"name": "TLC", "kind": "Property", "detail": "Point3D", "documentation": "Top left corner of bounding box", "readOnly": true},
+        {"name": "TRC", "kind": "Property", "detail": "Point3D", "documentation": "Top right corner of bounding box", "readOnly": true},
+        {"name": "XLength", "kind": "Property", "detail": "number", "documentation": "The length in X for the bounding box", "readOnly": true},
+        {"name": "YLength", "kind": "Property", "detail": "number", "documentation": "The length in Y for the bounding box", "readOnly": true},
+        {"name": "ZLength", "kind": "Property", "detail": "number", "documentation": "The length in Z for the bounding box", "readOnly": true}
+      ],
+      "methods": [
+        {
+          "name": "Expand",
+          "kind": "Method",
+          "detail": "(offset_dist: number) → void",
+          "documentation": "Expand this box on all sides by passed amount",
+          "signature": {
+            "label": "Expand(offset_dist: number)",
+            "documentation": "Expand box on all sides",
+            "parameters": [
+              {"label": "offset_dist", "documentation": "offset_dist: number - distance to offset box by"}
+            ],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "IsInside",
+          "kind": "Method",
+          "detail": "(point: Point3D, tol: number) → boolean",
+          "documentation": "Return true if passed point is inside this box within passed tolerance (which may be 0.0)",
+          "signature": {
+            "label": "IsInside(point: Point3D, tol: number)",
+            "documentation": "Check if point is inside box",
+            "parameters": [
+              {"label": "point", "documentation": "point: Point3D - point to test"},
+              {"label": "tol", "documentation": "tol: number - tolerance value (can be 0.0)"}
+            ],
+            "returns": "boolean"
+          }
+        },
+        {
+          "name": "IsInsideOrOn",
+          "kind": "Method",
+          "detail": "(point: Point3D, tol: number) → boolean",
+          "documentation": "Return true if passed point is inside or on the edge of this box within passed tolerance",
+          "signature": {
+            "label": "IsInsideOrOn(point: Point3D, tol: number)",
+            "documentation": "Check if point is inside or on box edge",
+            "parameters": [
+              {"label": "point", "documentation": "point: Point3D - point to test"},
+              {"label": "tol", "documentation": "tol: number - tolerance value (can be 0.0)"}
+            ],
+            "returns": "boolean"
+          }
+        },
+        {
+          "name": "Intersects",
+          "kind": "Method",
+          "detail": "(box: Box3D, tol: number) → boolean",
+          "documentation": "Return true if passed box intersects this box within passed tolerance",
+          "signature": {
+            "label": "Intersects(box: Box3D, tol: number)",
+            "documentation": "Check if boxes intersect",
+            "parameters": [
+              {"label": "box", "documentation": "box: Box3D - box to test"},
+              {"label": "tol", "documentation": "tol: number - tolerance value (can be 0.0)"}
+            ],
+            "returns": "boolean"
+          }
+        },
+        {
+          "name": "Merge",
+          "kind": "Method",
+          "detail": "(x: number, y: number, z: number) → void",
+          "documentation": "Merge a point with the passed values into the box updating limits",
+          "signature": {
+            "label": "Merge(x: number, y: number, z: number)",
+            "documentation": "Merge point into box",
+            "parameters": [
+              {"label": "x", "documentation": "x: number - x value for point"},
+              {"label": "y", "documentation": "y: number - y value for point"},
+              {"label": "z", "documentation": "z: number - z value for point"}
+            ],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "SetInvalid",
+          "kind": "Method",
+          "detail": "() → void",
+          "documentation": "Set the box to invalid state",
+          "signature": {
+            "label": "SetInvalid()",
+            "documentation": "Set box to invalid state",
+            "parameters": [],
+            "returns": "void"
+          }
+        }
+      ],
+      "constants": []
     }
   ]
 }
