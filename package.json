@@ -4,7 +4,9 @@
   "description": "Provides autocompletion, hover info, and signature help for Vectric Gadget API in Lua.",
   "version": "1.0.0",
   "publisher": "Dennis Ward",
-  "author": {"name": "Dennis Ward"},
+  "author": {
+    "name": "Dennis Ward"
+  },
   "engines": {
     "vscode": "^1.80.0"
   },
@@ -17,11 +19,15 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
-    "languages":[
+    "languages": [
       {
         "id": "lua",
-        "aliases": ["lua"],
-        "extensions": [".lua"],
+        "aliases": [
+          "lua"
+        ],
+        "extensions": [
+          ".lua"
+        ],
         "configuration": "./language-configuration.json"
       }
     ]
@@ -32,7 +38,7 @@
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src",
-    "test": "vscode-test"
+    "test": "node ./out/test/runTest.js"
   },
   "devDependencies": {
     "@types/vscode": "^1.107.0",
@@ -41,6 +47,8 @@
     "typescript-eslint": "^8.48.1",
     "eslint": "^9.39.1",
     "typescript": "^5.9.3",
+    "mocha": "^10.0.0",
+    "glob": "^11.0.0",
     "@vscode/test-cli": "^0.0.12",
     "@vscode/test-electron": "^2.5.2"
   }

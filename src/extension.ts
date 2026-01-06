@@ -218,6 +218,16 @@ function getCompletionContext(document: vscode.TextDocument, position: vscode.Po
         };
     }
     
+    // Check if we just typed 'local' - don't show completions for variable names
+    if (/\blocal\s+\w*$/.test(textBeforeCursor)) {
+        return {
+            type: 'keyword',
+            objectName: null,
+            className: null,
+            prefix: ''
+        };
+    }
+    
     // Check if we're in a context where a keyword is likely next
     // Pattern: after comparison operators, logical operators, or numbers
     const keywordContextPatterns = [
@@ -273,6 +283,155 @@ function getCompletionContext(document: vscode.TextDocument, position: vscode.Po
             className: inferredType || objectName,
             prefix: prefix
         };
+    }
+    
+    // Check if we're inside function call parentheses
+    // We need to find the INNERMOST unclosed function call
+    // Pattern: FunctionName( or FunctionName(arg1, 
+    // Handle nested calls like: OuterFunc(InnerFunc(
+    
+    console.log(`[Detection] Checking for function call, text before cursor: "${textBeforeCursor}"`);
+    
+    // Find the last unmatched opening parenthesis
+    let depth = 0;
+    let lastFunctionStart = -1;
+    
+    for (let i = textBeforeCursor.length - 1; i >= 0; i--) {
+        if (textBeforeCursor[i] === ')') {
+            depth++;
+        } else if (textBeforeCursor[i] === '(') {
+            if (depth === 0) {
+                // This is an unclosed paren - find the function name before it
+                lastFunctionStart = i;
+                console.log(`[Detection] Found unclosed ( at position ${i}`);
+                break;
+            }
+            depth--;
+        }
+    }
+    
+    console.log(`[Detection] lastFunctionStart = ${lastFunctionStart}`);
+    
+    if (lastFunctionStart >= 0) {
+        // Extract function name before the (
+        const beforeParen = textBeforeCursor.substring(0, lastFunctionStart);
+        const functionNameMatch = beforeParen.match(/(\w+)$/);
+        
+        if (functionNameMatch) {
+            const functionName = functionNameMatch[1];
+            const afterParen = textBeforeCursor.substring(lastFunctionStart + 1);
+            
+            console.log(`[Function Call] Detected: ${functionName}, text after paren: "${afterParen}"`);
+            
+            // First check if it's a global function
+            const func = globalFunctions.find(f => f.name === functionName);
+            if (func && func.signature && func.signature.parameters) {
+                // Count how many commas we have to determine which parameter we're on
+                const commaCount = (afterParen.match(/,/g) || []).length;
+                
+                console.log(`[Global Function] ${functionName}, commas: ${commaCount}`);
+                
+                // Get the expected parameter type
+                if (commaCount < func.signature.parameters.length) {
+                    const param = func.signature.parameters[commaCount];
+                    // Extract type from parameter documentation (e.g., "vec: Vector2D - description")
+                    const typeMatch = param.documentation.match(/:\s*(\w+)/);
+                    if (typeMatch) {
+                        const expectedType = typeMatch[1];
+                        console.log(`[Global Function] Expected type: ${expectedType}`);
+                        return {
+                            type: 'function-parameter',
+                            objectName: null,
+                            className: expectedType,
+                            prefix: '',
+                            functionName: functionName,
+                            parameterIndex: commaCount
+                        };
+                    }
+                }
+            }
+            
+            // Also check if it's a class constructor
+            const cls = classes.find(c => c.name === functionName);
+            if (cls && cls.constructors && cls.constructors.length > 0) {
+                // Count how many commas we have to determine which parameter we're on
+                const commaCount = (afterParen.match(/,/g) || []).length;
+            
+            console.log(`[Constructor] Function: ${functionName}, commaCount: ${commaCount}`);
+            console.log(`[Constructor] Available constructors: ${cls.constructors.map(c => c.label).join(', ')}`);
+            
+            // Find the best matching constructor based on parameter count
+            // Try to find one that has at least commaCount+1 parameters
+            let constructor = cls.constructors.find(c => c.parameters.length > commaCount);
+            
+            // If no match, use the first one (fallback)
+            if (!constructor) {
+                constructor = cls.constructors[0];
+            }
+            
+            console.log(`[Constructor] Selected: ${constructor.label}`);
+            
+            if (constructor.parameters && commaCount < constructor.parameters.length) {
+                const param = constructor.parameters[commaCount];
+                
+                let expectedType = null;
+                
+                // First try to extract type from the constructor label
+                // e.g., "Vector2D(x: number, y: number)" or "Point2D(pt: Point2D)"
+                const labelMatch = constructor.label.match(/\([^)]*\)/);
+                if (labelMatch) {
+                    const paramsSignature = labelMatch[0].slice(1, -1); // Remove parentheses
+                    const paramsList = paramsSignature.split(',').map(p => p.trim());
+                    
+                    console.log(`[Constructor] Params list:`, paramsList);
+                    
+                    if (commaCount < paramsList.length) {
+                        const paramSignature = paramsList[commaCount];
+                        console.log(`[Constructor] Param ${commaCount}: ${paramSignature}`);
+                        // Extract type from "x: number" or "pt: Point2D"
+                        const typeMatch = paramSignature.match(/:\s*(\w+)/);
+                        if (typeMatch) {
+                            expectedType = typeMatch[1];
+                            console.log(`[Constructor] Extracted type from label: ${expectedType}`);
+                        }
+                    }
+                }
+                
+                // If we didn't find it in the label, try the parameter itself
+                if (!expectedType) {
+                    console.log(`[Constructor] No type from label, trying parameter object`);
+                    // Try parameter label: "x: number" or "pt: Point2D"
+                    const labelTypeMatch = param.label.match(/:\s*(\w+)/);
+                    if (labelTypeMatch) {
+                        expectedType = labelTypeMatch[1];
+                    } else {
+                        // Try documentation: "pt: Point2D - description" or "Point2D - description"
+                        const docTypeMatch = param.documentation.match(/(?::\s*)?(\w+)(?:\s*-|$)/);
+                        if (docTypeMatch) {
+                            const candidate = docTypeMatch[1];
+                            // Only use if it starts with capital (likely a class name) or is "number"
+                            if (/^[A-Z]/.test(candidate) || candidate === 'number' || candidate === 'string' || candidate === 'boolean') {
+                                expectedType = candidate;
+                            }
+                        }
+                    }
+                }
+                
+                console.log(`[Constructor] Final expected type: ${expectedType}`);
+                
+                if (expectedType) {
+                    return {
+                        type: 'function-parameter',
+                        objectName: null,
+                        className: expectedType,
+                        prefix: '',
+                        functionName: functionName,
+                        parameterIndex: commaCount
+                    };
+                }
+            }
+        }
+    }
     }
     
     // Default: typing a new identifier
@@ -586,8 +745,10 @@ export function activate(context: vscode.ExtensionContext) {
 
     // ==================== Completion Provider ====================
     
-    const completionProvider = vscode.languages.registerCompletionItemProvider('lua', {
-        provideCompletionItems(document, position) {
+    const completionProvider = vscode.languages.registerCompletionItemProvider(
+        'lua',
+        {
+            provideCompletionItems(document, position) {
             const items: vscode.CompletionItem[] = [];
             const context = getCompletionContext(document, position, classes, globalFunctions);
             
@@ -618,6 +779,79 @@ export function activate(context: vscode.ExtensionContext) {
                     // Add methods only
                     items.push(...createMemberCompletions(clsWithInheritance, 'method'));
                 }
+                return items;
+            }
+            
+            // CONTEXT 2.5: Inside function call - filter by expected parameter type
+            if (context.type === 'function-parameter' && context.className) {
+                const expectedType = context.className;
+                
+                console.log(`[Completion Handler] Function parameter context, expected type: ${expectedType}`);
+                
+                // If expected type is a primitive (number, string, boolean), return empty list
+                const primitiveTypes = ['number', 'string', 'boolean', 'double', 'int', 'float'];
+                if (primitiveTypes.includes(expectedType.toLowerCase())) {
+                    console.log(`[Completion Handler] Primitive type detected, returning empty completion list`);
+                    
+                    // Return a CompletionList (not just array) to have more control
+                    const completionList = new vscode.CompletionList([], false); // false = isIncomplete
+                    return completionList;
+                }
+                
+                console.log(`[Completion Handler] Looking for class: ${expectedType}`);
+                
+                // Add constructors for the expected type
+                const expectedClass = findClassByName(classes, expectedType);
+                console.log(`[Completion Handler] Class found:`, expectedClass ? expectedClass.name : 'NOT FOUND');
+                
+                if (expectedClass && expectedClass.constructors && expectedClass.constructors.length > 0) {
+                    console.log(`[Completion Handler] Adding constructor for ${expectedClass.name}`);
+                    const item = new vscode.CompletionItem(expectedClass.name, vscode.CompletionItemKind.Class);
+                    item.detail = `${expectedClass.detail} (constructor)`;
+                    item.documentation = new vscode.MarkdownString(
+                        `Expected type: **${expectedType}**\n\n${expectedClass.documentation}`
+                    );
+                    
+                    // Add constructor snippet
+                    if (expectedClass.constructors[0].parameters.length > 0) {
+                        const params = expectedClass.constructors[0].parameters
+                            .map((p, i) => `\${${i + 1}:${p.label}}`)
+                            .join(', ');
+                        item.insertText = new vscode.SnippetString(`${expectedClass.name}(${params})$0`);
+                    } else {
+                        item.insertText = new vscode.SnippetString(`${expectedClass.name}()$0`);
+                    }
+                    item.sortText = `!${expectedClass.name}`; // ! sorts first
+                    item.preselect = true; // Auto-select expected type
+                    items.push(item);
+                }
+                
+                // Add global functions that return the expected type
+                globalFunctions.forEach((fn: ApiFunction) => {
+                    if (fn.signature && fn.signature.returns) {
+                        const returnType = fn.signature.returns.split(',')[0].trim();
+                        if (returnType === expectedType) {
+                            const item = new vscode.CompletionItem(fn.name, vscode.CompletionItemKind.Function);
+                            item.detail = `${fn.detail} → ${expectedType}`;
+                            item.documentation = new vscode.MarkdownString(
+                                `Expected type: **${expectedType}**\n\n${fn.documentation}`
+                            );
+                            if (fn.signature) {
+                                item.insertText = new vscode.SnippetString(
+                                    createSnippetFromSignature(fn.signature)
+                                );
+                            }
+                            item.sortText = `!${fn.name}`; // ! sorts first
+                            item.preselect = true;
+                            items.push(item);
+                        }
+                    }
+                });
+                
+                // Also show all variables of the expected type (look backwards for variable declarations)
+                // This would require searching the document, so we'll skip it for now
+                // Just return the filtered items
+                console.log(`[Completion Handler] Returning ${items.length} items for type ${expectedType}`);
                 return items;
             }
             
@@ -664,7 +898,7 @@ export function activate(context: vscode.ExtensionContext) {
 
             return items;
         }
-    }, '.', ':');  // Trigger on . and :
+    }, '.', ':', '(', ',');  // Trigger on ., :, ( and ,
 
     // ==================== Signature Help Provider ====================
     

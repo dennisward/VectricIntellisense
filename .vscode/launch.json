@@ -13,6 +13,16 @@
 				"--extensionDevelopmentPath=${workspaceFolder}"
 			],
 			"preLaunchTask": "${defaultBuildTask}"
+		},
+		{
+		"name": "Extension Tests",
+		"type": "extensionHost",
+		"request": "launch",
+		"args": [
+			"--extensionDevelopmentPath=${workspaceFolder}",
+			"--extensionTestsPath=${workspaceFolder}/out/test/suite/index"
+		],
+		"preLaunchTask": "${defaultBuildTask}"
 		}
 	]
 }
