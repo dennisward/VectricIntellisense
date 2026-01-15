@@ -1,0 +1,340 @@
+{
+  "version": "12.5",
+  "category": "Utility Classes",
+  "description": "Utility classes for managing UUIDs and persistent parameters",
+  "classes": [
+    {
+      "name": "utParameterList",
+      "kind": "Class",
+      "detail": "class utParameterList",
+      "documentation": "Used to store strings, doubles, booleans and integers as 'properties' of an object such as the job. Access via job.JobParameters property.",
+      "constructors": [],
+      "properties": [],
+      "methods": [
+        {
+          "name": "GetDouble",
+          "kind": "Method",
+          "detail": "(parameter_name: string, default_value: number, create_if_not_exist: boolean) → number",
+          "documentation": "Retrieve a double with the passed name. If no value exists, returns default value.",
+          "signature": {
+            "label": "GetDouble(parameter_name: string, default_value: number, create_if_not_exist: boolean)",
+            "documentation": "Retrieve a double parameter",
+            "parameters": [
+              {"label": "parameter_name", "documentation": "parameter_name: string - the name of the parameter"},
+              {"label": "default_value", "documentation": "default_value: number - value returned if parameter doesn't exist"},
+              {"label": "create_if_not_exist", "documentation": "create_if_not_exist: boolean - if true, stores default value when parameter doesn't exist"}
+            ],
+            "returns": "number"
+          }
+        },
+        {
+          "name": "GetInt",
+          "kind": "Method",
+          "detail": "(parameter_name: string, default_value: number, create_if_not_exist: boolean) → number",
+          "documentation": "Retrieve an integer with the passed name. If no value exists, returns default value.",
+          "signature": {
+            "label": "GetInt(parameter_name: string, default_value: number, create_if_not_exist: boolean)",
+            "documentation": "Retrieve an integer parameter",
+            "parameters": [
+              {"label": "parameter_name", "documentation": "parameter_name: string - the name of the parameter"},
+              {"label": "default_value", "documentation": "default_value: number - value returned if parameter doesn't exist"},
+              {"label": "create_if_not_exist", "documentation": "create_if_not_exist: boolean - if true, stores default value when parameter doesn't exist"}
+            ],
+            "returns": "number"
+          }
+        },
+        {
+          "name": "GetBool",
+          "kind": "Method",
+          "detail": "(parameter_name: string, default_value: boolean, create_if_not_exist: boolean) → boolean",
+          "documentation": "Retrieve a boolean flag with the passed name. If no value exists, returns default value.",
+          "signature": {
+            "label": "GetBool(parameter_name: string, default_value: boolean, create_if_not_exist: boolean)",
+            "documentation": "Retrieve a boolean parameter",
+            "parameters": [
+              {"label": "parameter_name", "documentation": "parameter_name: string - the name of the parameter"},
+              {"label": "default_value", "documentation": "default_value: boolean - value returned if parameter doesn't exist"},
+              {"label": "create_if_not_exist", "documentation": "create_if_not_exist: boolean - if true, stores default value when parameter doesn't exist"}
+            ],
+            "returns": "boolean"
+          }
+        },
+        {
+          "name": "GetString",
+          "kind": "Method",
+          "detail": "(parameter_name: string, default_value: string, create_if_not_exist: boolean) → string",
+          "documentation": "Retrieve a string with the passed name. If no value exists, returns default value.",
+          "signature": {
+            "label": "GetString(parameter_name: string, default_value: string, create_if_not_exist: boolean)",
+            "documentation": "Retrieve a string parameter",
+            "parameters": [
+              {"label": "parameter_name", "documentation": "parameter_name: string - the name of the parameter"},
+              {"label": "default_value", "documentation": "default_value: string - value returned if parameter doesn't exist"},
+              {"label": "create_if_not_exist", "documentation": "create_if_not_exist: boolean - if true, stores default value when parameter doesn't exist"}
+            ],
+            "returns": "string"
+          }
+        },
+        {
+          "name": "SetDouble",
+          "kind": "Method",
+          "detail": "(parameter_name: string, value: number) → void",
+          "documentation": "Store a double with the passed name and value",
+          "signature": {
+            "label": "SetDouble(parameter_name: string, value: number)",
+            "documentation": "Store a double parameter",
+            "parameters": [
+              {"label": "parameter_name", "documentation": "parameter_name: string - the name to store the value under"},
+              {"label": "value", "documentation": "value: number - the value to store"}
+            ],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "SetInt",
+          "kind": "Method",
+          "detail": "(parameter_name: string, value: number) → void",
+          "documentation": "Store an integer with the passed name and value",
+          "signature": {
+            "label": "SetInt(parameter_name: string, value: number)",
+            "documentation": "Store an integer parameter",
+            "parameters": [
+              {"label": "parameter_name", "documentation": "parameter_name: string - the name to store the value under"},
+              {"label": "value", "documentation": "value: number - the value to store"}
+            ],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "SetBool",
+          "kind": "Method",
+          "detail": "(parameter_name: string, value: boolean) → void",
+          "documentation": "Store a boolean flag with the passed name and value",
+          "signature": {
+            "label": "SetBool(parameter_name: string, value: boolean)",
+            "documentation": "Store a boolean parameter",
+            "parameters": [
+              {"label": "parameter_name", "documentation": "parameter_name: string - the name to store the value under"},
+              {"label": "value", "documentation": "value: boolean - the value to store"}
+            ],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "SetString",
+          "kind": "Method",
+          "detail": "(parameter_name: string, value: string) → void",
+          "documentation": "Store a string with the passed name and value",
+          "signature": {
+            "label": "SetString(parameter_name: string, value: string)",
+            "documentation": "Store a string parameter",
+            "parameters": [
+              {"label": "parameter_name", "documentation": "parameter_name: string - the name to store the value under"},
+              {"label": "value", "documentation": "value: string - the value to store"}
+            ],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "ParameterExists",
+          "kind": "Method",
+          "detail": "(parameter_name: string, type: utParameterType) → boolean",
+          "documentation": "Returns true if there is an existing parameter with passed name and type",
+          "signature": {
+            "label": "ParameterExists(parameter_name: string, type: utParameterType)",
+            "documentation": "Check if parameter exists",
+            "parameters": [
+              {"label": "parameter_name", "documentation": "parameter_name: string - the name of the parameter"},
+              {"label": "type", "documentation": "type: utParameterType - the type of parameter (UTP_DOUBLE, UTP_INT, UTP_BOOL, UTP_STRING)"}
+            ],
+            "returns": "boolean"
+          }
+        }
+      ],
+      "constants": [
+        {"name": "UTP_DOUBLE", "value": "Parameter type: double (floating point number)"},
+        {"name": "UTP_INT", "value": "Parameter type: integer (whole number)"},
+        {"name": "UTP_BOOL", "value": "Parameter type: boolean (true/false)"},
+        {"name": "UTP_STRING", "value": "Parameter type: string (text)"}
+      ]
+    },
+    {
+      "name": "luaUUID",
+      "kind": "Class",
+      "detail": "class luaUUID",
+      "documentation": "Wraps a Windows UUID and allows it to be treated as a string. Every object in the job has a unique UUID id.",
+      "constructors": [
+        {"label": "luaUUID()", "documentation": "Creates a new luaUUID with a new unique id", "parameters": []}
+      ],
+      "properties": [
+        {"name": "IsEmpty", "kind": "Property", "detail": "boolean", "documentation": "Returns true if this is the NULL/empty id", "readOnly": true},
+        {"name": "RawId", "kind": "Property", "detail": "UUID", "documentation": "Returns the raw UUID this object wraps", "readOnly": true}
+      ],
+      "methods": [
+        {
+          "name": "MakeEmpty",
+          "kind": "Method",
+          "detail": "() → void",
+          "documentation": "Makes this id equal to the 'empty' id",
+          "signature": {
+            "label": "MakeEmpty()",
+            "documentation": "Set to empty UUID",
+            "parameters": [],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "CreateNew",
+          "kind": "Method",
+          "detail": "() → void",
+          "documentation": "Make the id hold a new unique value",
+          "signature": {
+            "label": "CreateNew()",
+            "documentation": "Generate new unique UUID",
+            "parameters": [],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "AsString",
+          "kind": "Method",
+          "detail": "() → string",
+          "documentation": "Return a string representation of the id",
+          "signature": {
+            "label": "AsString()",
+            "documentation": "Convert UUID to string",
+            "parameters": [],
+            "returns": "string"
+          }
+        },
+        {
+          "name": "Set",
+          "kind": "Method",
+          "detail": "(text_id: string) → void",
+          "documentation": "Set the id using a string representation",
+          "signature": {
+            "label": "Set(text_id: string)",
+            "documentation": "Set UUID from string",
+            "parameters": [
+              {"label": "text_id", "documentation": "text_id: string - text representation of an id"}
+            ],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "SetId",
+          "kind": "Method",
+          "detail": "(raw_id: UUID) → void",
+          "documentation": "Set the id using raw UUID",
+          "signature": {
+            "label": "SetId(raw_id: UUID)",
+            "documentation": "Set UUID from raw UUID",
+            "parameters": [
+              {"label": "raw_id", "documentation": "raw_id: UUID - raw UUID value"}
+            ],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "IsEqual",
+          "kind": "Method",
+          "detail": "(id: luaUUID) → boolean",
+          "documentation": "Return true if passed id is the same as this one",
+          "signature": {
+            "label": "IsEqual(id: luaUUID)",
+            "documentation": "Compare UUIDs",
+            "parameters": [
+              {"label": "id", "documentation": "id: luaUUID - UUID to compare with"}
+            ],
+            "returns": "boolean"
+          }
+        }
+      ],
+      "constants": []
+    },
+    {
+      "name": "UUID_List",
+      "kind": "Class",
+      "detail": "class UUID_List",
+      "documentation": "Object which holds a list of UUIDs (note: raw UUIDs, not luaUUIDs)",
+      "constructors": [
+        {"label": "UUID_List()", "documentation": "Creates a new empty UUID_List", "parameters": []}
+      ],
+      "properties": [
+        {"name": "Count", "kind": "Property", "detail": "number", "documentation": "The number of ids in the list", "readOnly": true},
+        {"name": "IsEmpty", "kind": "Property", "detail": "boolean", "documentation": "Returns true if the id list is empty", "readOnly": true}
+      ],
+      "methods": [
+        {
+          "name": "AddHead",
+          "kind": "Method",
+          "detail": "(id: UUID) → void",
+          "documentation": "Add the passed id to the front of the list",
+          "signature": {
+            "label": "AddHead(id: UUID)",
+            "documentation": "Add UUID to front of list",
+            "parameters": [
+              {"label": "id", "documentation": "id: UUID - UUID to add"}
+            ],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "AddTail",
+          "kind": "Method",
+          "detail": "(id: UUID) → void",
+          "documentation": "Add the passed id to the end of the list",
+          "signature": {
+            "label": "AddTail(id: UUID)",
+            "documentation": "Add UUID to end of list",
+            "parameters": [
+              {"label": "id", "documentation": "id: UUID - UUID to add"}
+            ],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "GetAt",
+          "kind": "Method",
+          "detail": "(pos: POSITION) → UUID",
+          "documentation": "Returns the id at the current position",
+          "signature": {
+            "label": "GetAt(pos: POSITION)",
+            "documentation": "Get UUID at position",
+            "parameters": [
+              {"label": "pos", "documentation": "pos: POSITION - current position in list"}
+            ],
+            "returns": "UUID"
+          }
+        },
+        {
+          "name": "GetHeadPosition",
+          "kind": "Method",
+          "detail": "() → POSITION",
+          "documentation": "Returns a POSITION variable to allow access to the head of the list",
+          "signature": {
+            "label": "GetHeadPosition()",
+            "documentation": "Get position of first item",
+            "parameters": [],
+            "returns": "POSITION"
+          }
+        },
+        {
+          "name": "GetNext",
+          "kind": "Method",
+          "detail": "(pos: POSITION) → UUID, POSITION",
+          "documentation": "Returns the id at the current position AND a new value for position pointing to the next item (or nil if at end)",
+          "signature": {
+            "label": "GetNext(pos: POSITION)",
+            "documentation": "Get current UUID and advance to next position",
+            "parameters": [
+              {"label": "pos", "documentation": "pos: POSITION - current position in list"}
+            ],
+            "returns": "UUID, POSITION"
+          }
+        }
+      ],
+      "constants": []
+    }
+  ]
+}

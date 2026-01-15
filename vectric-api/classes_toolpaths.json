@@ -1,7 +1,8 @@
 {
   "version": "12.5",
-  "category": "Toolpath Objects",
-  "description": "These objects represent toolpaths and tools within the program.",
+  "category": "Toolpath Creation and Management",
+  "description": "Comprehensive collection of classes for creating, configuring, and managing toolpaths programmatically. These classes are used with ToolpathManager to create various types of toolpaths (profiling, pocketing, drilling, V-carving, etc.)",
+  "note": "Due to the extensive number of properties and constants in these classes, this documentation includes the most commonly used members. Refer to the Vectric Lua API manual for complete details on all properties and enum values.",
   "classes": [
     {
       "name": "ToolpathManager",
@@ -10,10 +11,27 @@
       "documentation": "Manages all toolpaths in the current job.",
       "constructors": [],
       "properties": [
-        {"name": "Count", "kind": "Property", "detail": "number", "documentation": "Number of toolpaths", "readOnly": true}
+        {
+          "name": "Count",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Number of toolpaths",
+          "readOnly": true
+        }
       ],
       "methods": [
-        {"name": "GetHeadPosition", "kind": "Method", "detail": "() → POSITION", "documentation": "Returns a POSITION for iterating", "signature": {"label": "GetHeadPosition()", "documentation": "Returns a POSITION", "parameters": [], "returns": "POSITION"}}
+        {
+          "name": "GetHeadPosition",
+          "kind": "Method",
+          "detail": "() → POSITION",
+          "documentation": "Returns a POSITION for iterating",
+          "signature": {
+            "label": "GetHeadPosition()",
+            "documentation": "Returns a POSITION",
+            "parameters": [],
+            "returns": "POSITION"
+          }
+        }
       ]
     },
     {
@@ -23,12 +41,1845 @@
       "documentation": "Represents a single toolpath operation.",
       "constructors": [],
       "properties": [
-        {"name": "Name", "kind": "Property", "detail": "string", "documentation": "Name of the toolpath", "readOnly": false},
-        {"name": "Visible", "kind": "Property", "detail": "boolean", "documentation": "True if visible", "readOnly": false}
+        {
+          "name": "Name",
+          "kind": "Property",
+          "detail": "string",
+          "documentation": "Name of the toolpath",
+          "readOnly": false
+        },
+        {
+          "name": "Visible",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "True if visible",
+          "readOnly": false
+        }
       ],
       "methods": [
-        {"name": "GetTool", "kind": "Method", "detail": "() → Tool", "documentation": "Returns the Tool object", "signature": {"label": "GetTool()", "documentation": "Returns the Tool", "parameters": [], "returns": "Tool"}}
+        {
+          "name": "GetTool",
+          "kind": "Method",
+          "detail": "() → Tool",
+          "documentation": "Returns the Tool object",
+          "signature": {
+            "label": "GetTool()",
+            "documentation": "Returns the Tool",
+            "parameters": [],
+            "returns": "Tool"
+          }
+        }
       ]
+    },
+    {
+      "name": "ToolpathTab",
+      "kind": "Class",
+      "detail": "class ToolpathTab : ContourCarriage",
+      "documentation": "Derived from ContourCarriage, represents a toolpath tab. A ToolpathTab is created from a CadContour object using the InsertToolpathTabAtPoint() method. All properties and methods are inherited from ContourCarriage.",
+      "inherits": "ContourCarriage",
+      "constructors": [],
+      "properties": [],
+      "methods": [],
+      "constants": []
+    },
+    {
+      "name": "Tool",
+      "kind": "Class",
+      "detail": "class Tool",
+      "documentation": "Represents a cutting tool with all parameters (diameter, speeds, feeds, etc.). Can be created programmatically for common tool types or retrieved from ToolDatabase for all tool types.",
+      "constructors": [
+        {
+          "label": "Tool(name: string, tool_type: number)",
+          "documentation": "Create a new tool of specified type. Supported types: BALL_NOSE, END_MILL, RADIUSED_END_MILL, VBIT, ENGRAVING, RADIUSED_ENGRAVING, THROUGH_DRILL, DIAMOND_DRAG. For other tool types, use ToolDatabase:SelectTool().",
+          "parameters": [
+            {
+              "label": "name",
+              "documentation": "name: string - name for the tool"
+            },
+            {
+              "label": "tool_type",
+              "documentation": "tool_type: number - Tool.END_MILL, Tool.BALL_NOSE, Tool.VBIT, Tool.THROUGH_DRILL, etc."
+            }
+          ]
+        }
+      ],
+      "properties": [
+        {
+          "name": "ClearStepover",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Clearance pass stepover (VBits only)",
+          "readOnly": false
+        },
+        {
+          "name": "Flat_Diameter",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Flat diameter for Engraving tools",
+          "readOnly": false
+        },
+        {
+          "name": "InMM",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "True if tool measurements are in millimeters, false for inches",
+          "readOnly": false
+        },
+        {
+          "name": "FeedRate",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Feed rate for tool (see RateUnits for units)",
+          "readOnly": false
+        },
+        {
+          "name": "Line_Width",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Line width for Diamond Drag tools",
+          "readOnly": false
+        },
+        {
+          "name": "Name",
+          "kind": "Property",
+          "detail": "string",
+          "documentation": "Name of the tool",
+          "readOnly": true
+        },
+        {
+          "name": "Notes",
+          "kind": "Property",
+          "detail": "string",
+          "documentation": "Notes field for tool",
+          "readOnly": false
+        },
+        {
+          "name": "PlungeRate",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Plunge rate for tool (see RateUnits for units)",
+          "readOnly": false
+        },
+        {
+          "name": "RateUnits",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Feed rate units: Tool.MM_SEC, Tool.MM_MIN, Tool.METRES_MIN, Tool.INCHES_SEC, Tool.INCHES_MIN, Tool.FEET_MIN",
+          "readOnly": false
+        },
+        {
+          "name": "RateUnitsText",
+          "kind": "Property",
+          "detail": "string",
+          "documentation": "Feed rate units as display string (e.g. 'mm/sec')",
+          "readOnly": true
+        },
+        {
+          "name": "SpindleSpeed",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Spindle speed (RPM)",
+          "readOnly": false
+        },
+        {
+          "name": "Stepdown",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Maximum depth of cut per pass",
+          "readOnly": false
+        },
+        {
+          "name": "Stepover",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Stepover distance between passes",
+          "readOnly": false
+        },
+        {
+          "name": "Tip_Radius",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Tip radius for Radiused Engraving or Radiused Endmill tools",
+          "readOnly": false
+        },
+        {
+          "name": "ToolDB_Location",
+          "kind": "Property",
+          "detail": "string",
+          "documentation": "Path to tool in tool database (not including tool name)",
+          "readOnly": true
+        },
+        {
+          "name": "ToolDBId",
+          "kind": "Property",
+          "detail": "ToolDBId",
+          "documentation": "The Id describing the location in the tool database",
+          "readOnly": true
+        },
+        {
+          "name": "ToolType",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Tool type constant: Tool.BALL_NOSE, Tool.END_MILL, Tool.VBIT, etc.",
+          "readOnly": true
+        },
+        {
+          "name": "ToolTypeText",
+          "kind": "Property",
+          "detail": "string",
+          "documentation": "Tool type as display string",
+          "readOnly": true
+        },
+        {
+          "name": "ToolDia",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Tool diameter",
+          "readOnly": false
+        },
+        {
+          "name": "ToolNumber",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Tool number for toolpath output",
+          "readOnly": false
+        },
+        {
+          "name": "VBit_Angle",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Included angle for V-Bit, Diamond Drag or Engraving tools (degrees)",
+          "readOnly": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "ConvertRateUnitsTo",
+          "kind": "Method",
+          "detail": "(new_units: number) → void",
+          "documentation": "Convert the feed and plunge rates to new units",
+          "signature": {
+            "label": "ConvertRateUnitsTo(new_units: number)",
+            "documentation": "Convert feed/plunge rates to specified units",
+            "parameters": [
+              {
+                "label": "new_units",
+                "documentation": "new_units: number - Tool.MM_SEC, Tool.MM_MIN, etc."
+              }
+            ],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "TipRadius",
+          "kind": "Method",
+          "detail": "(in_mm: boolean) → number",
+          "documentation": "Get tip radius for RADIUSED_END_MILL or RADIUSED_ENGRAVING tools (returns 0 for other types)",
+          "signature": {
+            "label": "TipRadius(in_mm: boolean)",
+            "documentation": "Get tool tip radius",
+            "parameters": [
+              {
+                "label": "in_mm",
+                "documentation": "in_mm: boolean - true to return value in mm, false for inches"
+              }
+            ],
+            "returns": "number"
+          }
+        },
+        {
+          "name": "UpdateParameters",
+          "kind": "Method",
+          "detail": "() → void",
+          "documentation": "CRITICAL: MUST call this after modifying any tool properties on a tool retrieved from an existing toolpath. Flushes parameter changes to the toolpath.",
+          "signature": {
+            "label": "UpdateParameters()",
+            "documentation": "Flush tool parameter changes to toolpath",
+            "parameters": [],
+            "returns": "void"
+          }
+        }
+      ],
+      "constants": [
+        {
+          "name": "BALL_NOSE",
+          "value": "Tool type: Ball nose end mill"
+        },
+        {
+          "name": "END_MILL",
+          "value": "Tool type: Flat end mill"
+        },
+        {
+          "name": "RADIUSED_END_MILL",
+          "value": "Tool type: End mill with radiused corners"
+        },
+        {
+          "name": "VBIT",
+          "value": "Tool type: V-bit engraving tool"
+        },
+        {
+          "name": "ENGRAVING",
+          "value": "Tool type: Engraving bit"
+        },
+        {
+          "name": "RADIUSED_ENGRAVING",
+          "value": "Tool type: Radiused engraving bit"
+        },
+        {
+          "name": "THROUGH_DRILL",
+          "value": "Tool type: Drill bit"
+        },
+        {
+          "name": "FORM_TOOL",
+          "value": "Tool type: Form tool"
+        },
+        {
+          "name": "DIAMOND_DRAG",
+          "value": "Tool type: Diamond drag engraver"
+        },
+        {
+          "name": "RADIUSED_FLAT_ENGRAVING",
+          "value": "Tool type: Radiused flat engraving bit"
+        },
+        {
+          "name": "MM_SEC",
+          "value": "Rate units: millimeters per second"
+        },
+        {
+          "name": "MM_MIN",
+          "value": "Rate units: millimeters per minute"
+        },
+        {
+          "name": "METRES_MIN",
+          "value": "Rate units: meters per minute"
+        },
+        {
+          "name": "INCHES_SEC",
+          "value": "Rate units: inches per second"
+        },
+        {
+          "name": "INCHES_MIN",
+          "value": "Rate units: inches per minute"
+        },
+        {
+          "name": "FEET_MIN",
+          "value": "Rate units: feet per minute"
+        }
+      ]
+    },
+    {
+      "name": "ToolDatabase",
+      "kind": "Class",
+      "detail": "class ToolDatabase",
+      "documentation": "Provides access to the program's tool database. Used to select existing tools or retrieve tools by ID.",
+      "constructors": [
+        {
+          "label": "ToolDatabase()",
+          "documentation": "Returns access to the single Tool database for the program",
+          "parameters": []
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "name": "SelectTool",
+          "kind": "Method",
+          "detail": "() → Tool",
+          "documentation": "Displays the Tool Database dialog and allows user to choose a tool, which is returned",
+          "signature": {
+            "label": "SelectTool()",
+            "documentation": "Show tool selection dialog",
+            "parameters": [],
+            "returns": "Tool"
+          }
+        },
+        {
+          "name": "GetTool",
+          "kind": "Method",
+          "detail": "(tooldb_id: ToolDBId) → Tool",
+          "documentation": "Return the tool from the database with the given Id",
+          "signature": {
+            "label": "GetTool(tooldb_id: ToolDBId)",
+            "documentation": "Get tool by database ID",
+            "parameters": [
+              {
+                "label": "tooldb_id",
+                "documentation": "tooldb_id: ToolDBId - database location identifier"
+              }
+            ],
+            "returns": "Tool"
+          }
+        }
+      ],
+      "constants": []
+    },
+    {
+      "name": "ToolDBId",
+      "kind": "Class",
+      "detail": "class ToolDBId",
+      "documentation": "Identifies a tool's location in the tool database. Retrieved via Tool.ToolDBId property. Useful for saving/loading tool defaults.",
+      "constructors": [
+        {
+          "label": "ToolDBId(section: string, key_prefix: string)",
+          "documentation": "Create an Id object from registry contents",
+          "parameters": [
+            {
+              "label": "section",
+              "documentation": "section: string - registry section name"
+            },
+            {
+              "label": "key_prefix",
+              "documentation": "key_prefix: string - prefix for registry keys (can be empty)"
+            }
+          ]
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "name": "SaveDefaults",
+          "kind": "Method",
+          "detail": "(section: string, key_prefix: string) → void",
+          "documentation": "Save the Id to the registry",
+          "signature": {
+            "label": "SaveDefaults(section: string, key_prefix: string)",
+            "documentation": "Save tool ID to registry",
+            "parameters": [
+              {
+                "label": "section",
+                "documentation": "section: string - registry section name"
+              },
+              {
+                "label": "key_prefix",
+                "documentation": "key_prefix: string - prefix for registry keys"
+              }
+            ],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "LoadDefaults",
+          "kind": "Method",
+          "detail": "(section: string, key_prefix: string) → void",
+          "documentation": "Load the Id from the registry",
+          "signature": {
+            "label": "LoadDefaults(section: string, key_prefix: string)",
+            "documentation": "Load tool ID from registry",
+            "parameters": [
+              {
+                "label": "section",
+                "documentation": "section: string - registry section name"
+              },
+              {
+                "label": "key_prefix",
+                "documentation": "key_prefix: string - prefix for registry keys"
+              }
+            ],
+            "returns": "void"
+          }
+        }
+      ],
+      "constants": []
+    },
+    {
+      "name": "ToolpathPosData",
+      "kind": "Class",
+      "detail": "class ToolpathPosData",
+      "documentation": "Specifies home position and safe Z heights for toolpath creation. Passed to ToolpathManager creation methods.",
+      "constructors": [
+        {
+          "label": "ToolpathPosData()",
+          "documentation": "Creates a new ToolpathPosData object with default values",
+          "parameters": []
+        }
+      ],
+      "properties": [
+        {
+          "name": "HomeX",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "X coordinate of home position (where tool starts/returns)",
+          "readOnly": true
+        },
+        {
+          "name": "HomeY",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Y coordinate of home position",
+          "readOnly": true
+        },
+        {
+          "name": "HomeZ",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Z coordinate of home position",
+          "readOnly": true
+        },
+        {
+          "name": "InMM",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "True if program working in mm, else inches",
+          "readOnly": true
+        },
+        {
+          "name": "SafeZ",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Absolute Z value for safe Z moves (rapid moves)",
+          "readOnly": true
+        },
+        {
+          "name": "SafeZGap",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "SafeZ gap - distance above material surface for rapid moves",
+          "readOnly": false
+        },
+        {
+          "name": "StartZGap",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "StartZ gap - distance above surface where plunges change from rapid to plunge feedrate",
+          "readOnly": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "SetHomePosition",
+          "kind": "Method",
+          "detail": "(x: number, y: number, z: number) → void",
+          "documentation": "Set the position from which the toolpath starts and usually returns to",
+          "signature": {
+            "label": "SetHomePosition(x: number, y: number, z: number)",
+            "documentation": "Set tool home position",
+            "parameters": [
+              {
+                "label": "x",
+                "documentation": "x: number - X value for home position"
+              },
+              {
+                "label": "y",
+                "documentation": "y: number - Y value for home position"
+              },
+              {
+                "label": "z",
+                "documentation": "z: number - Z value for home position"
+              }
+            ],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "EnsureHomeZIsSafe",
+          "kind": "Method",
+          "detail": "() → void",
+          "documentation": "Ensures home Z is at least SafeZ above material surface (prevents invalid programmatic values)",
+          "signature": {
+            "label": "EnsureHomeZIsSafe()",
+            "documentation": "Validate and correct home Z position",
+            "parameters": [],
+            "returns": "void"
+          }
+        }
+      ],
+      "constants": []
+    },
+    {
+      "name": "GeometrySelector",
+      "kind": "Class",
+      "detail": "class GeometrySelector",
+      "documentation": "Specifies automatic geometry selection criteria for toolpath creation. Default constructor leaves selector inactive (uses currently selected vectors). Set properties to enable automatic selection by layer, vector type, circle diameter, etc.",
+      "constructors": [
+        {
+          "label": "GeometrySelector()",
+          "documentation": "Creates a new GeometrySelector with default values (inactive - uses current selection)",
+          "parameters": []
+        }
+      ],
+      "properties": [
+        {
+          "name": "AllowOpen",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "If true, selector will allow open vectors in selection",
+          "readOnly": false
+        },
+        {
+          "name": "AllowToolDia",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "If true, selector will use ToolDia field when selecting vectors",
+          "readOnly": false
+        },
+        {
+          "name": "CircleDia",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Diameter of circles to select if CircleMatchCircleDia and SelectCircles are true",
+          "readOnly": false
+        },
+        {
+          "name": "CircleTolerance",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Tolerance when deciding if circle matches ToolDia/CircleDia criteria",
+          "readOnly": false
+        },
+        {
+          "name": "CircleMatchAll",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "If true, select all circles (if SelectCircles is true)",
+          "readOnly": false
+        },
+        {
+          "name": "CircleMatchCircleDia",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "If true, select circles matching CircleDia (if SelectCircles is true)",
+          "readOnly": false
+        },
+        {
+          "name": "CircleMatchToolDia",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "If true, select circles matching tool diameter (if SelectCircles is true)",
+          "readOnly": false
+        },
+        {
+          "name": "GeometryDepthOffset",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Offset value to add to geometry depth",
+          "readOnly": false
+        },
+        {
+          "name": "GeometryDepthOffsetFormula",
+          "kind": "Property",
+          "detail": "string",
+          "documentation": "Formula for depth offset from geometry",
+          "readOnly": false
+        },
+        {
+          "name": "MixedGroupsOk",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "If true, groups which only match some criteria are selected",
+          "readOnly": false
+        },
+        {
+          "name": "OnlyOnLayers",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "If true, only vectors on layers added with AddLayerName are selected",
+          "readOnly": false
+        },
+        {
+          "name": "SelectClosed",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "If true, closed vectors are selected",
+          "readOnly": false
+        },
+        {
+          "name": "SelectCircles",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "If true, only selecting circles",
+          "readOnly": false
+        },
+        {
+          "name": "SelectOpen",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "If true, open vectors are selected",
+          "readOnly": false
+        },
+        {
+          "name": "SetDepthFromGeometry",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "If true, depth for toolpath is set from selected geometry (from DXF with depth)",
+          "readOnly": false
+        },
+        {
+          "name": "ToolDia",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Diameter of circles to select if CircleMatchToolDia and SelectCircles are true",
+          "readOnly": false
+        },
+        {
+          "name": "HaveLayerNames",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "True if geometry selector has a list of layer names",
+          "readOnly": true
+        },
+        {
+          "name": "LayerNameCount",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Number of layers in list",
+          "readOnly": true
+        }
+      ],
+      "methods": [
+        {
+          "name": "AddLayerName",
+          "kind": "Method",
+          "detail": "(name: string) → void",
+          "documentation": "Add layer name to list used if OnlyOnLayers is true",
+          "signature": {
+            "label": "AddLayerName(name: string)",
+            "documentation": "Add layer to selection criteria",
+            "parameters": [
+              {
+                "label": "name",
+                "documentation": "name: string - layer name to add"
+              }
+            ],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "RemoveAllLayerNames",
+          "kind": "Method",
+          "detail": "() → void",
+          "documentation": "Remove all layer names from selector",
+          "signature": {
+            "label": "RemoveAllLayerNames()",
+            "documentation": "Clear layer name list",
+            "parameters": [],
+            "returns": "void"
+          }
+        },
+        {
+          "name": "GetLayerNameHeadPosition",
+          "kind": "Method",
+          "detail": "() → POSITION",
+          "documentation": "Returns POSITION to access head of layer name list",
+          "signature": {
+            "label": "GetLayerNameHeadPosition()",
+            "documentation": "Get start of layer list",
+            "parameters": [],
+            "returns": "POSITION"
+          }
+        },
+        {
+          "name": "GetNextLayerName",
+          "kind": "Method",
+          "detail": "(pos: POSITION) → string, POSITION",
+          "documentation": "Returns layer name at position AND new position (or nil at end)",
+          "signature": {
+            "label": "GetNextLayerName(pos: POSITION)",
+            "documentation": "Iterate through layer names",
+            "parameters": [
+              {
+                "label": "pos",
+                "documentation": "pos: POSITION - current position"
+              }
+            ],
+            "returns": "string, POSITION"
+          }
+        }
+      ],
+      "constants": []
+    },
+    {
+      "name": "ProfileParameterData",
+      "kind": "Class",
+      "detail": "class ProfileParameterData",
+      "documentation": "Parameters for profiling toolpaths. Specifies cut depth, side to profile on, cut direction, allowances, corner handling, etc.",
+      "constructors": [
+        {
+          "label": "ProfileParameterData()",
+          "documentation": "Create new object ready for parameter configuration",
+          "parameters": []
+        }
+      ],
+      "properties": [
+        {
+          "name": "Allowance",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Allowance to leave on profile when calculating",
+          "readOnly": false
+        },
+        {
+          "name": "AllowanceFormula",
+          "kind": "Property",
+          "detail": "string",
+          "documentation": "Formula for allowance (e.g. 'z * 0.1')",
+          "readOnly": false
+        },
+        {
+          "name": "CornerSharpen",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "True to create 3D corner sharpening moves for internal corners",
+          "readOnly": false
+        },
+        {
+          "name": "CreateSquareCorners",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "True to create square external corners",
+          "readOnly": false
+        },
+        {
+          "name": "CutDepth",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Final cutting depth below start depth",
+          "readOnly": false
+        },
+        {
+          "name": "CutDepthFormula",
+          "kind": "Property",
+          "detail": "string",
+          "documentation": "Formula for cut depth (e.g. 'z * 0.5')",
+          "readOnly": false
+        },
+        {
+          "name": "CutDirection",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "ProfileParameterData.CLIMB_DIRECTION or CONVENTIONAL_DIRECTION",
+          "readOnly": false
+        },
+        {
+          "name": "KeepStartPoints",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "If true, maintain vector start points; else optimize",
+          "readOnly": false
+        },
+        {
+          "name": "Name",
+          "kind": "Property",
+          "detail": "string",
+          "documentation": "Name for the toolpath",
+          "readOnly": false
+        },
+        {
+          "name": "ProfileSide",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "PROFILE_OUTSIDE, PROFILE_INSIDE, or PROFILE_ON",
+          "readOnly": false
+        },
+        {
+          "name": "ProjectToolpath",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "If true (Aspire), project toolpath onto model surface",
+          "readOnly": false
+        },
+        {
+          "name": "StartDepth",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Start depth below material surface",
+          "readOnly": false
+        },
+        {
+          "name": "StartDepthFormula",
+          "kind": "Property",
+          "detail": "string",
+          "documentation": "Formula for start depth (e.g. 'z * 0.5')",
+          "readOnly": false
+        }
+      ],
+      "methods": [],
+      "constants": [
+        {
+          "name": "CLIMB_DIRECTION",
+          "value": "Cut direction: climb milling"
+        },
+        {
+          "name": "CONVENTIONAL_DIRECTION",
+          "value": "Cut direction: conventional milling"
+        },
+        {
+          "name": "PROFILE_OUTSIDE",
+          "value": "Profile on outside of vector"
+        },
+        {
+          "name": "PROFILE_INSIDE",
+          "value": "Profile on inside of vector"
+        },
+        {
+          "name": "PROFILE_ON",
+          "value": "Profile on vector centerline"
+        }
+      ]
+    },
+    {
+      "name": "RampingData",
+      "kind": "Class",
+      "detail": "class RampingData",
+      "documentation": "Parameters controlling ramping behavior for toolpaths. Specifies ramp type (linear, zigzag, spiral), constraints (by angle or distance), and whether to ramp on lead-ins.",
+      "constructors": [
+        {
+          "label": "RampingData()",
+          "documentation": "Create new object with default values",
+          "parameters": []
+        }
+      ],
+      "properties": [
+        {
+          "name": "DoRamping",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "If true, create ramping moves",
+          "readOnly": false
+        },
+        {
+          "name": "RampAngle",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Angle to ramp at (degrees) if constrained by angle",
+          "readOnly": false
+        },
+        {
+          "name": "RampConstraint",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "CONSTRAIN_DISTANCE or CONSTRAIN_ANGLE",
+          "readOnly": false
+        },
+        {
+          "name": "RampDistance",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Distance to ramp over if constrained by distance",
+          "readOnly": false
+        },
+        {
+          "name": "RampMaxAngleDist",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Max distance to ramp over if constrained by angle",
+          "readOnly": false
+        },
+        {
+          "name": "RampOnLeadIn",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "If true, ramps created on lead-in moves",
+          "readOnly": false
+        },
+        {
+          "name": "RampType",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "RAMP_LINEAR, RAMP_ZIG_ZAG, or RAMP_SPIRAL",
+          "readOnly": false
+        }
+      ],
+      "methods": [],
+      "constants": [
+        {
+          "name": "CONSTRAIN_DISTANCE",
+          "value": "Constrain ramp by distance"
+        },
+        {
+          "name": "CONSTRAIN_ANGLE",
+          "value": "Constrain ramp by angle"
+        },
+        {
+          "name": "RAMP_LINEAR",
+          "value": "Linear ramping"
+        },
+        {
+          "name": "RAMP_ZIG_ZAG",
+          "value": "Zig-zag ramping"
+        },
+        {
+          "name": "RAMP_SPIRAL",
+          "value": "Spiral ramping"
+        }
+      ]
+    },
+    {
+      "name": "LeadInOutData",
+      "kind": "Class",
+      "detail": "class LeadInOutData",
+      "documentation": "Parameters for lead-in and lead-out moves on profiling toolpaths. Controls whether leads are created, their type (linear/circular), length, angle, and overcut distance.",
+      "constructors": [
+        {
+          "label": "LeadInOutData()",
+          "documentation": "Create new object with default values",
+          "parameters": []
+        }
+      ],
+      "properties": [
+        {
+          "name": "CircularLeadRadius",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Radius for circular leads",
+          "readOnly": false
+        },
+        {
+          "name": "DoLeadIn",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "If true, create lead-in",
+          "readOnly": false
+        },
+        {
+          "name": "DoLeadOut",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "If true, create lead-out",
+          "readOnly": false
+        },
+        {
+          "name": "LeadLength",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Length for lead in/out",
+          "readOnly": false
+        },
+        {
+          "name": "LeadType",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "LINEAR_LEAD or CIRCULAR_LEAD",
+          "readOnly": false
+        },
+        {
+          "name": "LinearLeadAngle",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Angle (degrees) for linear leads from perpendicular",
+          "readOnly": false
+        },
+        {
+          "name": "OvercutDistance",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "If > 0, tool continues past entry point by this distance",
+          "readOnly": false
+        }
+      ],
+      "methods": [],
+      "constants": [
+        {
+          "name": "LINEAR_LEAD",
+          "value": "Linear lead in/out"
+        },
+        {
+          "name": "CIRCULAR_LEAD",
+          "value": "Circular arc lead in/out"
+        }
+      ]
+    },
+    {
+      "name": "PocketParameterData",
+      "kind": "Class",
+      "detail": "class PocketParameterData",
+      "documentation": "Parameters for pocketing toolpaths. Controls depth, clearance strategy (offset/raster), profile passes, ramping, and allowances. Also used for clearance section of V-carving.",
+      "constructors": [
+        {
+          "label": "PocketParameterData()",
+          "documentation": "Create new object ready for parameter configuration",
+          "parameters": []
+        }
+      ],
+      "properties": [
+        {
+          "name": "Allowance",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Allowance to leave on pocket sides",
+          "readOnly": false
+        },
+        {
+          "name": "AllowanceFormula",
+          "kind": "Property",
+          "detail": "string",
+          "documentation": "Formula for allowance",
+          "readOnly": false
+        },
+        {
+          "name": "CutDepth",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Final cutting depth below start depth",
+          "readOnly": false
+        },
+        {
+          "name": "CutDepthFormula",
+          "kind": "Property",
+          "detail": "string",
+          "documentation": "Formula for cut depth",
+          "readOnly": false
+        },
+        {
+          "name": "CutDirection",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "ProfileParameterData.CLIMB_DIRECTION or CONVENTIONAL_DIRECTION",
+          "readOnly": false
+        },
+        {
+          "name": "DoRamping",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "If true, ramp entry to pockets (always zigzag)",
+          "readOnly": false
+        },
+        {
+          "name": "DoRasterClearance",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "If true, raster clearance; else offset clearance",
+          "readOnly": false
+        },
+        {
+          "name": "Name",
+          "kind": "Property",
+          "detail": "string",
+          "documentation": "Name for the toolpath",
+          "readOnly": false
+        },
+        {
+          "name": "ProfilePassType",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "PROFILE_NONE, PROFILE_FIRST, or PROFILE_LAST",
+          "readOnly": false
+        },
+        {
+          "name": "ProjectToolpath",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "If true (Aspire), project onto model surface",
+          "readOnly": false
+        },
+        {
+          "name": "RampDistance",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Distance to ramp over if ramping",
+          "readOnly": false
+        },
+        {
+          "name": "RasterAllowance",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Allowance to leave on pocket edge between rasters",
+          "readOnly": false
+        },
+        {
+          "name": "RasterAngle",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Angle (degrees) for raster toolpaths",
+          "readOnly": false
+        },
+        {
+          "name": "StartDepth",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Start depth below material surface",
+          "readOnly": false
+        },
+        {
+          "name": "StartDepthFormula",
+          "kind": "Property",
+          "detail": "string",
+          "documentation": "Formula for start depth",
+          "readOnly": false
+        }
+      ],
+      "methods": [],
+      "constants": [
+        {
+          "name": "PROFILE_NONE",
+          "value": "No profile pass"
+        },
+        {
+          "name": "PROFILE_FIRST",
+          "value": "Profile pass before area clearance"
+        },
+        {
+          "name": "PROFILE_LAST",
+          "value": "Profile pass after area clearance"
+        }
+      ]
+    },
+    {
+      "name": "DrillParameterData",
+      "kind": "Class",
+      "detail": "class DrillParameterData",
+      "documentation": "Parameters for drilling toolpaths. Controls depth, pecking behavior, and retract height.",
+      "constructors": [
+        {
+          "label": "DrillParameterData()",
+          "documentation": "Create new object with default values",
+          "parameters": []
+        }
+      ],
+      "properties": [
+        {
+          "name": "CutDepth",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Drilling depth below start depth",
+          "readOnly": false
+        },
+        {
+          "name": "CutDepthFormula",
+          "kind": "Property",
+          "detail": "string",
+          "documentation": "Formula for cut depth",
+          "readOnly": false
+        },
+        {
+          "name": "DoPecking",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "If true, perform peck drilling",
+          "readOnly": false
+        },
+        {
+          "name": "Name",
+          "kind": "Property",
+          "detail": "string",
+          "documentation": "Name for the toolpath",
+          "readOnly": false
+        },
+        {
+          "name": "PeckDepth",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Depth per peck if pecking",
+          "readOnly": false
+        },
+        {
+          "name": "RetractGap",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Distance to retract above surface between pecks",
+          "readOnly": false
+        },
+        {
+          "name": "StartDepth",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Start depth below material surface",
+          "readOnly": false
+        },
+        {
+          "name": "StartDepthFormula",
+          "kind": "Property",
+          "detail": "string",
+          "documentation": "Formula for start depth",
+          "readOnly": false
+        }
+      ],
+      "methods": [],
+      "constants": []
+    },
+    {
+      "name": "VCarveParameterData",
+      "kind": "Class",
+      "detail": "class VCarveParameterData",
+      "documentation": "Parameters for V-carving toolpaths. Controls depth limits, merge settings, flat area handling, and whether area clearance is performed.",
+      "constructors": [
+        {
+          "label": "VCarveParameterData()",
+          "documentation": "Create new object with default values",
+          "parameters": []
+        }
+      ],
+      "properties": [
+        {
+          "name": "CutDepth",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Maximum V-carving depth below start depth",
+          "readOnly": false
+        },
+        {
+          "name": "CutDepthFormula",
+          "kind": "Property",
+          "detail": "string",
+          "documentation": "Formula for cut depth",
+          "readOnly": false
+        },
+        {
+          "name": "DoFlatBottom",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "If true, perform flat-bottom V-carving with area clearance tool",
+          "readOnly": false
+        },
+        {
+          "name": "FlatDepth",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Depth of flat area if DoFlatBottom is true",
+          "readOnly": false
+        },
+        {
+          "name": "MergeVectors",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "If true, merge adjacent vectors before carving",
+          "readOnly": false
+        },
+        {
+          "name": "Name",
+          "kind": "Property",
+          "detail": "string",
+          "documentation": "Name for the toolpath",
+          "readOnly": false
+        },
+        {
+          "name": "ProjectToolpath",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "If true (Aspire), project onto model surface",
+          "readOnly": false
+        },
+        {
+          "name": "StartDepth",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Start depth below material surface",
+          "readOnly": false
+        },
+        {
+          "name": "StartDepthFormula",
+          "kind": "Property",
+          "detail": "string",
+          "documentation": "Formula for start depth",
+          "readOnly": false
+        }
+      ],
+      "methods": [],
+      "constants": []
+    },
+    {
+      "name": "FlutingParameterData",
+      "kind": "Class",
+      "detail": "class FlutingParameterData",
+      "documentation": "Parameters for fluting toolpaths. Controls depth and ramping behavior at start/end of flutes.",
+      "constructors": [
+        {
+          "label": "FlutingParameterData()",
+          "documentation": "Create new object with default values",
+          "parameters": []
+        }
+      ],
+      "properties": [
+        {
+          "name": "CutDepth",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Fluting depth below start depth",
+          "readOnly": false
+        },
+        {
+          "name": "CutDepthFormula",
+          "kind": "Property",
+          "detail": "string",
+          "documentation": "Formula for cut depth",
+          "readOnly": false
+        },
+        {
+          "name": "FluteType",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "FULL_LENGTH, RAMP_START, or RAMP_START_END",
+          "readOnly": false
+        },
+        {
+          "name": "Name",
+          "kind": "Property",
+          "detail": "string",
+          "documentation": "Name for the toolpath",
+          "readOnly": false
+        },
+        {
+          "name": "ProjectToolpath",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "If true (Aspire), project onto model surface",
+          "readOnly": false
+        },
+        {
+          "name": "RampLength",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Length to ramp over if UseRampRatio is false",
+          "readOnly": false
+        },
+        {
+          "name": "RampRatio",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Length of ramp as ratio of flute length (0-1.0)",
+          "readOnly": false
+        },
+        {
+          "name": "RampType",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "RAMP_LINEAR or RAMP_SMOOTH",
+          "readOnly": false
+        },
+        {
+          "name": "StartDepth",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Start depth below material surface",
+          "readOnly": false
+        },
+        {
+          "name": "StartDepthFormula",
+          "kind": "Property",
+          "detail": "string",
+          "documentation": "Formula for start depth",
+          "readOnly": false
+        },
+        {
+          "name": "UseRampRatio",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "If true, use RampRatio; else use RampLength",
+          "readOnly": false
+        }
+      ],
+      "methods": [],
+      "constants": [
+        {
+          "name": "FULL_LENGTH",
+          "value": "Full depth along entire flute"
+        },
+        {
+          "name": "RAMP_START",
+          "value": "Ramp at start of flute"
+        },
+        {
+          "name": "RAMP_START_END",
+          "value": "Ramp at both start and end"
+        },
+        {
+          "name": "RAMP_LINEAR",
+          "value": "Linear ramping"
+        },
+        {
+          "name": "RAMP_SMOOTH",
+          "value": "Smooth ramping"
+        }
+      ]
+    },
+    {
+      "name": "PrismCarveParameterData",
+      "kind": "Class",
+      "detail": "class PrismCarveParameterData",
+      "documentation": "Parameters for prism carving (bevel carving) toolpaths. Used to create beveled edges on vectors.",
+      "constructors": [
+        {
+          "label": "PrismCarveParameterData()",
+          "documentation": "Create new object with default values",
+          "parameters": []
+        }
+      ],
+      "properties": [
+        {
+          "name": "CutDepth",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Carving depth below start depth",
+          "readOnly": false
+        },
+        {
+          "name": "CutDepthFormula",
+          "kind": "Property",
+          "detail": "string",
+          "documentation": "Formula for cut depth",
+          "readOnly": false
+        },
+        {
+          "name": "CutDirection",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "ProfileParameterData.CLIMB_DIRECTION or CONVENTIONAL_DIRECTION",
+          "readOnly": false
+        },
+        {
+          "name": "Name",
+          "kind": "Property",
+          "detail": "string",
+          "documentation": "Name for the toolpath",
+          "readOnly": false
+        },
+        {
+          "name": "ProjectToolpath",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "If true (Aspire), project onto model surface",
+          "readOnly": false
+        },
+        {
+          "name": "StartDepth",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Start depth below material surface",
+          "readOnly": false
+        },
+        {
+          "name": "StartDepthFormula",
+          "kind": "Property",
+          "detail": "string",
+          "documentation": "Formula for start depth",
+          "readOnly": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "CalculateMinimumBevelDepth",
+          "kind": "Method",
+          "detail": "(tool: Tool, use_selection: boolean) → number",
+          "documentation": "Calculate minimum cut depth required to fully form bevel with current tool and selection",
+          "signature": {
+            "label": "CalculateMinimumBevelDepth(tool: Tool, use_selection: boolean)",
+            "documentation": "Calculate required depth for full bevel",
+            "parameters": [
+              {
+                "label": "tool",
+                "documentation": "tool: Tool - V-bit tool to use"
+              },
+              {
+                "label": "use_selection",
+                "documentation": "use_selection: boolean - if true, use current selection"
+              }
+            ],
+            "returns": "number"
+          }
+        }
+      ],
+      "constants": []
+    },
+    {
+      "name": "ExternalToolpath",
+      "kind": "Class",
+      "detail": "class ExternalToolpath",
+      "documentation": "Represents a toolpath created entirely from script (not based on program geometry). Created by adding ContourGroups representing tool movement. Cannot be recalculated by user - must be deleted and recreated by script.",
+      "constructors": [
+        {
+          "label": "ExternalToolpath(name: string, tool: Tool, options: ExternalToolpathOptions)",
+          "documentation": "Create new external toolpath with specified tool and options",
+          "parameters": [
+            {
+              "label": "name",
+              "documentation": "name: string - toolpath name"
+            },
+            {
+              "label": "tool",
+              "documentation": "tool: Tool - tool to use"
+            },
+            {
+              "label": "options",
+              "documentation": "options: ExternalToolpathOptions - toolpath options"
+            }
+          ]
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "name": "AddContourGroup",
+          "kind": "Method",
+          "detail": "(contour_group: ContourGroup, rapid_z: number) → void",
+          "documentation": "Add a contour group representing tool movement. Contours define the toolpath.",
+          "signature": {
+            "label": "AddContourGroup(contour_group: ContourGroup, rapid_z: number)",
+            "documentation": "Add tool movement contours",
+            "parameters": [
+              {
+                "label": "contour_group",
+                "documentation": "contour_group: ContourGroup - contours representing tool path"
+              },
+              {
+                "label": "rapid_z",
+                "documentation": "rapid_z: number - Z height for rapid moves between contours"
+              }
+            ],
+            "returns": "void"
+          }
+        }
+      ],
+      "constants": []
+    },
+    {
+      "name": "ExternalToolpathOptions",
+      "kind": "Class",
+      "detail": "class ExternalToolpathOptions",
+      "documentation": "Options for creating ExternalToolpath objects. Controls whether to use 2D preview and display warnings during creation.",
+      "constructors": [
+        {
+          "label": "ExternalToolpathOptions()",
+          "documentation": "Create new options object with default values",
+          "parameters": []
+        }
+      ],
+      "properties": [
+        {
+          "name": "Create2DPreview",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "If true, create 2D preview vectors in 2D view",
+          "readOnly": false
+        },
+        {
+          "name": "ShowWarnings",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "If true, display warnings/errors to user",
+          "readOnly": false
+        }
+      ],
+      "methods": [],
+      "constants": []
+    },
+    {
+      "name": "ToolpathNode",
+      "kind": "Class",
+      "detail": "class ToolpathNode",
+      "documentation": "Represents a single node/point in a toolpath with position and movement type information. Used when iterating through toolpath geometry.",
+      "constructors": [],
+      "properties": [
+        {
+          "name": "IsArc",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "True if this node represents an arc move",
+          "readOnly": true
+        },
+        {
+          "name": "IsRapid",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "True if this is a rapid (non-cutting) move",
+          "readOnly": true
+        },
+        {
+          "name": "Position",
+          "kind": "Property",
+          "detail": "Point3D",
+          "documentation": "3D position of this toolpath node",
+          "readOnly": true
+        }
+      ],
+      "methods": [],
+      "constants": []
+    },
+    {
+      "name": "PostPInfo",
+      "kind": "Class",
+      "detail": "class PostPInfo",
+      "documentation": "Information about post processor settings and results. Retrieved from VectricJob.PostPInfo property after running a post processor.",
+      "constructors": [],
+      "properties": [
+        {
+          "name": "OutputFileName",
+          "kind": "Property",
+          "detail": "string",
+          "documentation": "Name of output file generated by post processor",
+          "readOnly": true
+        },
+        {
+          "name": "PostProcessorFileName",
+          "kind": "Property",
+          "detail": "string",
+          "documentation": "Name of post processor file used",
+          "readOnly": true
+        }
+      ],
+      "methods": [],
+      "constants": []
+    },
+    {
+      "name": "ToolpathSaver",
+      "kind": "Class",
+      "detail": "class ToolpathSaver",
+      "documentation": "Used to save toolpaths to files. Provides control over which toolpaths to save and output settings.",
+      "constructors": [
+        {
+          "label": "ToolpathSaver()",
+          "documentation": "Create new toolpath saver object",
+          "parameters": []
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "name": "SaveToolpaths",
+          "kind": "Method",
+          "detail": "(save_info: ToolpathSaveInfo) → boolean",
+          "documentation": "Save toolpaths according to ToolpathSaveInfo settings. Returns true if successful.",
+          "signature": {
+            "label": "SaveToolpaths(save_info: ToolpathSaveInfo)",
+            "documentation": "Save toolpaths to file",
+            "parameters": [
+              {
+                "label": "save_info",
+                "documentation": "save_info: ToolpathSaveInfo - save settings"
+              }
+            ],
+            "returns": "boolean"
+          }
+        }
+      ],
+      "constants": []
+    },
+    {
+      "name": "ToolpathStats",
+      "kind": "Class",
+      "detail": "class ToolpathStats",
+      "documentation": "Statistics about a toolpath including cut time, distances, and other metrics. Retrieved from a Toolpath object.",
+      "constructors": [],
+      "properties": [
+        {
+          "name": "CutTime",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Estimated cutting time (seconds)",
+          "readOnly": true
+        },
+        {
+          "name": "PlungeCount",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Number of plunge moves",
+          "readOnly": true
+        },
+        {
+          "name": "PlungeDistance",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Total plunge distance",
+          "readOnly": true
+        },
+        {
+          "name": "RapidDistance",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Total rapid movement distance",
+          "readOnly": true
+        },
+        {
+          "name": "TotalCutDistance",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Total cutting distance",
+          "readOnly": true
+        }
+      ],
+      "methods": [],
+      "constants": []
+    },
+    {
+      "name": "ToolpathSaveInfo",
+      "kind": "Class",
+      "detail": "class ToolpathSaveInfo",
+      "documentation": "Information specifying which toolpaths to save and output settings. Used with ToolpathSaver.",
+      "constructors": [
+        {
+          "label": "ToolpathSaveInfo()",
+          "documentation": "Create new save info object with default values",
+          "parameters": []
+        }
+      ],
+      "properties": [
+        {
+          "name": "FileName",
+          "kind": "Property",
+          "detail": "string",
+          "documentation": "Output file name for saved toolpaths",
+          "readOnly": false
+        },
+        {
+          "name": "PostProcessorName",
+          "kind": "Property",
+          "detail": "string",
+          "documentation": "Name of post processor to use",
+          "readOnly": false
+        },
+        {
+          "name": "SaveAllToolpaths",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "If true, save all toolpaths; else only visible ones",
+          "readOnly": false
+        }
+      ],
+      "methods": [],
+      "constants": []
+    },
+    {
+      "name": "ToolpathList",
+      "kind": "Class",
+      "detail": "class ToolpathList",
+      "documentation": "Collection of toolpaths. Provides iteration methods to access individual Toolpath objects. Retrieved from ToolpathManager.",
+      "constructors": [],
+      "properties": [
+        {
+          "name": "Count",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Number of toolpaths in list",
+          "readOnly": true
+        },
+        {
+          "name": "IsEmpty",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "True if list contains no toolpaths",
+          "readOnly": true
+        }
+      ],
+      "methods": [
+        {
+          "name": "GetHeadPosition",
+          "kind": "Method",
+          "detail": "() → POSITION",
+          "documentation": "Returns POSITION to access head of list",
+          "signature": {
+            "label": "GetHeadPosition()",
+            "documentation": "Get start of toolpath list",
+            "parameters": [],
+            "returns": "POSITION"
+          }
+        },
+        {
+          "name": "GetNext",
+          "kind": "Method",
+          "detail": "(pos: POSITION) → Toolpath, POSITION",
+          "documentation": "Returns toolpath at position AND new position (or nil at end)",
+          "signature": {
+            "label": "GetNext(pos: POSITION)",
+            "documentation": "Iterate through toolpaths",
+            "parameters": [
+              {
+                "label": "pos",
+                "documentation": "pos: POSITION - current position"
+              }
+            ],
+            "returns": "Toolpath, POSITION"
+          }
+        }
+      ],
+      "constants": []
     }
   ]
 }
