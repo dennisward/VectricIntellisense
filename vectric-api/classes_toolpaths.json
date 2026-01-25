@@ -8,8 +8,14 @@
       "name": "ToolpathManager",
       "kind": "Class",
       "detail": "class ToolpathManager",
-      "documentation": "Manages all toolpaths in the current job.",
-      "constructors": [],
+      "documentation": "Manages all toolpaths in the current job. Single instance accessed via constructor. Used to create new toolpaths, load templates, and recalculate toolpaths.",
+      "constructors": [
+        {
+          "label": "ToolpathManager()",
+          "documentation": "Returns access to the single toolpath manager within the program",
+          "parameters": []
+        }
+      ],
       "properties": [
         {
           "name": "Count",
@@ -17,19 +23,304 @@
           "detail": "number",
           "documentation": "Number of toolpaths",
           "readOnly": true
+        },
+        {
+          "name": "IsEmpty",
+          "kind": "Property",
+          "detail": "boolean",
+          "documentation": "True if there are no toolpaths",
+          "readOnly": true
+        },
+        {
+          "name": "NumVisibleToolpaths",
+          "kind": "Property",
+          "detail": "number",
+          "documentation": "Number of visible toolpaths",
+          "readOnly": true
         }
       ],
       "methods": [
         {
-          "name": "GetHeadPosition",
+          "name": "AddExternalToolpath",
           "kind": "Method",
-          "detail": "() → POSITION",
-          "documentation": "Returns a POSITION for iterating",
+          "detail": "(toolpath: ExternalToolpath) → boolean",
+          "documentation": "Adds external toolpath to the job. Returns true if added successfully.",
           "signature": {
-            "label": "GetHeadPosition()",
-            "documentation": "Returns a POSITION",
-            "parameters": [],
-            "returns": "POSITION"
+            "label": "AddExternalToolpath(toolpath: ExternalToolpath)",
+            "documentation": "Add script-created toolpath",
+            "parameters": [
+              {
+                "label": "toolpath",
+                "documentation": "toolpath: ExternalToolpath - toolpath created in script"
+              }
+            ],
+            "returns": "boolean"
+          }
+        },
+        {
+          "name": "CreateProfilingToolpath",
+          "kind": "Method",
+          "detail": "(name: string, tool: Tool, profile_data: ProfileParameterData, ramping_data: RampingData, lead_data: LeadInOutData, pos_data: ToolpathPosData, geometry_selector: GeometrySelector, create_2d_preview: boolean, interactive: boolean) → UUID",
+          "documentation": "Creates a profiling toolpath for currently selected vectors. Returns UUID of created toolpath or nil on error.",
+          "signature": {
+            "label": "CreateProfilingToolpath(name: string, tool: Tool, profile_data: ProfileParameterData, ramping_data: RampingData, lead_data: LeadInOutData, pos_data: ToolpathPosData, geometry_selector: GeometrySelector, create_2d_preview: boolean, interactive: boolean)",
+            "documentation": "Create profiling toolpath",
+            "parameters": [
+              {
+                "label": "name",
+                "documentation": "name: string - toolpath name"
+              },
+              {
+                "label": "tool",
+                "documentation": "tool: Tool - tool to use"
+              },
+              {
+                "label": "profile_data",
+                "documentation": "profile_data: ProfileParameterData - profile settings"
+              },
+              {
+                "label": "ramping_data",
+                "documentation": "ramping_data: RampingData - ramping settings"
+              },
+              {
+                "label": "lead_data",
+                "documentation": "lead_data: LeadInOutData - lead in/out settings"
+              },
+              {
+                "label": "pos_data",
+                "documentation": "pos_data: ToolpathPosData - home/safe Z settings"
+              },
+              {
+                "label": "geometry_selector",
+                "documentation": "geometry_selector: GeometrySelector - auto-selection criteria"
+              },
+              {
+                "label": "create_2d_preview",
+                "documentation": "create_2d_preview: boolean - create 2D preview vectors"
+              },
+              {
+                "label": "interactive",
+                "documentation": "interactive: boolean - show warnings to user"
+              }
+            ],
+            "returns": "UUID"
+          }
+        },
+        {
+          "name": "CreatePocketingToolpath",
+          "kind": "Method",
+          "detail": "(name: string, tool: Tool, area_clear_tool: Tool, pocket_data: PocketParameterData, pos_data: ToolpathPosData, geometry_selector: GeometrySelector, create_2d_preview: boolean, interactive: boolean) → UUID",
+          "documentation": "Creates a pocketing toolpath. Returns UUID of created toolpath or nil on error.",
+          "signature": {
+            "label": "CreatePocketingToolpath(name: string, tool: Tool, area_clear_tool: Tool, pocket_data: PocketParameterData, pos_data: ToolpathPosData, geometry_selector: GeometrySelector, create_2d_preview: boolean, interactive: boolean)",
+            "documentation": "Create pocketing toolpath",
+            "parameters": [
+              {
+                "label": "name",
+                "documentation": "name: string - toolpath name"
+              },
+              {
+                "label": "tool",
+                "documentation": "tool: Tool - finishing tool (must not be nil)"
+              },
+              {
+                "label": "area_clear_tool",
+                "documentation": "area_clear_tool: Tool - optional area clearance tool (can be nil)"
+              },
+              {
+                "label": "pocket_data",
+                "documentation": "pocket_data: PocketParameterData - pocketing settings"
+              },
+              {
+                "label": "pos_data",
+                "documentation": "pos_data: ToolpathPosData - home/safe Z settings"
+              },
+              {
+                "label": "geometry_selector",
+                "documentation": "geometry_selector: GeometrySelector - auto-selection criteria"
+              },
+              {
+                "label": "create_2d_preview",
+                "documentation": "create_2d_preview: boolean - create 2D preview vectors"
+              },
+              {
+                "label": "interactive",
+                "documentation": "interactive: boolean - show warnings to user"
+              }
+            ],
+            "returns": "UUID"
+          }
+        },
+        {
+          "name": "CreateDrillingToolpath",
+          "kind": "Method",
+          "detail": "(name: string, tool: Tool, drilling_data: DrillParameterData, pos_data: ToolpathPosData, geometry_selector: GeometrySelector, create_2d_preview: boolean, interactive: boolean) → UUID",
+          "documentation": "Creates a drilling toolpath. Returns UUID of created toolpath or nil on error.",
+          "signature": {
+            "label": "CreateDrillingToolpath(name: string, tool: Tool, drilling_data: DrillParameterData, pos_data: ToolpathPosData, geometry_selector: GeometrySelector, create_2d_preview: boolean, interactive: boolean)",
+            "documentation": "Create drilling toolpath",
+            "parameters": [
+              {
+                "label": "name",
+                "documentation": "name: string - toolpath name"
+              },
+              {
+                "label": "tool",
+                "documentation": "tool: Tool - drill bit to use"
+              },
+              {
+                "label": "drilling_data",
+                "documentation": "drilling_data: DrillParameterData - drilling settings"
+              },
+              {
+                "label": "pos_data",
+                "documentation": "pos_data: ToolpathPosData - home/safe Z settings"
+              },
+              {
+                "label": "geometry_selector",
+                "documentation": "geometry_selector: GeometrySelector - auto-selection criteria"
+              },
+              {
+                "label": "create_2d_preview",
+                "documentation": "create_2d_preview: boolean - create 2D preview vectors"
+              },
+              {
+                "label": "interactive",
+                "documentation": "interactive: boolean - show warnings to user"
+              }
+            ],
+            "returns": "UUID"
+          }
+        },
+        {
+          "name": "CreateVCarvingToolpath",
+          "kind": "Method",
+          "detail": "(name: string, tool: Tool, area_clear_tool: Tool, vcarve_data: VCarveParameterData, pocket_data: PocketParameterData, pos_data: ToolpathPosData, geometry_selector: GeometrySelector, create_2d_preview: boolean, interactive: boolean) → UUID",
+          "documentation": "Creates a V-carving toolpath. Returns UUID of created toolpath or nil on error.",
+          "signature": {
+            "label": "CreateVCarvingToolpath(name: string, tool: Tool, area_clear_tool: Tool, vcarve_data: VCarveParameterData, pocket_data: PocketParameterData, pos_data: ToolpathPosData, geometry_selector: GeometrySelector, create_2d_preview: boolean, interactive: boolean)",
+            "documentation": "Create V-carving toolpath",
+            "parameters": [
+              {
+                "label": "name",
+                "documentation": "name: string - toolpath name"
+              },
+              {
+                "label": "tool",
+                "documentation": "tool: Tool - V-bit tool"
+              },
+              {
+                "label": "area_clear_tool",
+                "documentation": "area_clear_tool: Tool - optional clearance tool for flat areas (can be nil)"
+              },
+              {
+                "label": "vcarve_data",
+                "documentation": "vcarve_data: VCarveParameterData - V-carving settings"
+              },
+              {
+                "label": "pocket_data",
+                "documentation": "pocket_data: PocketParameterData - flat area clearance settings"
+              },
+              {
+                "label": "pos_data",
+                "documentation": "pos_data: ToolpathPosData - home/safe Z settings"
+              },
+              {
+                "label": "geometry_selector",
+                "documentation": "geometry_selector: GeometrySelector - auto-selection criteria"
+              },
+              {
+                "label": "create_2d_preview",
+                "documentation": "create_2d_preview: boolean - create 2D preview vectors"
+              },
+              {
+                "label": "interactive",
+                "documentation": "interactive: boolean - show warnings to user"
+              }
+            ],
+            "returns": "UUID"
+          }
+        },
+        {
+          "name": "CreatePrismCarvingToolpath",
+          "kind": "Method",
+          "detail": "(name: string, tool: Tool, prism_data: PrismCarveParameterData, pos_data: ToolpathPosData, geometry_selector: GeometrySelector, create_2d_preview: boolean, interactive: boolean) → UUID",
+          "documentation": "Creates a prism carving (bevel) toolpath. Returns UUID of created toolpath or nil on error.",
+          "signature": {
+            "label": "CreatePrismCarvingToolpath(name: string, tool: Tool, prism_data: PrismCarveParameterData, pos_data: ToolpathPosData, geometry_selector: GeometrySelector, create_2d_preview: boolean, interactive: boolean)",
+            "documentation": "Create prism/bevel carving toolpath",
+            "parameters": [
+              {
+                "label": "name",
+                "documentation": "name: string - toolpath name"
+              },
+              {
+                "label": "tool",
+                "documentation": "tool: Tool - V-bit tool"
+              },
+              {
+                "label": "prism_data",
+                "documentation": "prism_data: PrismCarveParameterData - prism carving settings"
+              },
+              {
+                "label": "pos_data",
+                "documentation": "pos_data: ToolpathPosData - home/safe Z settings"
+              },
+              {
+                "label": "geometry_selector",
+                "documentation": "geometry_selector: GeometrySelector - auto-selection criteria"
+              },
+              {
+                "label": "create_2d_preview",
+                "documentation": "create_2d_preview: boolean - create 2D preview vectors"
+              },
+              {
+                "label": "interactive",
+                "documentation": "interactive: boolean - show warnings to user"
+              }
+            ],
+            "returns": "UUID"
+          }
+        },
+        {
+          "name": "CreateFlutingToolpath",
+          "kind": "Method",
+          "detail": "(name: string, tool: Tool, fluting_data: FlutingParameterData, pos_data: ToolpathPosData, geometry_selector: GeometrySelector, create_2d_preview: boolean, interactive: boolean) → UUID",
+          "documentation": "Creates a fluting toolpath. Returns UUID of created toolpath or nil on error.",
+          "signature": {
+            "label": "CreateFlutingToolpath(name: string, tool: Tool, fluting_data: FlutingParameterData, pos_data: ToolpathPosData, geometry_selector: GeometrySelector, create_2d_preview: boolean, interactive: boolean)",
+            "documentation": "Create fluting toolpath",
+            "parameters": [
+              {
+                "label": "name",
+                "documentation": "name: string - toolpath name"
+              },
+              {
+                "label": "tool",
+                "documentation": "tool: Tool - typically ball nose"
+              },
+              {
+                "label": "fluting_data",
+                "documentation": "fluting_data: FlutingParameterData - fluting settings"
+              },
+              {
+                "label": "pos_data",
+                "documentation": "pos_data: ToolpathPosData - home/safe Z settings"
+              },
+              {
+                "label": "geometry_selector",
+                "documentation": "geometry_selector: GeometrySelector - auto-selection criteria"
+              },
+              {
+                "label": "create_2d_preview",
+                "documentation": "create_2d_preview: boolean - create 2D preview vectors"
+              },
+              {
+                "label": "interactive",
+                "documentation": "interactive: boolean - show warnings to user"
+              }
+            ],
+            "returns": "UUID"
           }
         }
       ]
